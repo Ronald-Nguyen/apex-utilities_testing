@@ -8,7 +8,7 @@ from pathlib import Path
 from datetime import datetime
 from unittest import result
 
-REFACTORING = 'prompts/coc_reduktion'
+REFACTORING = 'refactoring/coc_reduktion'
 PATH = 'force-app'
 ITERATIONS = 3
 GEMINI3 = 'gemini-3-pro-preview'
@@ -18,8 +18,8 @@ MISTRAL = 'mistral-large-2512'
 CODESTRAL = 'codestral-2501'
 MODEL_OLLAMA = 'devstral-2_123b-cloud'
 MODEL_GROQ = LLAMA
-MODEL_GEMINI = GEMINI3
-MODEL_MISTRAL = MISTRAL
+MODEL_GEMINI = GEMINI3  
+MODEL_MISTRAL = CODESTRAL
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 MISTRAL_API_KEY = os.environ.get('MISTRAL_API_KEY')
@@ -77,19 +77,19 @@ def get_project_structure(project_dir: Path) -> str:
         structure.append(f'{indent}{os.path.basename(root)}/')
         subindent = ' ' * 2 * (level + 1)
         for file in files:
-            if file.endswith('.cls'):
+            if file.endswith('.cls') or file.endswith('.trigger'):
                 structure.append(f'{subindent}{file}')
     return '\n'.join(structure)
 
-def get_all_python_files(project_dir: Path) -> str:
-    """Liest alle Python-Dateien ein und liefert einen großen Textblock."""
+def get_all_apex_files(project_dir: Path) -> str:
+    """Liest alle Apex-Dateien ein und liefert einen großen Textblock."""
     code_block = ""
     for root, dirs, files in os.walk(project_dir):
         dirs[:] = [d for d in dirs if not d.startswith('.') and d not in {'__pycache__', 'tests', 'pathlib2.egg-info'}]
         for file in files:
             if "test" in file:
                 continue
-            if file.endswith('.cls'):
+            if file.endswith('.cls') or file.endswith('.trigger'):
                 file_path = Path(root) / file
                 try:
                     with open(file_path, 'r', encoding='utf-8') as f:
