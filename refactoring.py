@@ -156,50 +156,35 @@ def apply_changes(project_dir: Path | str, files: dict[str, str]) -> None:
 
 def run_apex_tests(target_org=None):
     """
-    Führt Salesforce Apex Tests aus.
-    Entspricht: sf apex run test --code-coverage --result-format human --wait 10
+    Führt NUR die Salesforce Apex Tests aus (kein Deploy vorher).
+    Befehl: sf apex run test --wait 10 --result-format human --code-coverage
     """
     cmd = [
         "sf", "apex", "run", "test",
-        "--code-coverage",
-        "--result-format", "json", # JSON ist einfacher zu parsen als human
-        "--wait", "20"
+        "--wait", "10",
+        "--result-format", "human",
+        "--code-coverage"
     ]
     
     if target_org:
         cmd.extend(["--target-org", target_org])
     
-    print(" Starte Apex Tests (Deploy & Run)... das kann dauern...")
-    
-    # Zuerst müssen wir sicherstellen, dass der Code auf der Org ist!
-    # Apex kann man nicht lokal ausführen wie Python. Es MUSS auf die Org.
-    deploy_cmd = ["sf", "project", "deploy", "start"]
-    if target_org:
-        deploy_cmd.extend(["--target-org", target_org])
+    print(f" Starte Apex Tests ({' '.join(cmd)})...")
         
     try:
-        # 1. Deploy
-        print(" -> Deploying Code...")
-        deploy_res = subprocess.run(deploy_cmd, capture_output=True, text=True)
-        if deploy_res.returncode != 0:
-            return {
-                'success': False,
-                'stdout': deploy_res.stdout,
-                'stderr': f"DEPLOY FAILED:\n{deploy_res.stderr}",
-                'returncode': deploy_res.returncode
-            }
-
-        # 2. Run Tests
-        print(" -> Running Tests...")
+        # Führe den Befehl aus
         result = subprocess.run(cmd, capture_output=True, text=True)
         
-        # SF CLI gibt manchmal Exit Code 100 zurück bei Testfehlern, was okay ist für uns
-        # Wir müssen das JSON parsen um zu sehen ob "outcome": "Failed" ist
+        # In 'human' format ist es schwerer, programmatisch Details zu parsen,
+        # aber wir können uns auf den Return Code verlassen.
+        # 0 = Alles Success
+        # 100 = Tests liefen, aber Fehler (bei SF CLI v2)
+        # 1 = Genereller Error
         
         is_success = result.returncode == 0
         
-        # Einfacher Check im JSON Output String (quick & dirty aber robust)
-        if '"outcome": "Failed"' in result.stdout or '"outcome":"Failed"' in result.stdout:
+        # Fallback-Check: Manchmal ist returncode 0, aber im Text steht "Failed"
+        if "Test Run Failed" in result.stdout or "Fails" in result.stdout:
             is_success = False
         
         return {
@@ -211,8 +196,8 @@ def run_apex_tests(target_org=None):
 
     except Exception as e:
         return {'success': False, 'stdout': '', 'stderr': str(e), 'returncode': -1}
-
-
+    
+    
 def save_results(iteration: int, result_dir: Path, files: dict, test_result: dict, response_text: str) -> None:
     """Speichert die Ergebnisse einer Iteration."""
     result_dir.mkdir(parents=True, exist_ok=True)
