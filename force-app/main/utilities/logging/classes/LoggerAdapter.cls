@@ -1,10 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2018-06-27
- * @group Logging
- * @description The logger adapter exposes the log method and the specific log levels to be implemented by whatever class implements it
- *
- **/
+
 @SuppressWarnings('PMD.ExcessivePublicCount')
 public abstract class LoggerAdapter {
     protected String logType;
@@ -24,12 +18,10 @@ public abstract class LoggerAdapter {
 
     @SuppressWarnings('PMD.EmptyStatementBlock')
     public virtual void close() {
-        // by default nothing needed here
+        
     }
 
-    /**
-     * Implementation of LoggerAdapter that directs all logging through the built-in Apex method <code>System.debug()</code>
-     */
+    
     public class DebugLogAdapter extends LoggerAdapter {
         @SuppressWarnings('PMD.AvoidDebugStatements')
         public override void log(Object logLevel, String message) {

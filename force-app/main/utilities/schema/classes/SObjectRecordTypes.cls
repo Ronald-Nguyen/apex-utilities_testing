@@ -1,12 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2019-09-24
- * @group Schema
- * @description Utility class to help make interacting with an objects record types slightly easier eg cal call
- * SObjectRecordTypes opportunityRecordTypes = new SObjectRecordTypes('Opportunity');
- * Id defaultOpportunityRecordTypeId = opportunityRecordTypes.getDefaultId();
- *
- **/
+
 public inherited sharing class SObjectRecordTypes {
     private final Map<String, Schema.RecordTypeInfo> recordTypesByDeveloperName;
     private final Map<Id, Schema.RecordTypeInfo> recordTypesById;
@@ -20,9 +12,7 @@ public inherited sharing class SObjectRecordTypes {
         recordTypesById = objectDescribe.getRecordTypeInfosById();
     }
 
-    /*
-     * @description retrieves the default record type id for the object specified
-     */
+    
     public Id getDefaultId() {
         if (defaultRecordTypeInfo == null) {
             for (Schema.RecordTypeInfo info : recordTypesByDeveloperName.values()) {
@@ -35,9 +25,7 @@ public inherited sharing class SObjectRecordTypes {
         return defaultRecordTypeInfo.getRecordTypeId();
     }
 
-    /*
-     * @description gets the record type id for the developer name specified
-     */
+    
     public Id getRecordTypeId(final String developerName) {
         Id recordTypeId;
         if (recordTypesByDeveloperName.containsKey(developerName)) {
@@ -46,9 +34,7 @@ public inherited sharing class SObjectRecordTypes {
         return recordTypeId;
     }
 
-    /*
-     * @description gets the developername for the record type id specified
-     */
+    
     public String getRecordTypeDeveloperName(final Id recordTypeId) {
         String recordTypeDeveloperName;
         if (recordTypesById.containsKey(recordTypeId)) {

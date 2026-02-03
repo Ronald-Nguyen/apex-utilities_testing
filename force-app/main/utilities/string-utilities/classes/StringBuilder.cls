@@ -1,10 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2018-06-28
- * @group String Utilities
- * @description This class is intended to be similar to the java StringBuilder, it allows strings to be dynamically constructed but only assigned at the point, similar to Javas StringBuffer
- *
- **/
+
 public virtual inherited sharing class StringBuilder {
     @testVisible
     private final List<String> buffer;
@@ -50,30 +44,24 @@ public virtual inherited sharing class StringBuilder {
         }
     }
 
-    /**
-     * @description Capacity will return the total numbe of strings in the buffer
-     *
-     **/
+    
     public Integer capacity() {
         return buffer.size();
     }
 
-    /**
-     * @description Length will return the total length of the string once it is combined
-     *
-     **/
+    
     public Integer length() {
         return count + (separator.length() * (capacity() - 1));
     }
 
-    // TODO
-    // delete
-    // replace
-    // subString
-    // insert
-    // indexOf
-    // lastIndexOf
-    // reverse
+    
+    
+    
+    
+    
+    
+    
+    
 
     public override String toString() {
         return String.join(buffer, separator);

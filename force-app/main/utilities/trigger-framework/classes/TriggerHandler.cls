@@ -1,10 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2018-06-28
- * @group Trigger Framework
- * @description This class is a grouping of Triggerable actions so that they can be executed as one
- *
- **/
+
 public inherited sharing class TriggerHandler extends Triggerable {
     private final List<Triggerable> triggerActions;
 

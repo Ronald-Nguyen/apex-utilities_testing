@@ -1,19 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2019-02-02
- * @group Schema
- * @description This is a facade for the schema describe functions to make accessing the schema much easier within apex.
- * It is implemented as a sigleton so that it can perform some form of cacheing,
- * this probably isn't nessisary as I think salesforce implements cacheing on the schema methods anyway,
- * but this is just to be safe
-SchemaFacade schema = SchemaFacade.getInstance();
-DescribeSObjectResult accountDescribe = schema.getDescribe('Account');
-System.debug(accountDescribe.getName());
 
-DescribeFieldResult fieldDescribe = schema.getFieldDescribe('Account', 'Name');
-System.debug(fieldDescribe.getName());
- *
- **/
 public without sharing class SchemaFacade {
     private Map<String, SObjectType> sObjectTypeByObjectNames = Schema.getGlobalDescribe();
     private Map<String, DescribeSObjectResult> sObjectDescribeByObjectNames = new Map<String, DescribeSObjectResult>();
@@ -38,10 +23,7 @@ public without sharing class SchemaFacade {
         return !isValidSObject(objectApiName);
     }
 
-    /*
-     * @description will provide the describe sobject result for the object name specified,
-     * this method will travers the SObjectType so this doesn't have to be considered
-     */
+    
     public DescribeSObjectResult getDescribe(String objectApiName) {
         objectApiName = objectApiName.toLowerCase();
         validateObjectApiName(objectApiName);
@@ -80,10 +62,7 @@ public without sharing class SchemaFacade {
         return fieldTypesByNameAndObject.get(objectApiName);
     }
 
-    /*
-     * @description retrieves the field describe for the object and field name provided,
-     * it will traverse the SObjectField's so you don't have to
-     */
+    
     @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
     public DescribeFieldResult getFieldDescribe(String objectApiName, String fieldApiName) {
         objectApiName = objectApiName.toLowerCase();

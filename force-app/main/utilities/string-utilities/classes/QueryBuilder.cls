@@ -1,10 +1,4 @@
-/**
- * @author Gavin Palmer <gavinhughpalmer@gmail.com>
- * @date 2019-06-04
- * @group String Utilities
- * @description This class can be used to build up dynamic soql queries
- *
- */
+
 public virtual class QueryBuilder {
     private static final String SOQL_QUERY_STRUCTURE = 'SELECT {0} FROM {1}';
     protected final String objectName;
@@ -53,7 +47,7 @@ public virtual class QueryBuilder {
     }
 
     public QueryBuilder selectAllFields() {
-        // should still be used over the FIELDS(ALL) method, to return all fields not just those the user has access to
+        
         for (String field : objectDescribe.fields.getMap().keySet()) {
             selectField(field);
         }

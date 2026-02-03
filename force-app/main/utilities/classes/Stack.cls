@@ -1,9 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2020-11-20
- * @description A simple stack implementation to allow FILO on data structures
- *
- **/
+
 public class Stack {
     private final List<Object> items = new List<Object>();
 

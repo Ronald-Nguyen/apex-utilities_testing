@@ -1,11 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2020-11-18
- * @group Trigger Framework
- * @description This trigger dispatcher will be called from each trigger with a list of triggerable actions to perform.
- *  As the single point of entry for all triggers this class will manage the disabling and enabling of triggers, as well as tracking the stack of triggers
- *
- **/
+
 public with sharing class TriggerDispatcher {
     private static final Stack TRIGGER_STACK = new Stack();
     private static Boolean unknownExceptionLogged = false;
@@ -26,13 +19,13 @@ public with sharing class TriggerDispatcher {
         TriggerOperation operation
     ) {
         this.handler = new TriggerHandler(actions);
-        // default the map to the old map for delete triggers
+        
         this.newSObjects = newSObjects == null ? oldMap.values() : newSObjects;
         this.oldMap = oldMap;
         this.currentTriggerAction = getTriggerAction(newSObjects.getSObjectType(), operation);
     }
 
-    // Will be difficult to get coverage directly for this method instead we will use the constructor directly
+    
     public static void run(List<Triggerable> actions) {
         (new TriggerDispatcher(actions, Trigger.new, Trigger.oldMap, Trigger.operationType)).run();
     }
@@ -54,13 +47,13 @@ public with sharing class TriggerDispatcher {
             try {
                 TRIGGER_STACK.push(currentTriggerAction);
                 executeTriggerables();
-                TRIGGER_STACK.pop(); // pop in here so errors will get handled
+                TRIGGER_STACK.pop(); 
             } catch (Stack.UnderflowException underflowException) {
                 logUnknownException('Stack underflow');
-                throw underflowException; // Surface up to users
+                throw underflowException; 
             } catch (Exception exceptionToHandle) {
                 logUnknownException(exceptionToHandle.getMessage());
-                TRIGGER_STACK.pop(); // it wasn't popped
+                TRIGGER_STACK.pop(); 
                 throw exceptionToHandle;
             } finally {
                 if (TRIGGER_STACK.isEmpty()) {
@@ -72,7 +65,7 @@ public with sharing class TriggerDispatcher {
 
     private void executeTriggerables() {
         for (SObject newSObject : newSObjects) {
-            // ensure we don't get any null pointer issues in inserts
+            
             SObject oldSObject = oldMap != null ? oldMap.get(newSObject.Id) : null;
             SObjectTriggerWrapper wrappedSObject = new SObjectTriggerWrapper(
                 newSObject,
@@ -89,7 +82,7 @@ public with sharing class TriggerDispatcher {
     }
 
     private void logUnknownException(String exceptionMessage) {
-        // Only write the logs the first time an unknown exception is thown, the exception will then get thrown all the way up the stack
+        
         if (!unknownExceptionLogged) {
             log.error(
                 'Unhandled exception within trigger: ' +

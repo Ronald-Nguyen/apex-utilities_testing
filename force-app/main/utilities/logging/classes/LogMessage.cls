@@ -1,11 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2020-11-20
- * @group Logging
- * @description This class holds the logic for generating log messages,
- * meaning any specific details that should be added to each log can be appended in here
- *
- **/
+
 public class LogMessage {
     private final String message;
     private String stackTraceString;

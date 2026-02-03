@@ -1,17 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2018-06-27
- * @group Logging
- * @description The bulk log object adapter can be used to insert logs as a custom object into the database,
- * as a singleton the write logs can be called at the end of a trigger to insert the full logs into the system only once per object
- * The class has been adapted to use events so that it can still insert log objects when a transaction is rolled back, allowing it
- * to be more robust in trigger contexts
- * Usage:
- * Logger log = LoggerFactory.createLogger(MyClass.class);
- * log.warn('A warning message');
- * log.close();
- *
- **/
+
 public without sharing class EventBufferLogAdapter extends LoggerAdapter {
     @testVisible
     private static final String ERROR = 'Error';
@@ -82,7 +69,7 @@ public without sharing class EventBufferLogAdapter extends LoggerAdapter {
     }
     public override void close() {
         if (!logsToPublish.isEmpty()) {
-            // if error occurs allow to surface to the user as there is nothing else we can do here
+            
             EventBus.publish(logsToPublish);
             logsToPublish.clear();
         }

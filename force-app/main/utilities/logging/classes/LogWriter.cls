@@ -1,10 +1,4 @@
-/**
- * @author Gavin Palmer
- * @date 2019-04-20
- * @group Logging
- * @description The LogWriter class converts log events into log sobjects so that they are perminantely committed into the database
- *
- **/
+
 public without sharing class LogWriter extends Triggerable {
     private final List<Log__c> logs = new List<Log__c>();
 
@@ -24,6 +18,6 @@ public without sharing class LogWriter extends Triggerable {
 
     public override void performAction() {
         insert logs;
-        // don't error handle as we assume no errors will occur
+        
     }
 }
