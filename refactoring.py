@@ -155,46 +155,57 @@ def apply_changes(project_dir: Path | str, files: dict[str, str]) -> None:
             print(f" Fehler beim Schreiben von {filename}: {e}")
 
 def run_apex_tests(target_org=None):
-    # 1. ERST: Code hochladen (Damit die Org den neuen KI-Code kennt)
-    print(" -> Deploying Code (Wichtig!)...")
-    deploy_cmd = ["sf", "project", "deploy", "start"]
+    """
+    1. Deployt den Code: sf project deploy start --ignore-conflicts
+    2. Führt Tests aus: sf apex run test ...
+    """
+    
+    # --- SCHRITT 1: DEPLOY ---
+    # Wir fügen --ignore-conflicts hinzu, damit Salesforce nicht meckert, 
+    # wenn wir Dateien lokal ändern und sofort hochladen wollen.
+    deploy_cmd = "sf project deploy start --ignore-conflicts"
+    
     if target_org:
-        deploy_cmd.extend(["--target-org", target_org])
+        deploy_cmd += f" --target-org {target_org}"
+        
+    print(f" -> Deploying Code ({deploy_cmd})...")
     
-    deploy_res = subprocess.run(deploy_cmd, capture_output=True, text=True)
+    # shell=True ist WICHTIG unter Windows, damit 'sf' gefunden wird!
+    deploy_res = subprocess.run(deploy_cmd, capture_output=True, text=True, shell=True)
     
-    # Wenn der Upload fehlschlägt (z.B. Syntaxfehler der KI), brechen wir sofort ab
     if deploy_res.returncode != 0:
         return {
             'success': False,
             'stdout': deploy_res.stdout,
-            'stderr': f"COMPILATION ERROR:\n{deploy_res.stderr}", # Wichtig für deine Analyse!
+            'stderr': f"DEPLOY FAILED (Syntax Error?):\n{deploy_res.stderr}",
             'returncode': deploy_res.returncode
         }
 
-    # 2. DANN: Tests ausführen
-    print(" -> Running Tests...")
-    cmd = [
-        "sf", "apex", "run", "test",
-        "--wait", "10",
-        "--result-format", "human",
-        "--code-coverage"
-    ]
+    # --- SCHRITT 2: TESTS ---
+    test_cmd = "sf apex run test --wait 10 --result-format human --code-coverage"
+    
     if target_org:
-        cmd.extend(["--target-org", target_org])
+        test_cmd += f" --target-org {target_org}"
+    
+    print(f" -> Running Tests ({test_cmd})...")
+        
+    try:
+        # Auch hier shell=True
+        result = subprocess.run(test_cmd, capture_output=True, text=True, shell=True)
+        
+        is_success = result.returncode == 0
+        if "Test Run Failed" in result.stdout or "Fails" in result.stdout:
+            is_success = False
+        
+        return {
+            'success': is_success,
+            'stdout': result.stdout,
+            'stderr': result.stderr,
+            'returncode': result.returncode
+        }
 
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    
-    is_success = result.returncode == 0
-    if "Test Run Failed" in result.stdout or "Fails" in result.stdout:
-        is_success = False
-    
-    return {
-        'success': is_success,
-        'stdout': result.stdout,
-        'stderr': result.stderr,
-        'returncode': result.returncode
-    }
+    except Exception as e:
+        return {'success': False, 'stdout': '', 'stderr': str(e), 'returncode': -1}
 
 def save_results(iteration: int, result_dir: Path, files: dict, test_result: dict, response_text: str) -> None:
     """Speichert die Ergebnisse einer Iteration."""
