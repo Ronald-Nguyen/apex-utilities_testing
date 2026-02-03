@@ -161,9 +161,8 @@ def run_apex_tests(target_org=None):
     """
     
     # --- SCHRITT 1: DEPLOY ---
-    # Wir fügen --ignore-conflicts hinzu, damit Salesforce nicht meckert, 
     # wenn wir Dateien lokal ändern und sofort hochladen wollen.
-    deploy_cmd = "sf project deploy start --ignore-conflicts"
+    deploy_cmd = "sf project deploy start "
     
     if target_org:
         deploy_cmd += f" --target-org {target_org}"
