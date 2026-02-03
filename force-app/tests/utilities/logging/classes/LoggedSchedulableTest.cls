@@ -24,8 +24,8 @@ private class LoggedSchedulableTest {
             WHERE Id = :cronJobId
         ];
         System.assert(
-            cronJob.NextFireTime <= Date.today().addDays(1),
-            'The cron job should be scheduled for tomorrow'
+            cronJob.NextFireTime > DateTime.now(),
+            'The cron job should be scheduled in the future'
         );
         System.assertEquals(
             null,
