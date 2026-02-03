@@ -1,0 +1,6 @@
+
+Iteration 1 erfolgreich. Tokens: prompt=12645, completion=11452, total=24097
+Iteration 2 erfolgreich. Tokens: prompt=12645, completion=11456, total=24101
+Iteration 3 erfolgreich. Tokens: prompt=12645, completion=11452, total=24097
+Iteration 4 erfolgreich. Tokens: prompt=12645, completion=11452, total=24097
+Fertig. Erfolgsrate: 40.0%
