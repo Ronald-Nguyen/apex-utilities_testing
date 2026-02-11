@@ -111,4 +111,40 @@ private class CsvBuilderTest {
             'A null field value should result in the string null in the field'
         );
     }
+
+    @isTest
+    private static void unixLineEndingTest() {
+        CsvBuilder testCsv = new CsvBuilder(CsvBuilder.UNIX_LINE_ENDING);
+        testCsv.appendField('Col1', 'val1');
+        String csvContent = testCsv.toString();
+        System.assert(
+            csvContent.contains(CsvBuilder.UNIX_LINE_ENDING),
+            'Should use Unix line ending'
+        );
+    }
+
+    @isTest
+    private static void multipleColumnsTest() {
+        CsvBuilder testCsv = new CsvBuilder();
+        testCsv.appendField('Col1', 'val1');
+        testCsv.appendField('Col2', 'val2');
+        testCsv.appendField('Col3', 'val3');
+        String csvContent = testCsv.toString();
+        System.assert(
+            csvContent.contains('Col1,Col2,Col3'),
+            'Should have all columns in header'
+        );
+    }
+
+    @isTest
+    private static void emptyRowTest() {
+        CsvBuilder testCsv = new CsvBuilder();
+        testCsv.appendField('Header', 'value1');
+        testCsv.newRow();
+        String csvContent = testCsv.toString();
+        System.assert(
+            csvContent.contains('Header'),
+            'Should contain the header'
+        );
+    }
 }
