@@ -28,4 +28,29 @@ private class QueueableSchedulerTest {
         );
         Test.stopTest();
     }
+
+    @IsTest
+    private static void executeMultipleTimes() {
+        Test.startTest();
+        QueueableScheduler scheduler = new QueueableScheduler(new TestQueueable());
+        scheduler.execute();
+        Id firstId = scheduler.getRunningQueueableId();
+        System.assertNotEquals(
+            null,
+            firstId,
+            'The first queueable ID should be assigned'
+        );
+        Test.stopTest();
+    }
+
+    @IsTest
+    private static void getQueueableIdBeforeExecute() {
+        QueueableScheduler scheduler = new QueueableScheduler(new TestQueueable());
+        Id queueableId = scheduler.getRunningQueueableId();
+        System.assertEquals(
+            null,
+            queueableId,
+            'The queueable ID should be null before execute is called'
+        );
+    }
 }

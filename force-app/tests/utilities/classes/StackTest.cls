@@ -85,4 +85,45 @@ private class StackTest {
             );
         }
     }
+
+    @IsTest
+    private static void sizeAfterOperations() {
+        Stack stack = new Stack();
+        System.assertEquals(0, stack.size(), 'New stack should have size 0');
+        
+        stack.push('item1');
+        stack.push('item2');
+        stack.push('item3');
+        System.assertEquals(3, stack.size(), 'Stack should have size 3 after 3 pushes');
+        
+        stack.pop();
+        System.assertEquals(2, stack.size(), 'Stack should have size 2 after 1 pop');
+        
+        stack.pop();
+        stack.pop();
+        System.assertEquals(0, stack.size(), 'Stack should be empty after all pops');
+    }
+
+    @IsTest
+    private static void toStringEmptyStack() {
+        Stack stack = new Stack();
+        System.assertEquals(
+            '',
+            stack.toString(),
+            'Empty stack toString should return empty string'
+        );
+    }
+
+    @IsTest
+    private static void pushDifferentTypes() {
+        Stack stack = new Stack();
+        stack.push('String value');
+        stack.push(123);
+        stack.push(true);
+        
+        System.assertEquals(3, stack.size(), 'Stack should hold different types');
+        System.assertEquals(true, (Boolean) stack.pop(), 'Should pop boolean');
+        System.assertEquals(123, (Integer) stack.pop(), 'Should pop integer');
+        System.assertEquals('String value', (String) stack.pop(), 'Should pop string');
+    }
 }
