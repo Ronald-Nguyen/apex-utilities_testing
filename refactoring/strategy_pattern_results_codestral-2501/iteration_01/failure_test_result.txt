@@ -1,0 +1,45 @@
+Iteration 1
+Timestamp: 2026-02-13T00:56:25.892453
+Success: False
+
+============================================================
+STDOUT:
+───── Deploying Metadata ─────
+Stages:
+1. Preparing
+2. Waiting for the org to respond
+3. Deploying Metadata
+4. Running Tests
+5. Updating Source Tracking
+6. Done
+
+▶ Preparing…
+   Deploying v48.0 metadata to test-0pljy80qouio@example.com using the v65.0 SOAP API.
+   Deploy ID: 0AfAw00000MZyFxKAL
+   Target Org: test-0pljy80qouio@example.com
+✔ Preparing (193ms)
+◯ Waiting for the org to respond - Skipped
+▶ Deploying Metadata…
+   Components: 0/1 (0%)
+✘ Deploying Metadata (584ms)
+   Components: 0/3 (0%)
+
+Deploying v48.0 metadata to test-0pljy80qouio@example.com using the v65.0 SOAP API.
+Status: Failed
+Deploy ID: 0AfAw00000MZyFxKAL
+Target Org: test-0pljy80qouio@example.com
+
+Elapsed time: 779ms
+
+[1m[31mComponent Failures [3][39m[22m
+ Type       Name          Problem                                   Line:Column 
+--------------------------------------------------------------------------------
+ ApexClass  Relationship  static is not allowed on classes (26:26)  26:26       
+ ApexClass  Relationship  static is not allowed on classes (33:26)  33:26       
+ ApexClass  Relationship  static is not allowed on classes (40:26)  40:26       
+
+
+
+============================================================
+STDERR:
+DEPLOY FAILED (Level 0):

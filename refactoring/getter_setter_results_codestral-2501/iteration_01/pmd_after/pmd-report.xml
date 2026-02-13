@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd" version="7.21.0" timestamp="2026-02-13T00:51:42.344">
+<file name="C:\Users\ronal\apex-utilities_testing\refactoring\getter_setter_results_codestral-2501\iteration_01\pmd_after\subset_src\main\utilities\logging\classes\EventBufferLogAdapter.cls">
+<violation beginline="20" endline="24" begincolumn="5" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method '&lt;clinit&gt;()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="34" endline="36" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'log(Object, String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="38" endline="46" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'log(Object, String, Id)' has a cognitive complexity of 2, current threshold is 1
+</violation>
+<violation beginline="76" endline="81" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'close()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+</pmd>

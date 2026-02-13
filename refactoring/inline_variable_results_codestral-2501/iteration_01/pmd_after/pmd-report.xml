@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd" version="7.21.0" timestamp="2026-02-13T00:54:43.377">
+<file name="C:\Users\ronal\apex-utilities_testing\refactoring\inline_variable_results_codestral-2501\iteration_01\pmd_after\subset_src\main\utilities\logging\classes\Logger.cls">
+<violation beginline="12" endline="14" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'setType(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="64" endline="66" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'error(Exception)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="68" endline="70" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'error(Exception, Id)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="72" endline="75" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'close()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="77" endline="84" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'runApexPofiling()' has a cognitive complexity of 2, current threshold is 1
+</violation>
+</file>
+</pmd>

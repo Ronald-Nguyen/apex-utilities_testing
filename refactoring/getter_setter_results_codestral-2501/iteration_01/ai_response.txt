@@ -1,0 +1,93 @@
+I'll analyze the provided code and identify the attributes that need encapsulation with getter/setter methods. Based on the requirements, I'll refactor the code to encapsulate the attributes while maintaining all functionality.
+
+Looking through the files, I see that the `EventBufferLogAdapter` class has a `uniqueValue` attribute that needs encapsulation. Here's the refactored file:
+
+File `main\utilities\logging\classes\EventBufferLogAdapter.cls`:
+```apex
+public without sharing class EventBufferLogAdapter extends LoggerAdapter {
+    @testVisible
+    private static final String ERROR = 'Error';
+    @testVisible
+    private static final String WARNING = 'Warning';
+    @testVisible
+    private static final String INFO = 'Information';
+    @testVisible
+    private static final String DEBUG = 'Debug';
+
+    private static final Integer MAX_LOG_BUFFER = 10;
+
+    private static final EventBufferLogAdapter INSTANCE = new EventBufferLogAdapter();
+
+    @testVisible
+    private final List<Log_Event__e> logsToPublish = new List<Log_Event__e>();
+    @testVisible
+    private static final Set<String> LOGGING_LEVELS = new Set<String>();
+
+    static {
+        for (Logging_Level__mdt loggingLevel : [SELECT DeveloperName FROM Logging_Level__mdt]) {
+            LOGGING_LEVELS.add(loggingLevel.DeveloperName);
+        }
+    }
+
+    public static EventBufferLogAdapter getInstance() {
+        return INSTANCE;
+    }
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    private EventBufferLogAdapter() {
+    }
+
+    public override void log(Object logLevel, String message) {
+        log(logLevel, message, null);
+    }
+
+    public override void log(Object logLevel, String message, Id recordId) {
+        String logLevelString = (String) logLevel;
+        if (LOGGING_LEVELS.contains(logLevelString)) {
+            logsToPublish.add(createLogEvent(logLevelString, message, recordId));
+        }
+        if (logsToPublish.size() >= MAX_LOG_BUFFER) {
+            close();
+        }
+    }
+
+    private Log_Event__e createLogEvent(String logLevel, String message, Id recordId) {
+        Request currentRequest = Request.getCurrent();
+        return new Log_Event__e(
+            Type__c = logType,
+            Level__c = logLevel,
+            Messages__c = message,
+            Record_Id__c = recordId,
+            Quiddity__c = currentRequest.getQuiddity().name(),
+            Transaction_Id__c = currentRequest.getRequestId()
+        );
+    }
+
+    public override Object errorLevel() {
+        return ERROR;
+    }
+
+    public override Object warningLevel() {
+        return WARNING;
+    }
+
+    public override Object infoLevel() {
+        return INFO;
+    }
+
+    public override Object debugLevel() {
+        return DEBUG;
+    }
+
+    public override void close() {
+        if (!logsToPublish.isEmpty()) {
+            EventBus.publish(logsToPublish);
+            logsToPublish.clear();
+        }
+    }
+}
+```
+
+However, upon closer inspection, I don't see any attribute named `uniqueValue` in the `EventBufferLogAdapter` class. After reviewing all the provided files, I realize that the task might have been misinterpreted or there might be a misunderstanding in the requirements.
+
+Since I don't see any attribute named `uniqueValue` in any of the provided files, I cannot perform the requested refactoring. If there's another attribute that needs encapsulation or if you have additional files to review, please provide them so I can complete the task accurately.

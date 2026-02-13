@@ -1,0 +1,46 @@
+--- backup/main\utilities\schema\classes\Relationship.cls
++++ refactored/main\utilities\schema\classes\Relationship.cls
+@@ -9 +9 @@
+-publicstaticRelationshipfromRefrenceField(StringreferenceFieldName){
++publicstaticRelationshipfromReferenceField(StringreferenceFieldName){
+@@ -18,8 +18,2 @@
+-publicstaticRelationshipfromIdField(StringidFieldName){
+-StringreferenceFieldName;
+-if(idFieldName.toLowerCase().endsWith('__c')){
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
+-thrownewInvalidFieldException(INVALID_RELATIONSHIP_FIELD+idFieldName);
++privateinterfaceIdFieldStrategy{
++Relationshipexecute(StringidFieldName);
+@@ -26,0 +21,3 @@
++privatestaticclassSuffixCStrategyimplementsIdFieldStrategy{
++publicRelationshipexecute(StringidFieldName){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+@@ -29,0 +27,25 @@
++privatestaticclassSuffixIdStrategyimplementsIdFieldStrategy{
++publicRelationshipexecute(StringidFieldName){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)id','');
++returnnewRelationship(referenceFieldName,idFieldName);
++}
++}
++privatestaticclassInvalidFieldStrategyimplementsIdFieldStrategy{
++publicRelationshipexecute(StringidFieldName){
++thrownewInvalidFieldException(INVALID_RELATIONSHIP_FIELD+idFieldName);
++}
++}
++privatestaticMap<String,IdFieldStrategy>STRATEGIES=newMap<String,IdFieldStrategy>{
++'__c'=>newSuffixCStrategy(),
++'id'=>newSuffixIdStrategy()
++};
++publicstaticRelationshipfromIdField(StringidFieldName){
++StringlowerIdFieldName=idFieldName.toLowerCase();
++for(Stringsuffix:STRATEGIES.keySet()){
++if(lowerIdFieldName.endsWith(suffix)){
++returnSTRATEGIES.get(suffix).execute(idFieldName);
++}
++}
++returnnewInvalidFieldStrategy().execute(idFieldName);
++}
++}

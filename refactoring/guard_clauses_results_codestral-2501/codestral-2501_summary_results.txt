@@ -1,0 +1,2 @@
+iteration 1 failed test passed diff failed Tokens: prompt=13205, completion=3780, total=16985 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(guard_clauses)
+Fertig. Erfolgsrate: 0.0% (0/1)

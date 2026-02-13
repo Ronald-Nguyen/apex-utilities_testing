@@ -1,0 +1,10 @@
+--- backup/main\utilities\logging\classes\Logger.cls
++++ refactored/main\utilities\logging\classes\Logger.cls
+@@ -64 +63,0 @@
+-StringprofilingReport=profiler.generateProfilingReport();
+@@ -66 +65 @@
+-warn(profilingReport);
++warn(profiler.generateProfilingReport());
+@@ -68 +67 @@
+-info(profilingReport);
++info(profiler.generateProfilingReport());

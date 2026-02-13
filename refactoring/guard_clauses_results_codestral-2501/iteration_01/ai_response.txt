@@ -1,0 +1,516 @@
+I'll analyze the provided codebase and identify methods with deeply nested conditional logic that can be refactored using guard clauses. Here are the files that require refactoring:
+
+File `main\utilities\configuration-management\classes\DeletionValidator.cls`:
+```apex
+public without sharing class DeletionValidator extends Triggerable {
+    @testVisible
+    private static final String NOT_ALLOWED_DELETE = 'You do not have the correct permissions to delete this record. Please contact your system administrator';
+
+    public override void register(SObjectTriggerWrapper wrappedSObject) {
+        if (ConfigurationManager.getInstance().isNotAllowedDelete()) {
+            wrappedSObject.getSObject().addError(NOT_ALLOWED_DELETE);
+        }
+    }
+}
+```
+
+File `main\utilities\logging\classes\EventBufferLogAdapter.cls`:
+```apex
+public without sharing class EventBufferLogAdapter extends LoggerAdapter {
+    @testVisible
+    private static final String ERROR = 'Error';
+    @testVisible
+    private static final String WARNING = 'Warning';
+    @testVisible
+    private static final String INFO = 'Information';
+    @testVisible
+    private static final String DEBUG = 'Debug';
+
+    private static final Integer MAX_LOG_BUFFER = 10;
+
+    private static final EventBufferLogAdapter INSTANCE = new EventBufferLogAdapter();
+
+    @testVisible
+    private final List<Log_Event__e> logsToPublish = new List<Log_Event__e>();
+    @testVisible
+    private static final Set<String> LOGGING_LEVELS = new Set<String>();
+
+    static {
+        for (Logging_Level__mdt loggingLevel : [SELECT DeveloperName FROM Logging_Level__mdt]) {
+            LOGGING_LEVELS.add(loggingLevel.DeveloperName);
+        }
+    }
+
+    public static EventBufferLogAdapter getInstance() {
+        return INSTANCE;
+    }
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    private EventBufferLogAdapter() {
+    }
+
+    public override void log(Object logLevel, String message) {
+        log(logLevel, message, null);
+    }
+
+    public override void log(Object logLevel, String message, Id recordId) {
+        String logLevelString = (String) logLevel;
+        if (LOGGING_LEVELS.contains(logLevelString)) {
+            logsToPublish.add(createLogEvent(logLevelString, message, recordId));
+        }
+        if (logsToPublish.size() >= MAX_LOG_BUFFER) {
+            close();
+        }
+    }
+
+    private Log_Event__e createLogEvent(String logLevel, String message, Id recordId) {
+        Request currentRequest = Request.getCurrent();
+        return new Log_Event__e(
+            Type__c = logType,
+            Level__c = logLevel,
+            Messages__c = message,
+            Record_Id__c = recordId,
+            Quiddity__c = currentRequest.getQuiddity().name(),
+            Transaction_Id__c = currentRequest.getRequestId()
+        );
+    }
+
+    public override Object errorLevel() {
+        return ERROR;
+    }
+
+    public override Object warningLevel() {
+        return WARNING;
+    }
+
+    public override Object infoLevel() {
+        return INFO;
+    }
+
+    public override Object debugLevel() {
+        return DEBUG;
+    }
+
+    public override void close() {
+        if (!logsToPublish.isEmpty()) {
+            EventBus.publish(logsToPublish);
+            logsToPublish.clear();
+        }
+    }
+}
+```
+
+File `main\utilities\logging\classes\Logger.cls`:
+```apex
+@SuppressWarnings('PMD.ExcessivePublicCount')
+public without sharing class Logger {
+    private static final String MESSAGE_FORMAT = 'An error has occured in the class {0} with the message: {1}';
+
+    private final LoggerAdapter loggerAdapter;
+
+    public Logger(Type apexClass, LoggerAdapter loggerAdapter) {
+        this.loggerAdapter = loggerAdapter;
+        this.loggerAdapter.setType(apexClass.getName());
+    }
+
+    public void setType(String type) {
+        this.loggerAdapter.setType(type);
+    }
+
+    public void debug(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.debugLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void debug(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.debugLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void info(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.infoLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void info(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.infoLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void warn(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.warningLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void warn(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.warningLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void error(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.errorLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void error(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.errorLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void error(Exception exceptionToLog) {
+        error((new LogMessage(exceptionToLog)).toString());
+    }
+
+    public void error(Exception exceptionToLog, Id recordId) {
+        error((new LogMessage(exceptionToLog)).toString(), recordId);
+    }
+
+    public void close() {
+        runApexPofiling();
+        loggerAdapter.close();
+    }
+
+    private void runApexPofiling() {
+        Profiler profiler = new ApexProfiler();
+        String profilingReport = profiler.generateProfilingReport();
+        if (profiler.isBreachingWarning()) {
+            warn(profilingReport);
+        } else {
+            info(profilingReport);
+        }
+    }
+}
+```
+
+File `main\utilities\logging\classes\LogMessage.cls`:
+```apex
+public class LogMessage {
+    private final String message;
+    private String stackTraceString;
+
+    public LogMessage(String message) {
+        this.message = message;
+    }
+
+    public LogMessage(Exception exceptionToLog) {
+        this.message = exceptionToLog.getMessage();
+        this.stackTraceString = exceptionToLog.getStackTraceString();
+    }
+
+    public String getStackTraceString() {
+        if (String.isBlank(stackTraceString)) {
+            stackTraceString = generateStackTraceString();
+        }
+        return stackTraceString;
+    }
+
+    private String generateStackTraceString() {
+        List<String> stack = (new DmlException()).getStackTraceString().split('\n');
+        while (isLoggingFrameworkClass(stack[0])) {
+            stack.remove(0);
+        }
+        return String.join(stack, '\n');
+    }
+
+    private Boolean isLoggingFrameworkClass(String stackLine) {
+        return stackLine.startsWith('Class.Logger.') ||
+            stackLine.startsWith('Class.LoggerAdapter.') ||
+            stackLine.startsWith('Class.LogMessage.');
+    }
+
+    public override String toString() {
+        return String.format(
+            '{0}\nStack trace:\n{1}',
+            new List<String>{ message, getStackTraceString() }
+        );
+    }
+}
+```
+
+File `main\utilities\logging\profiler\classes\Profiler.cls`:
+```apex
+public abstract without sharing class Profiler {
+    @testVisible
+    private static final Decimal DEFAULT_WARNING_PERCENTAGE = 0.75;
+    @testVisible
+    private final Map<String, ProfileInfo> profilingInfos = new Map<String, ProfileInfo>();
+    private Boolean isBreachingWarning = false;
+    private static final Map<String, Decimal> WARNING_PERCENTAGES = new Map<String, Decimal>();
+    private static final Set<String> IGNORE_LIMITS = new Set<String>();
+
+    static {
+        for (Apex_Profiling_Warning_Limit__mdt warningLimit : [
+            SELECT DeveloperName, Ignore_Limit__c, Warning_Level__c
+            FROM Apex_Profiling_Warning_Limit__mdt
+        ]) {
+            if (warningLimit.Ignore_Limit__c) {
+                IGNORE_LIMITS.add(warningLimit.DeveloperName);
+            } else {
+                WARNING_PERCENTAGES.put(warningLimit.DeveloperName, warningLimit.Warning_Level__c);
+            }
+        }
+    }
+
+    public Profiler() {
+        refreshProfiling();
+    }
+
+    public Boolean isBreachingWarning() {
+        return isBreachingWarning;
+    }
+
+    public abstract void refreshProfiling();
+
+    protected void addProfilingInfo(String limitName, Integer recorded, Integer limitTotal) {
+        if (!IGNORE_LIMITS.contains(limitName)) {
+            ProfileInfo profilingInfo = new ProfileInfo(limitName, recorded, limitTotal);
+            isBreachingWarning = isBreachingWarning || profilingInfo.isBreachingWarning();
+            profilingInfos.put(profilingInfo.limitName, profilingInfo);
+        }
+    }
+
+    public String generateProfilingReport() {
+        StringBuilder report = new StringBuilder();
+        report.setSeparator('\n');
+        for (ProfileInfo profile : profilingInfos.values()) {
+            report.append(profile.getReportLine());
+        }
+        return report.toString();
+    }
+
+    private class ProfileInfo {
+        private final String limitName;
+        @testVisible
+        private final Integer recorded;
+        @testVisible
+        private final Integer limitTotal;
+
+        private ProfileInfo(String limitName, Integer recorded, Integer limitTotal) {
+            this.limitName = limitName;
+            this.recorded = recorded;
+            this.limitTotal = limitTotal;
+        }
+
+        private Decimal getPercentage() {
+            return limitTotal == 0
+                ? 0
+                : 1 - Decimal.valueOf(limitTotal - recorded) / Decimal.valueOf(limitTotal);
+        }
+
+        private String getReportLine() {
+            String prefix = isBreachingWarning() ? 'Warning hit for ' : 'Number of ';
+            return prefix + limitName + ': ' + recorded + ' of ' + limitTotal;
+        }
+
+        private Boolean isBreachingWarning() {
+            Decimal warningPercentage = WARNING_PERCENTAGES.containsKey(limitName)
+                ? (WARNING_PERCENTAGES.get(limitName) / 100)
+                : DEFAULT_WARNING_PERCENTAGE;
+            return getPercentage() > warningPercentage;
+        }
+    }
+}
+```
+
+File `main\utilities\schema\classes\SObjectWrapper.cls`:
+```apex
+public virtual class SObjectWrapper {
+    public static final String INVALID_PARENT_MESSAGE = 'The provided field is not a valid relationship field';
+    public static final String NON_INITIALISED_RELATIONSHIP = 'The relationship field that is attempting to be accessed has not been initialised.';
+
+    private final SObject wrappedSObject;
+    private final String objectApiName;
+    private final SchemaFacade schema = SchemaFacade.getInstance();
+
+    public SObjectWrapper(SObject sObjectToWrap) {
+        wrappedSObject = sObjectToWrap;
+        objectApiName = String.valueOf(sObjectToWrap.getSObjectType());
+    }
+
+    public virtual Object get(String fieldApiName) {
+        if (isRelatedField(fieldApiName)) {
+            return getParentField(wrappedSObject, fieldApiName);
+        }
+        return wrappedSObject.get(fieldApiName);
+    }
+
+    public virtual void put(String fieldApiName, Object fieldValue) {
+        wrappedSObject.put(fieldApiName, fieldValue);
+    }
+
+    private static Boolean isRelatedField(String fieldApiName) {
+        return fieldApiName.contains('.');
+    }
+
+    private static Object getParentField(SObject childSObject, String fieldApiName) {
+        RelationshipField field = new RelationshipField(fieldApiName);
+        SObject parentSObject;
+        try {
+            parentSObject = childSObject.getSobject(field.relationshipApiName);
+        } catch (NullPointerException exceptionToHandle) {
+            throw new InvalidFieldException(NON_INITIALISED_RELATIONSHIP);
+        }
+        if (isRelatedField(field.relatedFieldName)) {
+            return getParentField(parentSObject, field.relatedFieldName);
+        }
+        return parentSObject.get(field.relatedFieldName);
+    }
+
+    public DescribeFieldResult describe(String fieldApiName) {
+        if (isRelatedField(fieldApiName)) {
+            return describeParentField(fieldApiName);
+        }
+        return describeField(fieldApiName);
+    }
+
+    private DescribeFieldResult describeParentField(String fieldApiName) {
+        RelationshipField relatedField = new RelationshipField(fieldApiName);
+        String parentObjectName = getRelatedObjectName(relatedField.relationshipApiName);
+        if (isRelatedField(relatedField.relatedFieldName)) {
+            return describeParentField(relatedField.relatedFieldName);
+        }
+        return schema.getFieldDescribe(parentObjectName, relatedField.relatedFieldName);
+    }
+
+    @testVisible
+    private String getRelatedObjectName(String relationshipApiName) {
+        String relationshipFieldName = Relationship.fromRefrenceField(relationshipApiName)
+            .idFieldName;
+        DescribeFieldResult relationshipField = schema.getFieldDescribe(
+            objectApiName,
+            relationshipFieldName
+        );
+        return relationshipField.getReferenceTo()[0]
+            .getDescribe(SObjectDescribeOptions.DEFERRED)
+            .getName();
+    }
+
+    private DescribeFieldResult describeField(String fieldApiName) {
+        return schema.getFieldDescribe(objectApiName, fieldApiName);
+    }
+
+    @testVisible
+    private class RelationshipField {
+        public final String relationshipApiName;
+        public final String relatedFieldName;
+
+        public RelationshipField(String fieldApiName) {
+            validateParentField(fieldApiName);
+            final List<String> parentRelationshipAndField = fieldApiName.split('\\.', 2);
+            relationshipApiName = parentRelationshipAndField[0];
+            relatedFieldName = parentRelationshipAndField[1];
+        }
+
+        private void validateParentField(String fieldApiName) {
+            if (!isRelatedField(fieldApiName)) {
+                throw new InvalidFieldException(INVALID_PARENT_MESSAGE);
+            }
+        }
+    }
+}
+```
+
+File `main\utilities\trigger-framework\classes\TriggerDispatcher.cls`:
+```apex
+public with sharing class TriggerDispatcher {
+    private static final Stack TRIGGER_STACK = new Stack();
+    private static Boolean unknownExceptionLogged = false;
+    private static final Set<String> DISABLED_TRIGGERS = new Set<String>();
+
+    private final Triggerable handler;
+    private final List<SObject> newSObjects;
+    private final Map<Id, SObject> oldMap;
+    private final String currentTriggerAction;
+    private final Logger log = LoggerFactory.createLogger(TriggerDispatcher.class);
+
+    @SuppressWarnings('PMD.ExcessiveParameterList')
+    @TestVisible
+    private TriggerDispatcher(
+        List<Triggerable> actions,
+        List<SObject> newSObjects,
+        Map<Id, SObject> oldMap,
+        TriggerOperation operation
+    ) {
+        this.handler = new TriggerHandler(actions);
+
+        this.newSObjects = newSObjects == null ? oldMap.values() : newSObjects;
+        this.oldMap = oldMap;
+        this.currentTriggerAction = getTriggerAction(newSObjects.getSObjectType(), operation);
+    }
+
+    public static void run(List<Triggerable> actions) {
+        (new TriggerDispatcher(actions, Trigger.new, Trigger.oldMap, Trigger.operationType)).run();
+    }
+
+    public static void disable(SObjectType objectType, TriggerOperation operation) {
+        DISABLED_TRIGGERS.add(getTriggerAction(objectType, operation));
+    }
+
+    public static void enable(SObjectType objectType, TriggerOperation operation) {
+        DISABLED_TRIGGERS.remove(getTriggerAction(objectType, operation));
+    }
+
+    private static String getTriggerAction(SObjectType objectType, TriggerOperation operation) {
+        return (operation + '-' + objectType).toUpperCase();
+    }
+
+    public void run() {
+        if (triggersAreActive()) {
+            try {
+                TRIGGER_STACK.push(currentTriggerAction);
+                executeTriggerables();
+                TRIGGER_STACK.pop();
+            } catch (Stack.UnderflowException underflowException) {
+                logUnknownException('Stack underflow');
+                throw underflowException;
+            } catch (Exception exceptionToHandle) {
+                logUnknownException(exceptionToHandle.getMessage());
+                TRIGGER_STACK.pop();
+                throw exceptionToHandle;
+            } finally {
+                if (TRIGGER_STACK.isEmpty()) {
+                    log.close();
+                }
+            }
+        }
+    }
+
+    private void executeTriggerables() {
+        for (SObject newSObject : newSObjects) {
+            SObject oldSObject = oldMap != null ? oldMap.get(newSObject.Id) : null;
+            SObjectTriggerWrapper wrappedSObject = new SObjectTriggerWrapper(
+                newSObject,
+                oldSObject
+            );
+            handler.register(wrappedSObject);
+        }
+        handler.performAction();
+    }
+
+    private Boolean triggersAreActive() {
+        return ConfigurationManager.getInstance().areTriggersOn() &&
+            !DISABLED_TRIGGERS.contains(currentTriggerAction);
+    }
+
+    private void logUnknownException(String exceptionMessage) {
+        if (!unknownExceptionLogged) {
+            log.error(
+                'Unhandled exception within trigger: ' +
+                exceptionMessage +
+                '\n' +
+                'Trigger Stack: ' +
+                TRIGGER_STACK.toString()
+            );
+            unknownExceptionLogged = true;
+        }
+    }
+}
+```

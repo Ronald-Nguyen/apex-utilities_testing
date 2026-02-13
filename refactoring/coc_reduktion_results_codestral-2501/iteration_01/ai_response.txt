@@ -1,0 +1,1535 @@
+I'll refactor the code to reduce cognitive complexity while preserving behavior. Here are the modified files:
+
+File `main\utilities\classes\Stack.cls`:
+```apex
+public class Stack {
+    private final List<Object> items = new List<Object>();
+
+    public void push(Object item) {
+        items.add(item);
+    }
+
+    public Object pop() {
+        if (isEmpty()) {
+            throw new UnderflowException();
+        }
+        return items.remove(items.size() - 1);
+    }
+
+    public Integer size() {
+        return items.size();
+    }
+
+    public Boolean isEmpty() {
+        return items.isEmpty();
+    }
+
+    public override String toString() {
+        return String.join(items, '\n');
+    }
+
+    public class UnderflowException extends Exception {
+    }
+}
+```
+
+File `main\utilities\configuration-management\classes\ConfigurationManager.cls`:
+```apex
+public without sharing class ConfigurationManager {
+    private final Configuration__c configurationSetting = Configuration__c.getInstance();
+
+    private static final ConfigurationManager INSTANCE = new ConfigurationManager();
+
+    public static ConfigurationManager getInstance() {
+        return INSTANCE;
+    }
+
+    public static void turnAutomationsOn() {
+        INSTANCE.turnProcessesOn();
+        INSTANCE.turnTriggersOn();
+        INSTANCE.turnValidationsOn();
+        INSTANCE.turnWorkflowsOn();
+        INSTANCE.commitChanges();
+    }
+
+    public static void turnAutomationsOff() {
+        INSTANCE.turnProcessesOff();
+        INSTANCE.turnTriggersOff();
+        INSTANCE.turnValidationsOff();
+        INSTANCE.turnWorkflowsOff();
+        INSTANCE.commitChanges();
+    }
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    private ConfigurationManager() {
+    }
+
+    public Boolean areTriggersOff() {
+        return configurationSetting.Are_Triggers_Off__c;
+    }
+
+    public Boolean areTriggersOn() {
+        return !areTriggersOff();
+    }
+
+    public Boolean isAllowedDelete() {
+        return configurationSetting.Is_Allowed_Delete__c;
+    }
+
+    public Boolean isNotAllowedDelete() {
+        return !isAllowedDelete();
+    }
+
+    public void turnTriggersOff() {
+        configurationSetting.Are_Triggers_Off__c = true;
+    }
+
+    public void turnTriggersOn() {
+        configurationSetting.Are_Triggers_Off__c = false;
+    }
+
+    public void turnWorkflowsOff() {
+        configurationSetting.Are_Workflows_Off__c = true;
+    }
+
+    public void turnWorkflowsOn() {
+        configurationSetting.Are_Workflows_Off__c = false;
+    }
+
+    public void turnValidationsOff() {
+        configurationSetting.Are_Validations_Off__c = true;
+    }
+
+    public void turnValidationsOn() {
+        configurationSetting.Are_Validations_Off__c = false;
+    }
+
+    public void turnProcessesOff() {
+        configurationSetting.Are_Processes_Off__c = true;
+    }
+
+    public void turnProcessesOn() {
+        configurationSetting.Are_Processes_Off__c = false;
+    }
+
+    public void turnDeletionOff() {
+        configurationSetting.Is_Allowed_Delete__c = false;
+    }
+
+    public void turnDeletionOn() {
+        configurationSetting.Is_Allowed_Delete__c = true;
+    }
+
+    public void commitChanges() {
+        upsert configurationSetting;
+    }
+}
+```
+
+File `main\utilities\logging\classes\EventBufferLogAdapter.cls`:
+```apex
+public without sharing class EventBufferLogAdapter extends LoggerAdapter {
+    @testVisible
+    private static final String ERROR = 'Error';
+    @testVisible
+    private static final String WARNING = 'Warning';
+    @testVisible
+    private static final String INFO = 'Information';
+    @testVisible
+    private static final String DEBUG = 'Debug';
+
+    private static final Integer MAX_LOG_BUFFER = 10;
+
+    private static final EventBufferLogAdapter INSTANCE = new EventBufferLogAdapter();
+
+    @testVisible
+    private final List<Log_Event__e> logsToPublish = new List<Log_Event__e>();
+    @testVisible
+    private static final Set<String> LOGGING_LEVELS = new Set<String>();
+
+    static {
+        for (Logging_Level__mdt loggingLevel : [SELECT DeveloperName FROM Logging_Level__mdt]) {
+            LOGGING_LEVELS.add(loggingLevel.DeveloperName);
+        }
+    }
+
+    public static EventBufferLogAdapter getInstance() {
+        return INSTANCE;
+    }
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    private EventBufferLogAdapter() {
+    }
+
+    public override void log(Object logLevel, String message) {
+        log(logLevel, message, null);
+    }
+
+    public override void log(Object logLevel, String message, Id recordId) {
+        String logLevelString = (String) logLevel;
+        if (LOGGING_LEVELS.contains(logLevelString)) {
+            logsToPublish.add(createLogEvent(logLevelString, message, recordId));
+        }
+        if (logsToPublish.size() >= MAX_LOG_BUFFER) {
+            close();
+        }
+    }
+
+    private Log_Event__e createLogEvent(String logLevel, String message, Id recordId) {
+        Request currentRequest = Request.getCurrent();
+        return new Log_Event__e(
+            Type__c = logType,
+            Level__c = logLevel,
+            Messages__c = message,
+            Record_Id__c = recordId,
+            Quiddity__c = currentRequest.getQuiddity().name(),
+            Transaction_Id__c = currentRequest.getRequestId()
+        );
+    }
+
+    public override Object errorLevel() {
+        return ERROR;
+    }
+
+    public override Object warningLevel() {
+        return WARNING;
+    }
+
+    public override Object infoLevel() {
+        return INFO;
+    }
+
+    public override Object debugLevel() {
+        return DEBUG;
+    }
+
+    public override void close() {
+        if (!logsToPublish.isEmpty()) {
+            EventBus.publish(logsToPublish);
+            logsToPublish.clear();
+        }
+    }
+}
+```
+
+File `main\utilities\logging\classes\LoggedQueueable.cls`:
+```apex
+public abstract inherited sharing class LoggedQueueable implements Queueable {
+    protected QueueableContext context;
+    protected final Logger log = LoggerFactory.createLogger(LoggedQueueable.class);
+
+    public void execute(QueueableContext context) {
+        this.context = context;
+        try {
+            execute();
+        } catch (Exception exceptionToHandle) {
+            log.error(exceptionToHandle);
+        }
+        log.close();
+    }
+
+    protected abstract void execute();
+
+    public Id enqueue() {
+        return System.enqueueJob(this);
+    }
+}
+```
+
+File `main\utilities\logging\classes\LoggedSchedulable.cls`:
+```apex
+public abstract inherited sharing class LoggedSchedulable implements Schedulable {
+    private static final String DAILY_CRON_EXPRESSION = '0 0 0 ? * * *';
+    public static final String DEFAULT_JOB_NAME = 'Schedule Job';
+
+    protected SchedulableContext context;
+    protected final Logger log = LoggerFactory.createLogger(LoggedSchedulable.class);
+    private String jobName = DEFAULT_JOB_NAME;
+
+    public void execute(SchedulableContext context) {
+        this.context = context;
+        try {
+            execute();
+        } catch (Exception exceptionToHandle) {
+            log.error(exceptionToHandle);
+        }
+        log.close();
+    }
+
+    protected abstract void execute();
+
+    public Id scheduleDaily() {
+        return schedule(DAILY_CRON_EXPRESSION);
+    }
+
+    public Id schedule(String cronExpression) {
+        return System.schedule(getJobName(), cronExpression, this);
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
+    protected String getJobName() {
+        return jobName;
+    }
+}
+```
+
+File `main\utilities\logging\classes\Logger.cls`:
+```apex
+@SuppressWarnings('PMD.ExcessivePublicCount')
+public without sharing class Logger {
+    private static final String MESSAGE_FORMAT = 'An error has occured in the class {0} with the message: {1}';
+
+    private final LoggerAdapter loggerAdapter;
+
+    public Logger(Type apexClass, LoggerAdapter loggerAdapter) {
+        this.loggerAdapter = loggerAdapter;
+        this.loggerAdapter.setType(apexClass.getName());
+    }
+
+    public void setType(String type) {
+        this.loggerAdapter.setType(type);
+    }
+
+    public void debug(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.debugLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void debug(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.debugLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void info(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.infoLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void info(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.infoLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void warn(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.warningLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void warn(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.warningLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void error(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.errorLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void error(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.errorLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void error(Exception exceptionToLog) {
+        error((new LogMessage(exceptionToLog)).toString());
+    }
+
+    public void error(Exception exceptionToLog, Id recordId) {
+        error((new LogMessage(exceptionToLog)).toString(), recordId);
+    }
+
+    public void close() {
+        runApexPofiling();
+        loggerAdapter.close();
+    }
+
+    private void runApexPofiling() {
+        Profiler profiler = new ApexProfiler();
+        String profilingReport = profiler.generateProfilingReport();
+        if (profiler.isBreachingWarning()) {
+            warn(profilingReport);
+        } else {
+            info(profilingReport);
+        }
+    }
+}
+```
+
+File `main\utilities\logging\classes\LoggerAdapter.cls`:
+```apex
+@SuppressWarnings('PMD.ExcessivePublicCount')
+public abstract class LoggerAdapter {
+    protected String logType;
+
+    public virtual void setType(String type) {
+        logType = type;
+    }
+
+    public abstract void log(Object logLevel, String message);
+
+    public virtual void log(Object logLevel, String message, Id recordId) {
+        message = 'Record Id: ' + recordId + ' message: ' + message;
+        log(logLevel, message);
+    }
+
+    public abstract Object errorLevel();
+    public abstract Object warningLevel();
+    public abstract Object infoLevel();
+    public abstract Object debugLevel();
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    public virtual void close() {
+    }
+
+    public class DebugLogAdapter extends LoggerAdapter {
+        @SuppressWarnings('PMD.AvoidDebugStatements')
+        public override void log(Object logLevel, String message) {
+            System.debug((LoggingLevel) logLevel, message);
+        }
+
+        public override Object errorLevel() {
+            return LoggingLevel.ERROR;
+        }
+
+        public override Object warningLevel() {
+            return LoggingLevel.WARN;
+        }
+
+        public override Object infoLevel() {
+            return LoggingLevel.INFO;
+        }
+
+        public override Object debugLevel() {
+            return LoggingLevel.DEBUG;
+        }
+    }
+}
+```
+
+File `main\utilities\logging\classes\LoggerFactory.cls`:
+```apex
+public with sharing class LoggerFactory {
+    public static Logger createLogger(Type apexClass) {
+        return new Logger(apexClass, EventBufferLogAdapter.getInstance());
+    }
+}
+```
+
+File `main\utilities\logging\classes\LogMessage.cls`:
+```apex
+public class LogMessage {
+    private final String message;
+    private String stackTraceString;
+
+    public LogMessage(String message) {
+        this.message = message;
+    }
+
+    public LogMessage(Exception exceptionToLog) {
+        this.message = exceptionToLog.getMessage();
+        this.stackTraceString = exceptionToLog.getStackTraceString();
+    }
+
+    public String getStackTraceString() {
+        if (String.isBlank(stackTraceString)) {
+            stackTraceString = generateStackTraceString();
+        }
+        return stackTraceString;
+    }
+
+    private String generateStackTraceString() {
+        List<String> stack = (new DmlException()).getStackTraceString().split('\n');
+        while (isLoggingFrameworkClass(stack[0])) {
+            stack.remove(0);
+        }
+        return String.join(stack, '\n');
+    }
+
+    private Boolean isLoggingFrameworkClass(String stackLine) {
+        return stackLine.startsWith('Class.Logger.') ||
+            stackLine.startsWith('Class.LoggerAdapter.') ||
+            stackLine.startsWith('Class.LogMessage.');
+    }
+
+    public override String toString() {
+        return String.format(
+            '{0}\nStack trace:\n{1}',
+            new List<String>{ message, getStackTraceString() }
+        );
+    }
+}
+```
+
+File `main\utilities\logging\classes\LogWriter.cls`:
+```apex
+public without sharing class LogWriter extends Triggerable {
+    private final List<Log__c> logs = new List<Log__c>();
+
+    public override void register(SObjectTriggerWrapper wrappedSObject) {
+        Log_Event__e logEvent = (Log_Event__e) wrappedSObject.getSObject();
+        logs.add(
+            new Log__c(
+                Level__c = logEvent.Level__c,
+                Messages__c = logEvent.Messages__c,
+                Record_Id__c = logEvent.Record_Id__c,
+                Type__c = logEvent.Type__c,
+                Quiddity__c = logEvent.Quiddity__c,
+                Transaction_Id__c = logEvent.Transaction_Id__c
+            )
+        );
+    }
+
+    public override void performAction() {
+        insert logs;
+    }
+}
+```
+
+File `main\utilities\logging\classes\QueueableScheduler.cls`:
+```apex
+public inherited sharing class QueueableScheduler extends LoggedSchedulable {
+    private final LoggedQueueable queueableToRun;
+    private Id runningQueueableId;
+
+    public QueueableScheduler(LoggedQueueable queueableToRun) {
+        this.queueableToRun = queueableToRun;
+    }
+
+    public override void execute() {
+        runningQueueableId = queueableToRun.enqueue();
+    }
+
+    public Id getRunningQueueableId() {
+        return runningQueueableId;
+    }
+}
+```
+
+File `main\utilities\logging\profiler\classes\ApexProfiler.cls`:
+```apex
+public without sharing class ApexProfiler extends Profiler {
+    public override void refreshProfiling() {
+        addProfilingInfo(
+            'AggregateQueries',
+            Limits.getAggregateQueries(),
+            Limits.getLimitAggregateQueries()
+        );
+        addProfilingInfo('Callouts', Limits.getCallouts(), Limits.getLimitCallouts());
+        addProfilingInfo('CpuTime', Limits.getCpuTime(), Limits.getLimitCpuTime());
+        addProfilingInfo('DatabaseTime', Limits.getDatabaseTime(), Limits.getLimitDatabaseTime());
+        addProfilingInfo('DmlRows', Limits.getDmlRows(), Limits.getLimitDmlRows());
+        addProfilingInfo(
+            'DmlStatements',
+            Limits.getDmlStatements(),
+            Limits.getLimitDmlStatements()
+        );
+        addProfilingInfo(
+            'EmailInvocations',
+            Limits.getEmailInvocations(),
+            Limits.getLimitEmailInvocations()
+        );
+        addProfilingInfo(
+            'FindSimilarCalls',
+            Limits.getFindSimilarCalls(),
+            Limits.getLimitFindSimilarCalls()
+        );
+        addProfilingInfo('FutureCalls', Limits.getFutureCalls(), Limits.getLimitFutureCalls());
+        addProfilingInfo('HeapSize', Limits.getHeapSize(), Limits.getLimitHeapSize());
+        addProfilingInfo(
+            'MobilePushApexCalls',
+            Limits.getMobilePushApexCalls(),
+            Limits.getLimitMobilePushApexCalls()
+        );
+        addProfilingInfo('Queries', Limits.getQueries(), Limits.getLimitQueries());
+        addProfilingInfo(
+            'QueryLocatorRows',
+            Limits.getQueryLocatorRows(),
+            Limits.getLimitQueryLocatorRows()
+        );
+        addProfilingInfo('QueryRows', Limits.getQueryRows(), Limits.getLimitQueryRows());
+        addProfilingInfo(
+            'QueueableJobs',
+            Limits.getQueueableJobs(),
+            Limits.getLimitQueueableJobs()
+        );
+        addProfilingInfo('RunAs', Limits.getRunAs(), Limits.getLimitRunAs());
+        addProfilingInfo(
+            'SavepointRollbacks',
+            Limits.getSavepointRollbacks(),
+            Limits.getLimitSavepointRollbacks()
+        );
+        addProfilingInfo('Savepoints', Limits.getSavepoints(), Limits.getLimitSavepoints());
+        addProfilingInfo('SoslQueries', Limits.getSoslQueries(), Limits.getLimitSoslQueries());
+        addProfilingInfo(
+            'PublishImmediateDML',
+            Limits.getPublishImmediateDML(),
+            Limits.getLimitPublishImmediateDML()
+        );
+    }
+}
+```
+
+File `main\utilities\logging\profiler\classes\OrgLimitsProfiler.cls`:
+```apex
+public without sharing class OrgLimitsProfiler extends Profiler {
+    public override void refreshProfiling() {
+        Map<String, OrgLimit> orgLimitsMap = OrgLimits.getMap();
+        for (String limitName : orgLimitsMap.keySet()) {
+            OrgLimit orgLimit = orgLimitsMap.get(limitName);
+            addProfilingInfo(limitName, orgLimit.getValue(), orgLimit.getLimit());
+        }
+    }
+}
+```
+
+File `main\utilities\logging\profiler\classes\OrgLimitsProfilingReportRunner.cls`:
+```apex
+public without sharing class OrgLimitsProfilingReportRunner extends LoggedSchedulable {
+    public static final String JOB_NAME = 'Profiling Report';
+    public static final String LOG_TYPE = 'Org Limits Profiling Report';
+
+    private final Profiler profiler = new OrgLimitsProfiler();
+
+    public OrgLimitsProfilingReportRunner() {
+        setJobName(JOB_NAME);
+    }
+
+    public override void execute() {
+        log.setType(LOG_TYPE);
+        if (profiler.isBreachingWarning()) {
+            log.warn(profiler.generateProfilingReport());
+        } else {
+            log.info(profiler.generateProfilingReport());
+        }
+        log.close();
+    }
+}
+```
+
+File `main\utilities\logging\profiler\classes\Profiler.cls`:
+```apex
+public abstract without sharing class Profiler {
+    @testVisible
+    private static final Decimal DEFAULT_WARNING_PERCENTAGE = 0.75;
+    @testVisible
+    private final Map<String, ProfileInfo> profilingInfos = new Map<String, ProfileInfo>();
+    private Boolean isBreachingWarning = false;
+    private static final Map<String, Decimal> WARNING_PERCENTAGES = new Map<String, Decimal>();
+    private static final Set<String> IGNORE_LIMITS = new Set<String>();
+
+    static {
+        for (Apex_Profiling_Warning_Limit__mdt warningLimit : [
+            SELECT DeveloperName, Ignore_Limit__c, Warning_Level__c
+            FROM Apex_Profiling_Warning_Limit__mdt
+        ]) {
+            if (warningLimit.Ignore_Limit__c) {
+                IGNORE_LIMITS.add(warningLimit.DeveloperName);
+            } else {
+                WARNING_PERCENTAGES.put(warningLimit.DeveloperName, warningLimit.Warning_Level__c);
+            }
+        }
+    }
+
+    public Profiler() {
+        refreshProfiling();
+    }
+
+    public Boolean isBreachingWarning() {
+        return isBreachingWarning;
+    }
+
+    public abstract void refreshProfiling();
+
+    protected void addProfilingInfo(String limitName, Integer recorded, Integer limitTotal) {
+        if (!IGNORE_LIMITS.contains(limitName)) {
+            ProfileInfo profilingInfo = new ProfileInfo(limitName, recorded, limitTotal);
+            isBreachingWarning = isBreachingWarning || profilingInfo.isBreachingWarning();
+            profilingInfos.put(profilingInfo.limitName, profilingInfo);
+        }
+    }
+
+    public String generateProfilingReport() {
+        StringBuilder report = new StringBuilder();
+        report.setSeparator('\n');
+        for (ProfileInfo profile : profilingInfos.values()) {
+            report.append(profile.getReportLine());
+        }
+        return report.toString();
+    }
+
+    private class ProfileInfo {
+        private final String limitName;
+        @testVisible
+        private final Integer recorded;
+        @testVisible
+        private final Integer limitTotal;
+
+        private ProfileInfo(String limitName, Integer recorded, Integer limitTotal) {
+            this.limitName = limitName;
+            this.recorded = recorded;
+            this.limitTotal = limitTotal;
+        }
+
+        private Decimal getPercentage() {
+            return limitTotal == 0
+                ? 0
+                : 1 - Decimal.valueOf(limitTotal - recorded) / Decimal.valueOf(limitTotal);
+        }
+
+        private String getReportLine() {
+            String prefix = isBreachingWarning() ? 'Warning hit for ' : 'Number of ';
+            return prefix + limitName + ': ' + recorded + ' of ' + limitTotal;
+        }
+
+        private Boolean isBreachingWarning() {
+            Decimal warningPercentage = WARNING_PERCENTAGES.containsKey(limitName)
+                ? (WARNING_PERCENTAGES.get(limitName) / 100)
+                : DEFAULT_WARNING_PERCENTAGE;
+            return getPercentage() > warningPercentage;
+        }
+    }
+}
+```
+
+File `main\utilities\parsers\classes\DisplayTypeParser.cls`:
+```apex
+public class DisplayTypeParser implements Parsable {
+    private static final Map<DisplayType, Parser> PARSERS = new Map<DisplayType, Parser>{
+        DisplayType.BOOLEAN => new BooleanParser(),
+        DisplayType.DOUBLE => new DecimalParser(),
+        DisplayType.CURRENCY => new DecimalParser(),
+        DisplayType.PERCENT => new DecimalParser(),
+        DisplayType.INTEGER => new DecimalParser(),
+        DisplayType.DATE => new DateParser(),
+        DisplayType.DATETIME => new DatetimeParser(),
+        DisplayType.ID => new IdParser(),
+        DisplayType.REFERENCE => new IdParser(),
+        null => new StringParser()
+    };
+
+    private final Parser parser;
+
+    public DisplayTypeParser(DisplayType type) {
+        parser = PARSERS.containsKey(type) ? PARSERS.get(type) : PARSERS.get(null);
+    }
+
+    public Object parse(String value) {
+        return parser.parse(value);
+    }
+
+    private abstract class Parser {
+        public Object parse(String value) {
+            Object parsedValue;
+            if (String.isNotBlank(value)) {
+                parsedValue = parseSafe(value);
+            }
+            return parsedValue;
+        }
+
+        protected abstract Object parseSafe(String value);
+    }
+
+    private class BooleanParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Boolean.valueOf(value);
+        }
+    }
+
+    private class DecimalParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Decimal.valueOf(value);
+        }
+    }
+
+    private class DateParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Date.valueOf(value);
+        }
+    }
+
+    private class DatetimeParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Datetime.valueOf(value);
+        }
+    }
+
+    private class IdParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Id.valueOf(value);
+        }
+    }
+
+    private class StringParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return String.valueOf(value);
+        }
+    }
+}
+```
+
+File `main\utilities\schema\classes\PicklistValueSet.cls`:
+```apex
+public class PicklistValueSet {
+    private final Map<String, String> apiNameByValues = new Map<String, String>();
+    private final Map<String, String> valuesByApiNames = new Map<String, String>();
+    private final DescribeFieldResult fieldDefinition;
+
+    public PicklistValueSet(DescribeFieldResult fieldDefinition) {
+        this.fieldDefinition = fieldDefinition;
+        for (Schema.PicklistEntry value : fieldDefinition.getPickListValues()) {
+            apiNameByValues.put(value.getValue().toLowerCase(), value.getLabel());
+            valuesByApiNames.put(value.getLabel().toLowerCase(), value.getValue());
+        }
+    }
+
+    public String getValue(String label) {
+        return valuesByApiNames.get(label.toLowerCase());
+    }
+
+    public String getLabel(String value) {
+        return apiNameByValues.get(value.toLowerCase());
+    }
+}
+```
+
+File `main\utilities\schema\classes\Relationship.cls`:
+```apex
+public with sharing class Relationship {
+    public static final String INVALID_RELATIONSHIP_FIELD = 'The field passed in is not a relationship. Field Value: ';
+
+    public final String referenceFieldName;
+    public final String idFieldName;
+
+    private Relationship(String referenceFieldName, String idFieldName) {
+        this.referenceFieldName = referenceFieldName;
+        this.idFieldName = idFieldName;
+    }
+
+    public static Relationship fromRefrenceField(String referenceFieldName) {
+        String idFieldName;
+        if (referenceFieldName.toLowerCase().endsWith('__r')) {
+            idFieldName = referenceFieldName.replaceAll('(?i)__r', '__c');
+        } else {
+            idFieldName = referenceFieldName + 'Id';
+        }
+        return new Relationship(referenceFieldName, idFieldName);
+    }
+
+    public static Relationship fromIdField(String idFieldName) {
+        String referenceFieldName;
+        if (idFieldName.toLowerCase().endsWith('__c')) {
+            referenceFieldName = idFieldName.replaceAll('(?i)__c', '__r');
+        } else if (idFieldName.toLowerCase().endsWith('id')) {
+            referenceFieldName = idFieldName.replaceAll('(?i)id', '');
+        } else {
+            throw new InvalidFieldException(INVALID_RELATIONSHIP_FIELD + idFieldName);
+        }
+        return new Relationship(referenceFieldName, idFieldName);
+    }
+}
+```
+
+File `main\utilities\schema\classes\SchemaFacade.cls`:
+```apex
+public without sharing class SchemaFacade {
+    private Map<String, SObjectType> sObjectTypeByObjectNames = Schema.getGlobalDescribe();
+    private Map<String, DescribeSObjectResult> sObjectDescribeByObjectNames = new Map<String, DescribeSObjectResult>();
+    private Map<String, Map<String, SObjectField>> fieldTypesByNameAndObject = new Map<String, Map<String, SObjectField>>();
+    private Map<String, Map<String, DescribeFieldResult>> fieldDescribeByNameAndObject = new Map<String, Map<String, DescribeFieldResult>>();
+
+    private static final SchemaFacade INSTANCE = new SchemaFacade();
+
+    public static SchemaFacade getInstance() {
+        return INSTANCE;
+    }
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    private SchemaFacade() {
+    }
+
+    public Boolean isValidSObject(String objectApiName) {
+        return sObjectTypeByObjectNames.containsKey(objectApiName);
+    }
+
+    public Boolean isNotValidSObject(String objectApiName) {
+        return !isValidSObject(objectApiName);
+    }
+
+    public DescribeSObjectResult getDescribe(String objectApiName) {
+        objectApiName = objectApiName.toLowerCase();
+        validateObjectApiName(objectApiName);
+        if (!sObjectDescribeByObjectNames.containsKey(objectApiName)) {
+            DescribeSObjectResult sObjectDescribe = sObjectTypeByObjectNames.get(objectApiName)
+                .getDescribe(SObjectDescribeOptions.FULL);
+            sObjectDescribe.fields.getMap();
+            sObjectDescribeByObjectNames.put(objectApiName, sObjectDescribe);
+        }
+        return sObjectDescribeByObjectNames.get(objectApiName);
+    }
+
+    private void validateObjectApiName(String objectApiName) {
+        if (isNotValidSObject(objectApiName)) {
+            throw new InvalidDescribeException('The field ' + objectApiName + ' does not exist');
+        }
+    }
+
+    public Boolean isValidField(String objectApiName, String fieldApiName) {
+        return isValidSObject(objectApiName) &&
+            getFieldsMap(objectApiName).containsKey(fieldApiName);
+    }
+
+    public Boolean isNotValidField(String objectApiName, String fieldApiName) {
+        return !isValidField(objectApiName, fieldApiName);
+    }
+
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    private Map<String, SObjectField> getFieldsMap(String objectApiName) {
+        objectApiName = objectApiName.toLowerCase();
+        validateObjectApiName(objectApiName);
+        if (!fieldTypesByNameAndObject.containsKey(objectApiName)) {
+            Map<String, SObjectField> fieldsMap = getDescribe(objectApiName).fields.getMap();
+            fieldTypesByNameAndObject.put(objectApiName, fieldsMap);
+        }
+        return fieldTypesByNameAndObject.get(objectApiName);
+    }
+
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    public DescribeFieldResult getFieldDescribe(String objectApiName, String fieldApiName) {
+        objectApiName = objectApiName.toLowerCase();
+        fieldApiName = fieldApiName.toLowerCase();
+        validateFieldApiName(objectApiName, fieldApiName);
+        if (
+            !fieldDescribeByNameAndObject.containsKey(objectApiName) ||
+            !fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+        ) {
+            Map<String, DescribeFieldResult> fieldDescribeMap = fieldDescribeByNameAndObject.get(
+                objectApiName
+            );
+            fieldDescribeMap = fieldDescribeMap == null
+                ? new Map<String, DescribeFieldResult>()
+                : fieldDescribeMap;
+            fieldDescribeMap.put(
+                fieldApiName,
+                getFieldsMap(objectApiName).get(fieldApiName).getDescribe()
+            );
+            fieldDescribeByNameAndObject.put(objectApiName, fieldDescribeMap);
+        }
+        return fieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
+    }
+
+    private void validateFieldApiName(String objectApiName, String fieldApiName) {
+        if (isNotValidField(objectApiName, fieldApiName)) {
+            throw new InvalidDescribeException(
+                'The field ' +
+                fieldApiName +
+                ' does not exist on the object ' +
+                objectApiName
+            );
+        }
+    }
+
+    public class InvalidDescribeException extends Exception {
+    }
+}
+```
+
+File `main\utilities\schema\classes\SecureSObjectWrapper.cls`:
+```apex
+public class SecureSObjectWrapper extends SObjectWrapper {
+    public SecureSObjectWrapper(SObject sObjectToWrap) {
+        super(sObjectToWrap);
+    }
+
+    public override Object get(String fieldApiName) {
+        DescribeFieldResult field = describe(fieldApiName);
+        if (field.isAccessible()) {
+            return super.get(fieldApiName);
+        }
+        return null;
+    }
+
+    public override void put(String fieldApiName, Object fieldValue) {
+        DescribeFieldResult field = describe(fieldApiName);
+        if (field.isCreateable() && field.isUpdateable()) {
+            super.put(fieldApiName, fieldValue);
+        }
+    }
+}
+```
+
+File `main\utilities\schema\classes\SObjectRecordTypes.cls`:
+```apex
+public inherited sharing class SObjectRecordTypes {
+    private final Map<String, Schema.RecordTypeInfo> recordTypesByDeveloperName;
+    private final Map<Id, Schema.RecordTypeInfo> recordTypesById;
+    private RecordTypeInfo defaultRecordTypeInfo;
+
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    public SObjectRecordTypes(final String objectApiName) {
+        final SchemaFacade schema = SchemaFacade.getInstance();
+        final DescribeSObjectResult objectDescribe = schema.getDescribe(objectApiName);
+        recordTypesByDeveloperName = objectDescribe.getRecordTypeInfosByDeveloperName();
+        recordTypesById = objectDescribe.getRecordTypeInfosById();
+    }
+
+    public Id getDefaultId() {
+        if (defaultRecordTypeInfo == null) {
+            for (Schema.RecordTypeInfo info : recordTypesByDeveloperName.values()) {
+                if (info.isDefaultRecordTypeMapping()) {
+                    defaultRecordTypeInfo = info;
+                    break;
+                }
+            }
+        }
+        return defaultRecordTypeInfo.getRecordTypeId();
+    }
+
+    public Id getRecordTypeId(final String developerName) {
+        Id recordTypeId;
+        if (recordTypesByDeveloperName.containsKey(developerName)) {
+            recordTypeId = recordTypesByDeveloperName.get(developerName).getRecordTypeId();
+        }
+        return recordTypeId;
+    }
+
+    public String getRecordTypeDeveloperName(final Id recordTypeId) {
+        String recordTypeDeveloperName;
+        if (recordTypesById.containsKey(recordTypeId)) {
+            recordTypeDeveloperName = recordTypesById.get(recordTypeId).getDeveloperName();
+        }
+        return recordTypeDeveloperName;
+    }
+}
+```
+
+File `main\utilities\schema\classes\SObjectWrapper.cls`:
+```apex
+public virtual class SObjectWrapper {
+    public static final String INVALID_PARENT_MESSAGE = 'The provided field is not a valid relationship field';
+    public static final String NON_INITIALISED_RELATIONSHIP = 'The relationship field that is attempting to be accessed has not been initialised.';
+
+    private final SObject wrappedSObject;
+    private final String objectApiName;
+    private final SchemaFacade schema = SchemaFacade.getInstance();
+
+    public SObjectWrapper(SObject sObjectToWrap) {
+        wrappedSObject = sObjectToWrap;
+        objectApiName = String.valueOf(sObjectToWrap.getSObjectType());
+    }
+
+    public virtual Object get(String fieldApiName) {
+        if (isRelatedField(fieldApiName)) {
+            return getParentField(wrappedSObject, fieldApiName);
+        }
+        return wrappedSObject.get(fieldApiName);
+    }
+
+    public virtual void put(String fieldApiName, Object fieldValue) {
+        wrappedSObject.put(fieldApiName, fieldValue);
+    }
+
+    private static Boolean isRelatedField(String fieldApiName) {
+        return fieldApiName.contains('.');
+    }
+
+    private static Object getParentField(SObject childSObject, String fieldApiName) {
+        RelationshipField field = new RelationshipField(fieldApiName);
+        SObject parentSObject;
+        try {
+            parentSObject = childSObject.getSobject(field.relationshipApiName);
+        } catch (NullPointerException exceptionToHandle) {
+            throw new InvalidFieldException(NON_INITIALISED_RELATIONSHIP);
+        }
+        if (isRelatedField(field.relatedFieldName)) {
+            return getParentField(parentSObject, field.relatedFieldName);
+        }
+        return parentSObject.get(field.relatedFieldName);
+    }
+
+    public DescribeFieldResult describe(String fieldApiName) {
+        if (isRelatedField(fieldApiName)) {
+            return describeParentField(fieldApiName);
+        }
+        return describeField(fieldApiName);
+    }
+
+    private DescribeFieldResult describeParentField(String fieldApiName) {
+        RelationshipField relatedField = new RelationshipField(fieldApiName);
+        String parentObjectName = getRelatedObjectName(relatedField.relationshipApiName);
+        if (isRelatedField(relatedField.relatedFieldName)) {
+            return describeParentField(relatedField.relatedFieldName);
+        }
+        return schema.getFieldDescribe(parentObjectName, relatedField.relatedFieldName);
+    }
+
+    @testVisible
+    private String getRelatedObjectName(String relationshipApiName) {
+        String relationshipFieldName = Relationship.fromRefrenceField(relationshipApiName)
+            .idFieldName;
+        DescribeFieldResult relationshipField = schema.getFieldDescribe(
+            objectApiName,
+            relationshipFieldName
+        );
+        return relationshipField.getReferenceTo()[0]
+            .getDescribe(SObjectDescribeOptions.DEFERRED)
+            .getName();
+    }
+
+    private DescribeFieldResult describeField(String fieldApiName) {
+        return schema.getFieldDescribe(objectApiName, fieldApiName);
+    }
+
+    @testVisible
+    private class RelationshipField {
+        public final String relationshipApiName;
+        public final String relatedFieldName;
+
+        public RelationshipField(String fieldApiName) {
+            validateParentField(fieldApiName);
+            final List<String> parentRelationshipAndField = fieldApiName.split('\\.', 2);
+            relationshipApiName = parentRelationshipAndField[0];
+            relatedFieldName = parentRelationshipAndField[1];
+        }
+
+        private void validateParentField(String fieldApiName) {
+            if (!isRelatedField(fieldApiName)) {
+                throw new InvalidFieldException(INVALID_PARENT_MESSAGE);
+            }
+        }
+    }
+}
+```
+
+File `main\utilities\schema\classes\StateCountryCodeMapper.cls`:
+```apex
+public with sharing class StateCountryCodeMapper extends Triggerable {
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    private final PicklistValueSet stateValueSet = new PicklistValueSet(
+        Account.BillingStateCode.getDescribe()
+    );
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    private final PicklistValueSet countryValueSet = new PicklistValueSet(
+        Account.BillingCountryCode.getDescribe()
+    );
+
+    public override void register(SObjectTriggerWrapper wrappedSObject) {
+        Account accountRecord = (Account) wrappedSObject.getSObject();
+        accountRecord.BillingState = stateValueSet.getLabel(accountRecord.BillingStateCode);
+        accountRecord.BillingCountry = countryValueSet.getLabel(accountRecord.BillingCountryCode);
+    }
+}
+```
+
+File `main\utilities\string-utilities\classes\CsvBuilder.cls`:
+```apex
+public class CsvBuilder {
+    public static final String WINDOWS_LINE_ENDING = '\r\n';
+    public static final String UNIX_LINE_ENDING = '\n';
+
+    @testVisible
+    private final Map<String, Map<Integer, String>> headerToValues = new Map<String, Map<Integer, String>>();
+    private Integer currentRow = 0;
+    private final String lineEnding;
+
+    public CsvBuilder(String lineEnding) {
+        this.lineEnding = lineEnding;
+    }
+
+    public CsvBuilder() {
+        this(UNIX_LINE_ENDING);
+    }
+
+    public CsvBuilder appendField(String headerName, String fieldValue) {
+        headerName = String.isBlank(headerName) ? 'null' : headerName;
+        fieldValue = String.isBlank(fieldValue) ? 'null' : fieldValue;
+        Map<Integer, String> column = headerToValues.containsKey(headerName)
+            ? headerToValues.get(headerName)
+            : new Map<Integer, String>();
+        column.put(currentRow, fieldValue);
+        headerToValues.put(headerName, column);
+        return this;
+    }
+
+    public CsvBuilder newRow() {
+        currentRow++;
+        return this;
+    }
+
+    public Integer totalRows() {
+        return headerToValues.values() != null ? headerToValues.values().size() : 0;
+    }
+
+    public override String toString() {
+        ColumnBuilder csvDocument = new ColumnBuilder(lineEnding);
+        RowBuilder headerRow = new RowBuilder();
+        RowBuilder[] rows = new List<RowBuilder>(totalRows());
+        for (String headerName : headerToValues.keySet()) {
+            headerRow.append(headerName);
+            Map<Integer, String> values = headerToValues.get(headerName);
+            for (Integer rowIterator = 0; rowIterator <= currentRow; rowIterator++) {
+                String value = values.containsKey(rowIterator) ? values.get(rowIterator) : '';
+                RowBuilder row = rows[rowIterator];
+                if (row == null) {
+                    row = new RowBuilder();
+                }
+                row.append(value);
+                rows[rowIterator] = row;
+            }
+        }
+        csvDocument.append(headerRow);
+        for (RowBuilder row : rows) {
+            csvDocument.append(row);
+        }
+        return csvDocument.toString();
+    }
+
+    private class RowBuilder extends StringBuilder {
+        public RowBuilder() {
+            setSeparator(',');
+        }
+    }
+
+    private class ColumnBuilder extends StringBuilder {
+        private Integer numberOfColumns;
+
+        public ColumnBuilder(String lineEnding) {
+            setSeparator(lineEnding);
+        }
+
+        public ColumnBuilder append(RowBuilder rowToAdd) {
+            Boolean isAddedRowValid =
+                numberOfColumns == null ||
+                rowToAdd.capacity() == numberOfColumns;
+            if (!isAddedRowValid) {
+                throw new InvalidRowException(
+                    'The number of columns provided does not match those already in the csv'
+                );
+            }
+            numberOfColumns = rowToAdd.capacity();
+            append(rowToAdd.toString());
+            return this;
+        }
+    }
+
+    public class InvalidRowException extends Exception {
+    }
+}
+```
+
+File `main\utilities\string-utilities\classes\QueryBuilder.cls`:
+```apex
+public virtual class QueryBuilder {
+    private static final String SOQL_QUERY_STRUCTURE = 'SELECT {0} FROM {1}';
+    protected final String objectName;
+    private final Set<String> fieldsToQuery = new Set<String>();
+    protected final SchemaFacade schema = SchemaFacade.getInstance();
+    protected final DescribeSObjectResult objectDescribe;
+
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    protected QueryBuilder(String objectName) {
+        validateObjectName(objectName);
+        this.objectName = objectName;
+        objectDescribe = schema.getDescribe(objectName);
+    }
+
+    public static QueryBuilder fromObject(String objectName) {
+        return new QueryBuilder(objectName);
+    }
+
+    private void validateObjectName(String objectName) {
+        if (schema.isNotValidSObject(objectName)) {
+            throw new QueryException('The object name \'' + objectName + '\' is not valid');
+        }
+    }
+
+    public QueryBuilder selectField(String field) {
+        fieldsToQuery.add(field.toLowerCase());
+        return this;
+    }
+
+    public QueryBuilder selectFields(List<String> fields) {
+        for (String field : fields) {
+            selectField(field);
+        }
+        return this;
+    }
+
+    public QueryBuilder selectFieldSet(String fieldSetName) {
+        for (
+            Schema.FieldSetMember member : objectDescribe.FieldSets.getMap()
+                .get(fieldSetName)
+                .getFields()
+        ) {
+            selectField(member.getFieldPath());
+        }
+        return this;
+    }
+
+    public QueryBuilder selectAllFields() {
+        for (String field : objectDescribe.fields.getMap().keySet()) {
+            selectField(field);
+        }
+        return this;
+    }
+
+    public QueryBuilder selectAllAccessibleFields() {
+        selectField('FIELDS(ALL)');
+        return this;
+    }
+
+    public override String toString() {
+        validateFields();
+        return String.format(
+            SOQL_QUERY_STRUCTURE,
+            new List<String>{ String.join(new List<String>(fieldsToQuery), ','), objectName }
+        );
+    }
+
+    private void validateFields() {
+        if (fieldsToQuery.isEmpty()) {
+            throw new QueryException(
+                'No fields have been added into the query so it cannot be executed'
+            );
+        }
+    }
+
+    public class QueryException extends Exception {
+    }
+}
+```
+
+File `main\utilities\string-utilities\classes\StringBuilder.cls`:
+```apex
+public virtual inherited sharing class StringBuilder {
+    @testVisible
+    private final List<String> buffer;
+    @testVisible
+    private String separator = '';
+    private Integer count = 0;
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    public StringBuilder() {
+        buffer = new List<String>();
+    }
+
+    public StringBuilder(Object value) {
+        this();
+        append(value);
+    }
+
+    public StringBuilder append(String value) {
+        if (value != null) {
+            buffer.add(value);
+            count += value.length();
+        }
+        return this;
+    }
+
+    public StringBuilder append(Object value) {
+        String stringValue = String.valueOf(value);
+        return append(stringValue);
+    }
+
+    public StringBuilder append(StringBuilder stringBuilder) {
+        if (stringBuilder == null) {
+            return append('null');
+        }
+        count += stringBuilder.count;
+        buffer.addAll(stringBuilder.buffer);
+        return this;
+    }
+
+    public void setSeparator(String separator) {
+        if (String.isNotEmpty(separator)) {
+            this.separator = separator;
+        }
+    }
+
+    public Integer capacity() {
+        return buffer.size();
+    }
+
+    public Integer length() {
+        return count + (separator.length() * (capacity() - 1));
+    }
+
+    public override String toString() {
+        return String.join(buffer, separator);
+    }
+}
+```
+
+File `main\utilities\trigger-framework\classes\SObjectTriggerWrapper.cls`:
+```apex
+public inherited sharing class SObjectTriggerWrapper {
+    private final SObject newSObject;
+    private final SObject oldSObject;
+
+    public SObjectTriggerWrapper(SObject newSObject, SObject oldSObject) {
+        this.newSObject = newSObject;
+        this.oldSObject = oldSObject;
+    }
+
+    public Boolean hasChanged(String fieldName) {
+        return oldSObject == null || oldSObject.get(fieldName) != newSObject.get(fieldName);
+    }
+
+    public Boolean hasChanged(Schema.SObjectField field) {
+        return oldSObject == null || oldSObject.get(field) != newSObject.get(field);
+    }
+
+    public Boolean hasChangedTo(String fieldName, Object fieldValue) {
+        return hasChanged(fieldName) && newSObject.get(fieldName) == fieldValue;
+    }
+
+    public Boolean hasChangedTo(Schema.SObjectField field, Object fieldValue) {
+        return hasChanged(field) && newSObject.get(field) == fieldValue;
+    }
+
+    public SObject getSObject() {
+        return newSObject;
+    }
+}
+```
+
+File `main\utilities\trigger-framework\classes\Triggerable.cls`:
+```apex
+public abstract class Triggerable {
+    public abstract void register(SObjectTriggerWrapper wrappedSObject);
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    public virtual void performAction() {
+    }
+}
+```
+
+File `main\utilities\trigger-framework\classes\TriggerDispatcher.cls`:
+```apex
+public with sharing class TriggerDispatcher {
+    private static final Stack TRIGGER_STACK = new Stack();
+    private static Boolean unknownExceptionLogged = false;
+    private static final Set<String> DISABLED_TRIGGERS = new Set<String>();
+
+    private final Triggerable handler;
+    private final List<SObject> newSObjects;
+    private final Map<Id, SObject> oldMap;
+    private final String currentTriggerAction;
+    private final Logger log = LoggerFactory.createLogger(TriggerDispatcher.class);
+
+    @SuppressWarnings('PMD.ExcessiveParameterList')
+    @TestVisible
+    private TriggerDispatcher(
+        List<Triggerable> actions,
+        List<SObject> newSObjects,
+        Map<Id, SObject> oldMap,
+        TriggerOperation operation
+    ) {
+        this.handler = new TriggerHandler(actions);
+
+        this.newSObjects = newSObjects == null ? oldMap.values() : newSObjects;
+        this.oldMap = oldMap;
+        this.currentTriggerAction = getTriggerAction(newSObjects.getSObjectType(), operation);
+    }
+
+    public static void run(List<Triggerable> actions) {
+        (new TriggerDispatcher(actions, Trigger.new, Trigger.oldMap, Trigger.operationType)).run();
+    }
+
+    public static void disable(SObjectType objectType, TriggerOperation operation) {
+        DISABLED_TRIGGERS.add(getTriggerAction(objectType, operation));
+    }
+
+    public static void enable(SObjectType objectType, TriggerOperation operation) {
+        DISABLED_TRIGGERS.remove(getTriggerAction(objectType, operation));
+    }
+
+    private static String getTriggerAction(SObjectType objectType, TriggerOperation operation) {
+        return (operation + '-' + objectType).toUpperCase();
+    }
+
+    public void run() {
+        if (triggersAreActive()) {
+            try {
+                TRIGGER_STACK.push(currentTriggerAction);
+                executeTriggerables();
+                TRIGGER_STACK.pop();
+            } catch (Stack.UnderflowException underflowException) {
+                logUnknownException('Stack underflow');
+                throw underflowException;
+            } catch (Exception exceptionToHandle) {
+                logUnknownException(exceptionToHandle.getMessage());
+                TRIGGER_STACK.pop();
+                throw exceptionToHandle;
+            } finally {
+                if (TRIGGER_STACK.isEmpty()) {
+                    log.close();
+                }
+            }
+        }
+    }
+
+    private void executeTriggerables() {
+        for (SObject newSObject : newSObjects) {
+            SObject oldSObject = oldMap != null ? oldMap.get(newSObject.Id) : null;
+            SObjectTriggerWrapper wrappedSObject = new SObjectTriggerWrapper(
+                newSObject,
+                oldSObject
+            );
+            handler.register(wrappedSObject);
+        }
+        handler.performAction();
+    }
+
+    private Boolean triggersAreActive() {
+        return ConfigurationManager.getInstance().areTriggersOn() &&
+            !DISABLED_TRIGGERS.contains(currentTriggerAction);
+    }
+
+    private void logUnknownException(String exceptionMessage) {
+        if (!unknownExceptionLogged) {
+            log.error(
+                'Unhandled exception within trigger: ' +
+                exceptionMessage +
+                '\n' +
+                'Trigger Stack: ' +
+                TRIGGER_STACK.toString()
+            );
+            unknownExceptionLogged = true;
+        }
+    }
+}
+```
+
+File `main\utilities\trigger-framework\classes\TriggerHandler.cls`:
+```apex
+public inherited sharing class TriggerHandler extends Triggerable {
+    private final List<Triggerable> triggerActions;
+
+    public TriggerHandler(List<Triggerable> triggerActions) {
+        this.triggerActions = triggerActions;
+    }
+
+    public override void register(SObjectTriggerWrapper wrappedSObject) {
+        for (Triggerable action : triggerActions) {
+            action.register(wrappedSObject);
+        }
+    }
+
+    public override void performAction() {
+        for (Triggerable action : triggerActions) {
+            action.performAction();
+        }
+    }
+}
+```
