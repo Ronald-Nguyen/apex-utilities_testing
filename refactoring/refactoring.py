@@ -437,7 +437,7 @@ def _is_rate_limit_error(e: Exception) -> bool:
     msg = str(e).lower()
     if "status 429" in msg:
         return True
-    if "rate limit" in msg.lower():
+    if "rate limit" in msg:
         return True
     if '"type":"rate_limited"' in msg:
         return True
