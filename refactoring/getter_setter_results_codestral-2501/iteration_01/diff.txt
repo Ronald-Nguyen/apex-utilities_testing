@@ -1,0 +1,13 @@
+--- backup/AbstractSObjectTestFactory.cls
++++ refactored/AbstractSObjectTestFactory.cls
+@@ -0,0 +1,10 @@
++publicabstractclassAbstractSObjectTestFactory{
++privateString_uniqueValue;
++publicStringgetUniqueValue(){
++return_uniqueValue;
++}
++publicvoidsetUniqueValue(Stringvalue){
++_uniqueValue=value;
++}
++//Otherexistingmethodsandpropertieswouldremainunchanged
++}

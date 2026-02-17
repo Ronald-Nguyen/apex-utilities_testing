@@ -29,7 +29,7 @@ REFACTORINGS = [
 REFACTORING_BASE_DIR = "refactoring"
 DEFAULT_REFACTORING = "guard_clauses"
 
-PATH = 'force-app'
+PATH = 'force-app/main'
 ITERATIONS = 1
 GEMMA = 'gemma-3-27b-it'
 GEMINI3 = 'gemini-3-pro-preview'
@@ -44,7 +44,7 @@ MODEL_MISTRAL = CODESTRAL
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 MISTRAL_API_KEY = os.environ.get('MISTRAL_API_KEY')
-LLM_API_KEY = GEMINI_API_KEY    
+LLM_API_KEY = MISTRAL_API_KEY    
 client = None
 MODEL = None
 

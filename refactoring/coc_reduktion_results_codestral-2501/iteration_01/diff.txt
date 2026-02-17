@@ -1,0 +1,501 @@
+--- backup/utilities\classes\DatabaseUtils.cls
++++ refactored/utilities\classes\DatabaseUtils.cls
+@@ -3,0 +4,3 @@
++if(errors==null||errors.isEmpty()){
++return'';
++}
+@@ -6,0 +10 @@
++if(error!=null){
+@@ -7,0 +12 @@
++}
+
+--- backup/utilities\classes\DateUtils.cls
++++ refactored/utilities\classes\DateUtils.cls
+@@ -18,0 +19,3 @@
++if(input==null){
++returnnull;
++}
+
+--- backup/utilities\classes\Stack.cls
++++ refactored/utilities\classes\Stack.cls
+@@ -3,0 +4,3 @@
++if(item==null){
++thrownewIllegalArgumentException('Cannotpushnullitemtostack');
++}
+@@ -18,0 +22,3 @@
++if(isEmpty()){
++return'';
++}
+
+--- backup/utilities\configuration-management\classes\DeletionValidator.cls
++++ refactored/utilities\configuration-management\classes\DeletionValidator.cls
+@@ -4,0 +5,7 @@
++if(wrappedSObject==null){
++return;
++}
++SObjectsObject=wrappedSObject.getSObject();
++if(sObject==null){
++return;
++}
+@@ -6 +13 @@
+-wrappedSObject.getSObject().addError(NOT_ALLOWED_DELETE);
++sObject.addError(NOT_ALLOWED_DELETE);
+
+--- backup/utilities\logging\classes\EventBufferLogAdapter.cls
++++ refactored/utilities\logging\classes\EventBufferLogAdapter.cls
+@@ -30,0 +31,3 @@
++if(logLevel==null||message==null){
++return;
++}
+@@ -40,0 +44,8 @@
++if(currentRequest==null){
++returnnewLog_Event__e(
++Type__c=logType,
++Level__c=logLevel,
++Messages__c=message,
++Record_Id__c=recordId
++);
++}
+@@ -63 +74,3 @@
+-if(!logsToPublish.isEmpty()){
++if(logsToPublish.isEmpty()){
++return;
++}
+@@ -68 +80,0 @@
+-}
+
+--- backup/utilities\logging\classes\LogMessage.cls
++++ refactored/utilities\logging\classes\LogMessage.cls
+@@ -7,0 +8,3 @@
++if(exceptionToLog==null){
++thrownewIllegalArgumentException('Exceptioncannotbenull');
++}
+@@ -24,0 +28,3 @@
++if(String.isBlank(stackLine)){
++returnfalse;
++}
+
+--- backup/utilities\logging\classes\LogWriter.cls
++++ refactored/utilities\logging\classes\LogWriter.cls
+@@ -4 +4,8 @@
+-Log_Event__elogEvent=(Log_Event__e)wrappedSObject.getSObject();
++if(wrappedSObject==null){
++return;
++}
++SObjectsObject=wrappedSObject.getSObject();
++if(sObject==null||!(sObjectinstanceofLog_Event__e)){
++return;
++}
++Log_Event__elogEvent=(Log_Event__e)sObject;
+@@ -16,0 +24,3 @@
++if(logs.isEmpty()){
++return;
++}
+
+--- backup/utilities\logging\classes\LoggedQueueable.cls
++++ refactored/utilities\logging\classes\LoggedQueueable.cls
+@@ -4,0 +5,3 @@
++if(context==null){
++return;
++}
+@@ -8,0 +12 @@
++if(exceptionToHandle!=null){
+@@ -10,0 +15 @@
++}finally{
+@@ -11,0 +17 @@
++}
+
+--- backup/utilities\logging\classes\LoggedSchedulable.cls
++++ refactored/utilities\logging\classes\LoggedSchedulable.cls
+@@ -7,0 +8,3 @@
++if(context==null){
++return;
++}
+@@ -11,0 +15 @@
++if(exceptionToHandle!=null){
+@@ -13,0 +18 @@
++}finally{
+@@ -14,0 +20 @@
++}
+@@ -20,0 +27,3 @@
++if(String.isBlank(cronExpression)){
++thrownewIllegalArgumentException('Cronexpressioncannotbeblank');
++}
+@@ -23,0 +33,3 @@
++if(String.isBlank(jobName)){
++thrownewIllegalArgumentException('Jobnamecannotbeblank');
++}
+
+--- backup/utilities\logging\classes\Logger.cls
++++ refactored/utilities\logging\classes\Logger.cls
+@@ -5,0 +6,3 @@
++if(apexClass==null||loggerAdapter==null){
++thrownewIllegalArgumentException('Apexclassandloggeradaptercannotbenull');
++}
+@@ -9,0 +13,3 @@
++if(String.isBlank(type)){
++thrownewIllegalArgumentException('Typecannotbeblank');
++}
+@@ -12,0 +19,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -15,0 +25,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -22,0 +35,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -25,0 +41,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -32,0 +51,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -35,0 +57,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -42,0 +67,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -45,0 +73,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -52,0 +83,3 @@
++if(exceptionToLog==null){
++return;
++}
+@@ -55,0 +89,3 @@
++if(exceptionToLog==null){
++return;
++}
+
+--- backup/utilities\logging\classes\LoggerAdapter.cls
++++ refactored/utilities\logging\classes\LoggerAdapter.cls
+@@ -4,0 +5,3 @@
++if(String.isBlank(type)){
++thrownewIllegalArgumentException('Typecannotbeblank');
++}
+@@ -8,0 +12,3 @@
++if(String.isBlank(message)){
++return;
++}
+@@ -21,0 +28,3 @@
++if(logLevel==null||String.isBlank(message)){
++return;
++}
+
+--- backup/utilities\logging\classes\LoggerFactory.cls
++++ refactored/utilities\logging\classes\LoggerFactory.cls
+@@ -2,0 +3,3 @@
++if(apexClass==null){
++thrownewIllegalArgumentException('Apexclasscannotbenull');
++}
+
+--- backup/utilities\logging\classes\QueueableScheduler.cls
++++ refactored/utilities\logging\classes\QueueableScheduler.cls
+@@ -4,0 +5,3 @@
++if(queueableToRun==null){
++thrownewIllegalArgumentException('Queueabletoruncannotbenull');
++}
+
+--- backup/utilities\logging\profiler\classes\OrgLimitsProfiler.cls
++++ refactored/utilities\logging\profiler\classes\OrgLimitsProfiler.cls
+@@ -3,0 +4,3 @@
++if(orgLimitsMap==null||orgLimitsMap.isEmpty()){
++return;
++}
+@@ -5,0 +9 @@
++if(orgLimit!=null){
+@@ -9,0 +14 @@
++}
+
+--- backup/utilities\logging\profiler\classes\Profiler.cls
++++ refactored/utilities\logging\profiler\classes\Profiler.cls
+@@ -13,0 +14,3 @@
++if(warningLimit==null){
++continue;
++}
+@@ -28,0 +32,3 @@
++if(String.isBlank(limitName)||recorded==null||limitTotal==null){
++return;
++}
+@@ -35,0 +42,3 @@
++if(profilingInfos.isEmpty()){
++return'';
++}
+@@ -38,0 +48 @@
++if(profile!=null){
+@@ -39,0 +50 @@
++}
+@@ -49,0 +61,3 @@
++if(String.isBlank(limitName)||recorded==null||limitTotal==null){
++thrownewIllegalArgumentException('ProfileInfoparameterscannotbenullorblank');
++}
+
+--- backup/utilities\parsers\classes\DisplayTypeParser.cls
++++ refactored/utilities\parsers\classes\DisplayTypeParser.cls
+@@ -18,0 +19,3 @@
++if(parser==null){
++returnnull;
++}
+
+--- backup/utilities\schema\classes\PicklistValueSet.cls
++++ refactored/utilities\schema\classes\PicklistValueSet.cls
+@@ -5,0 +6,3 @@
++if(fieldDefinition==null){
++thrownewIllegalArgumentException('Fielddefinitioncannotbenull');
++}
+@@ -7,0 +11 @@
++if(value!=null){
+@@ -11,0 +16 @@
++}
+@@ -12,0 +18,3 @@
++if(String.isBlank(label)){
++returnnull;
++}
+@@ -15,0 +24,3 @@
++if(String.isBlank(value)){
++returnnull;
++}
+
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -5,0 +6,3 @@
++if(String.isBlank(referenceFieldName)||String.isBlank(idFieldName)){
++thrownewIllegalArgumentException('ReferencefieldnameandIDfieldnamecannotbeblank');
++}
+@@ -9,0 +13,3 @@
++if(String.isBlank(referenceFieldName)){
++thrownewIllegalArgumentException('Referencefieldnamecannotbeblank');
++}
+@@ -18,0 +25,3 @@
++if(String.isBlank(idFieldName)){
++thrownewIllegalArgumentException('IDfieldnamecannotbeblank');
++}
+
+--- backup/utilities\schema\classes\SObjectRecordTypes.cls
++++ refactored/utilities\schema\classes\SObjectRecordTypes.cls
+@@ -6,0 +7,3 @@
++if(String.isBlank(objectApiName)){
++thrownewIllegalArgumentException('ObjectAPInamecannotbeblank');
++}
+@@ -23,0 +27,3 @@
++if(String.isBlank(developerName)){
++returnnull;
++}
+@@ -30,0 +37,3 @@
++if(recordTypeId==null){
++returnnull;
++}
+
+--- backup/utilities\schema\classes\SObjectWrapper.cls
++++ refactored/utilities\schema\classes\SObjectWrapper.cls
+@@ -7,0 +8,3 @@
++if(sObjectToWrap==null){
++thrownewIllegalArgumentException('SObjecttowrapcannotbenull');
++}
+@@ -11,0 +15,3 @@
++if(String.isBlank(fieldApiName)){
++returnnull;
++}
+@@ -17,0 +24,3 @@
++if(String.isBlank(fieldApiName)){
++return;
++}
+@@ -20,0 +30,3 @@
++if(String.isBlank(fieldApiName)){
++returnfalse;
++}
+@@ -23,0 +36,3 @@
++if(childSObject==null||String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('ChildSObjectandfieldAPInamecannotbenullorblank');
++}
+@@ -36,0 +52,3 @@
++if(String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('FieldAPInamecannotbeblank');
++}
+@@ -42,0 +61,3 @@
++if(String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('FieldAPInamecannotbeblank');
++}
+@@ -51,0 +73,3 @@
++if(String.isBlank(relationshipApiName)){
++thrownewIllegalArgumentException('RelationshipAPInamecannotbeblank');
++}
+@@ -62,0 +87,3 @@
++if(String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('FieldAPInamecannotbeblank');
++}
+@@ -69,0 +97,3 @@
++if(String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('FieldAPInamecannotbeblank');
++}
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -13,0 +14,3 @@
++if(String.isBlank(objectApiName)){
++returnfalse;
++}
+@@ -19,0 +23,3 @@
++if(String.isBlank(objectApiName)){
++thrownewIllegalArgumentException('ObjectAPInamecannotbeblank');
++}
+@@ -35,0 +42,3 @@
++if(String.isBlank(objectApiName)||String.isBlank(fieldApiName)){
++returnfalse;
++}
+@@ -43,0 +53,3 @@
++if(String.isBlank(objectApiName)){
++thrownewIllegalArgumentException('ObjectAPInamecannotbeblank');
++}
+@@ -53,0 +66,3 @@
++if(String.isBlank(objectApiName)||String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('ObjectAPInameandfieldAPInamecannotbeblank');
++}
+
+--- backup/utilities\schema\classes\SecureSObjectWrapper.cls
++++ refactored/utilities\schema\classes\SecureSObjectWrapper.cls
+@@ -5,0 +6,3 @@
++if(String.isBlank(fieldApiName)){
++returnnull;
++}
+@@ -12,0 +16,3 @@
++if(String.isBlank(fieldApiName)){
++return;
++}
+
+--- backup/utilities\schema\classes\StateCountryCodeMapper.cls
++++ refactored/utilities\schema\classes\StateCountryCodeMapper.cls
+@@ -11 +11,8 @@
+-AccountaccountRecord=(Account)wrappedSObject.getSObject();
++if(wrappedSObject==null){
++return;
++}
++SObjectsObject=wrappedSObject.getSObject();
++if(sObject==null||!(sObjectinstanceofAccount)){
++return;
++}
++AccountaccountRecord=(Account)sObject;
+
+--- backup/utilities\string-utilities\classes\CsvBuilder.cls
++++ refactored/utilities\string-utilities\classes\CsvBuilder.cls
+@@ -8,0 +9,3 @@
++if(String.isBlank(lineEnding)){
++thrownewIllegalArgumentException('Lineendingcannotbeblank');
++}
+@@ -61,0 +65,3 @@
++if(String.isBlank(lineEnding)){
++thrownewIllegalArgumentException('Lineendingcannotbeblank');
++}
+@@ -64,0 +71,3 @@
++if(rowToAdd==null){
++thrownewIllegalArgumentException('Rowtoaddcannotbenull');
++}
+
+--- backup/utilities\string-utilities\classes\QueryBuilder.cls
++++ refactored/utilities\string-utilities\classes\QueryBuilder.cls
+@@ -8,0 +9,3 @@
++if(String.isBlank(objectName)){
++thrownewIllegalArgumentException('Objectnamecannotbeblank');
++}
+@@ -13,0 +17,3 @@
++if(String.isBlank(objectName)){
++thrownewIllegalArgumentException('Objectnamecannotbeblank');
++}
+@@ -21,0 +28,3 @@
++if(String.isBlank(field)){
++thrownewIllegalArgumentException('Fieldcannotbeblank');
++}
+@@ -25,0 +35,3 @@
++if(fields==null||fields.isEmpty()){
++thrownewIllegalArgumentException('Fieldslistcannotbenullorempty');
++}
+@@ -31,0 +44,3 @@
++if(String.isBlank(fieldSetName)){
++thrownewIllegalArgumentException('Fieldsetnamecannotbeblank');
++}
+
+--- backup/utilities\trigger-framework\classes\SObjectTriggerWrapper.cls
++++ refactored/utilities\trigger-framework\classes\SObjectTriggerWrapper.cls
+@@ -4,0 +5,3 @@
++if(newSObject==null){
++thrownewIllegalArgumentException('NewSObjectcannotbenull');
++}
+@@ -8,0 +12,3 @@
++if(String.isBlank(fieldName)){
++returnfalse;
++}
+@@ -11,0 +18,3 @@
++if(field==null){
++returnfalse;
++}
+@@ -14,0 +24,3 @@
++if(String.isBlank(fieldName)){
++returnfalse;
++}
+@@ -17,0 +30,3 @@
++if(field==null){
++returnfalse;
++}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -17,0 +18,6 @@
++if(actions==null||actions.isEmpty()){
++thrownewIllegalArgumentException('Actionslistcannotbenullorempty');
++}
++if(newSObjects==null&&oldMap==null){
++thrownewIllegalArgumentException('EithernewSObjectsoroldMapmustbeprovided');
++}
+@@ -23,0 +30,3 @@
++if(actions==null||actions.isEmpty()){
++thrownewIllegalArgumentException('Actionslistcannotbenullorempty');
++}
+@@ -26,0 +36,3 @@
++if(objectType==null||operation==null){
++thrownewIllegalArgumentException('Objecttypeandoperationcannotbenull');
++}
+@@ -29,0 +42,3 @@
++if(objectType==null||operation==null){
++thrownewIllegalArgumentException('Objecttypeandoperationcannotbenull');
++}
+@@ -32,0 +48,3 @@
++if(objectType==null||operation==null){
++thrownewIllegalArgumentException('Objecttypeandoperationcannotbenull');
++}
+@@ -56,0 +75,3 @@
++if(newSObject==null){
++continue;
++}
+@@ -70,0 +92,3 @@
++if(String.isBlank(exceptionMessage)){
++return;
++}
+
+--- backup/utilities\trigger-framework\classes\TriggerHandler.cls
++++ refactored/utilities\trigger-framework\classes\TriggerHandler.cls
+@@ -3,0 +4,3 @@
++if(triggerActions==null||triggerActions.isEmpty()){
++thrownewIllegalArgumentException('Triggeractionslistcannotbenullorempty');
++}
+@@ -6,0 +10,3 @@
++if(wrappedSObject==null){
++return;
++}
+@@ -7,0 +14 @@
++if(action!=null){
+@@ -8,0 +16 @@
++}
+@@ -12,0 +21 @@
++if(action!=null){
+@@ -16,0 +26 @@
++}

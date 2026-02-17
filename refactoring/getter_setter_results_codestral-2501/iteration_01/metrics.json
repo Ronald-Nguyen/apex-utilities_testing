@@ -1,0 +1,111 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-17T17:35:20.456060",
+  "refactoring": "refactoring/getter_setter",
+  "changed_files_scope": [
+    "AbstractSObjectTestFactory.cls"
+  ],
+  "test": {
+    "status": "failed",
+    "success": false,
+    "level": 0
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=14775, completion=311, total=15086",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-17T17:35:16.252652",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_codestral-2501\\iteration_01\\pmd_before\\subset_src",
+      "files": []
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_codestral-2501\\iteration_01\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_codestral-2501\\iteration_01\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-17T17:35:17.811287",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_codestral-2501\\iteration_01\\pmd_after\\subset_src",
+      "files": [
+        "AbstractSObjectTestFactory.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_codestral-2501\\iteration_01\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_codestral-2501\\iteration_01\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 13,
+        "count": 1
+      },
+      "total": {
+        "complexity": 0,
+        "loc": 13,
+        "count": 1
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 13,
+      "count": 1
+    },
+    "total": {
+      "complexity": 0,
+      "loc": 13,
+      "count": 1
+    }
+  },
+  "refactoring_check": {
+    "type": "getter_setter",
+    "targets": {},
+    "ok": false,
+    "checks": {
+      "getter_setter": {
+        "passed": false,
+        "reason": "targets_not_parsed",
+        "targets": {}
+      }
+    }
+  }
+}

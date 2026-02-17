@@ -1,0 +1,45 @@
+Iteration 1
+Timestamp: 2026-02-17T17:35:12.464760
+Success: False
+
+============================================================
+STDOUT:
+───── Deploying Metadata ─────
+Stages:
+1. Preparing
+2. Waiting for the org to respond
+3. Deploying Metadata
+4. Running Tests
+5. Updating Source Tracking
+6. Done
+
+▶ Preparing…
+   Deploying v48.0 metadata to test-bm6qvffj5sms@example.com using the v65.0 SOAP API.
+   Deploy ID: 0AfAs00000U7XCWKA3
+   Target Org: test-bm6qvffj5sms@example.com
+✔ Preparing (216ms)
+◯ Waiting for the org to respond - Skipped
+▶ Deploying Metadata…
+   Components: 0/33 (0%)
+✘ Deploying Metadata (4.32s)
+   Components: 30/33 (91%)
+
+Deploying v48.0 metadata to test-bm6qvffj5sms@example.com using the v65.0 SOAP API.
+Status: Failed
+Deploy ID: 0AfAs00000U7XCWKA3
+Target Org: test-bm6qvffj5sms@example.com
+
+Elapsed time: 4.54s
+
+[1m[31mComponent Failures [3][39m[22m
+ Type       Name                    Problem                                       Line:Column 
+----------------------------------------------------------------------------------------------
+ ApexClass  DeletionValidator       Identifier name is reserved: sObject (10:17)  10:17       
+ ApexClass  LogWriter               Identifier name is reserved: sObject (9:17)   9:17        
+ ApexClass  StateCountryCodeMapper  Identifier name is reserved: sObject (16:17)  16:17       
+
+
+
+============================================================
+STDERR:
+DEPLOY FAILED (Level 0):

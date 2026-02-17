@@ -1,0 +1,4 @@
+iteration 1 failed test passed diff passed Tokens: prompt=13131, completion=1775, total=14906 PMD:ok CoCΔ(total=2, prod=2, test=0) REF:fail(guard_clauses)
+Fertig. Erfolgsrate: 0.0% (0/1)
+iteration 1 failed test failed diff passed Tokens: prompt=13140, completion=1092, total=14232 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(guard_clauses)
+Fertig. Erfolgsrate: 0.0% (0/1)

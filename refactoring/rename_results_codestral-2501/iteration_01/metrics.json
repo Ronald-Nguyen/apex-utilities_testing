@@ -1,0 +1,131 @@
+{
+  "iteration": 1,
+  "timestamp": "2026-02-17T17:37:50.985016",
+  "refactoring": "refactoring/rename",
+  "changed_files_scope": [
+    "utilities\\schema\\classes\\Relationship.cls",
+    "utilities\\schema\\classes\\SObjectWrapper.cls"
+  ],
+  "test": {
+    "status": "failed",
+    "success": false,
+    "level": 0
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=12687, completion=1177, total=13864",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-17T17:37:46.755613",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_01\\pmd_before\\subset_src",
+      "files": [
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectWrapper.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_01\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_01\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 17,
+        "loc": 133,
+        "count": 2
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 17,
+        "loc": 133,
+        "count": 2
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-17T17:37:48.353328",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_01\\pmd_after\\subset_src",
+      "files": [
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectWrapper.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_01\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_01\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 17,
+        "loc": 127,
+        "count": 2
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 17,
+        "loc": 127,
+        "count": 2
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 0,
+      "loc": -6,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": 0,
+      "loc": -6,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "rename",
+    "targets": {
+      "old_method": "calculateSum",
+      "file": "CalculateSum.cls",
+      "new_method": "add"
+    },
+    "ok": true,
+    "checks": {
+      "rename": {
+        "passed": true,
+        "old_method": "calculateSum",
+        "new_method": "add",
+        "file_hint": "CalculateSum.cls",
+        "old_method_hits": [],
+        "new_method_hits": [
+          "utilities/classes/Stack.cls",
+          "utilities/logging/classes/EventBufferLogAdapter.cls",
+          "utilities/logging/classes/LogWriter.cls",
+          "utilities/logging/profiler/classes/Profiler.cls",
+          "utilities/string-utilities/classes/QueryBuilder.cls",
+          "utilities/string-utilities/classes/StringBuilder.cls",
+          "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+        ]
+      }
+    }
+  }
+}
