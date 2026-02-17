@@ -1,0 +1,130 @@
+{
+  "iteration": 9,
+  "timestamp": "2026-02-17T21:02:36.478443",
+  "refactoring": "refactoring/rename",
+  "changed_files_scope": [
+    "utilities\\schema\\classes\\Relationship.cls"
+  ],
+  "test": {
+    "status": "failed",
+    "success": false,
+    "level": 0
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=12677, completion=328, total=13005",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-17T21:02:31.279195",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_09\\pmd_before\\subset_src",
+      "files": [
+        "utilities/schema/classes/Relationship.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_09\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_09\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 5,
+        "loc": 36,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 5,
+        "loc": 36,
+        "count": 1
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-17T21:02:32.822769",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_09\\pmd_after\\subset_src",
+      "files": [
+        "utilities/schema/classes/Relationship.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_09\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\rename_results_codestral-2501\\iteration_09\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 5,
+        "loc": 33,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 5,
+        "loc": 33,
+        "count": 1
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 0,
+      "loc": -3,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": 0,
+      "loc": -3,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "rename",
+    "targets": {
+      "old_method": "fromRefrenceField",
+      "file": "Relationship.cls",
+      "new_method": "fromReferenceField"
+    },
+    "ok": false,
+    "checks": {
+      "rename": {
+        "passed": false,
+        "old_method": "fromRefrenceField",
+        "new_method": "fromReferenceField",
+        "file_hint": "Relationship.cls",
+        "resolved_file": "utilities/schema/classes/Relationship.cls",
+        "decl_old_in_file": false,
+        "decl_new_in_file": true,
+        "old_method_hits": [
+          "utilities/schema/classes/SObjectWrapper.cls"
+        ],
+        "new_method_hits": [
+          "utilities/schema/classes/Relationship.cls"
+        ],
+        "reasons": [
+          "old_method_still_referenced"
+        ]
+      }
+    }
+  }
+}

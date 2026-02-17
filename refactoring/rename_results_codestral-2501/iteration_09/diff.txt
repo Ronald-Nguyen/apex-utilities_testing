@@ -1,0 +1,5 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -9 +9 @@
+-publicstaticRelationshipfromRefrenceField(StringreferenceFieldName){
++publicstaticRelationshipfromReferenceField(StringreferenceFieldName){

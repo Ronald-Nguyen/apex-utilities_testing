@@ -1,0 +1,11 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -9 +9 @@
+-publicstaticRelationshipfromRefrenceField(StringreferenceFieldName){
++publicstaticRelationshipfromReferenceField(StringreferenceFieldName){
+
+--- backup/utilities\schema\classes\SObjectWrapper.cls
++++ refactored/utilities\schema\classes\SObjectWrapper.cls
+@@ -52 +52 @@
+-StringrelationshipFieldName=Relationship.fromRefrenceField(relationshipApiName)
++StringrelationshipFieldName=Relationship.fromReferenceField(relationshipApiName)

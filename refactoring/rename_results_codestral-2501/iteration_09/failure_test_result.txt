@@ -1,0 +1,42 @@
+Iteration 9
+Timestamp: 2026-02-17T21:02:36.476803
+Success: False
+
+============================================================
+STDOUT:
+───── Deploying Metadata ─────
+Stages:
+1. Preparing
+2. Waiting for the org to respond
+3. Deploying Metadata
+4. Running Tests
+5. Updating Source Tracking
+6. Done
+
+▶ Preparing…
+   Deploying v48.0 metadata to test-oz61ydxlaciz@example.com using the v65.0 SOAP API.
+   Deploy ID: 0AfAw00000MeC2bKAF
+   Target Org: test-oz61ydxlaciz@example.com
+✔ Preparing (162ms)
+◯ Waiting for the org to respond - Skipped
+▶ Deploying Metadata…
+   Components: 0/1 (0%)
+✘ Deploying Metadata (875ms)
+
+Deploying v48.0 metadata to test-oz61ydxlaciz@example.com using the v65.0 SOAP API.
+Status: Failed
+Deploy ID: 0AfAw00000MeC2bKAF
+Target Org: test-oz61ydxlaciz@example.com
+
+Elapsed time: 1.03s
+
+[1m[31mComponent Failures [1][39m[22m
+ Type       Name            Problem                                                                                                          Line:Column 
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ ApexClass  SObjectWrapper  Method does not exist or incorrect signature: void fromRefrenceField(String) from the type Relationship (63:53)  63:53       
+
+
+
+============================================================
+STDERR:
+DEPLOY FAILED (Level 0):

@@ -27,7 +27,7 @@ REFACTORINGS = [
     "strategy_pattern",
 ]
 REFACTORING_BASE_DIR = "refactoring"
-DEFAULT_REFACTORING = "guard_clauses"
+DEFAULT_REFACTORING = "rename"
 
 PATH = 'force-app/main'
 ITERATIONS = 10
@@ -39,7 +39,7 @@ MISTRAL = 'mistral-large-2512'
 CODESTRAL = 'codestral-2501'
 MODEL_OLLAMA = 'devstral-2_123b-cloud'
 MODEL_GROQ = LLAMA
-MODEL_GEMINI = GEMMA
+MODEL_GEMINI = GEMINI3
 MODEL_MISTRAL = CODESTRAL
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
@@ -84,6 +84,39 @@ parser.add_argument("--refactoring", type=str, default=DEFAULT_REFACTORING,
                     choices=REFACTORINGS,
                     help="Welches Refactoring ausgeführt werden soll (wenn --all-refactorings nicht gesetzt ist).")
 args = parser.parse_args()
+
+
+def _resolve_file_hint(project_root: Path, file_hint: str, changed_rel_paths: list[str]) -> str | None:
+    """
+    Resolves file_hint from prompt to a project-relative path.
+    Priority:
+    1) exact match in changed_rel_paths
+    2) basename match in changed_rel_paths
+    3) global scan for basename in project (first hit)
+    Returns normalized rel path with forward slashes, or None.
+    """
+    if not file_hint:
+        return None
+
+    hint = str(Path(file_hint)).replace("\\", "/")
+
+    # 1) exact match
+    for rel in changed_rel_paths:
+        if rel.replace("\\", "/") == hint:
+            return rel.replace("\\", "/")
+
+    # 2) basename match among changed files
+    hint_base = Path(hint).name.lower()
+    for rel in changed_rel_paths:
+        if Path(rel).name.lower() == hint_base:
+            return rel.replace("\\", "/")
+
+    # 3) global scan
+    for fp in _iter_apex_files(project_root):
+        if fp.name.lower() == hint_base:
+            return str(fp.relative_to(project_root)).replace("\\", "/")
+
+    return None
 
 
 def format_pmd_metrics_summary(pmd_before: dict, pmd_after: dict) -> str:
@@ -778,12 +811,13 @@ def _parse_prompt_targets(prompt_text: str, ref_type: str) -> dict:
 
     if ref_type == "inline_variable":
         m = re.search(
-            r"Inline the temporary variable\s+`([^`]+)`\s+in the method\s+([A-Za-z_]\w*)\s+in the file\s+`([^`]+)`",
+            r"Inline the temporary variable\s+`([^`]+)`\s+in the method\s+`?([A-Za-z_]\w*)`?\s+in the file\s+`?([^`\s]+)`?\s*\.?",
             t,
             flags=re.IGNORECASE
         )
         if m:
             return {"var": m.group(1), "method": m.group(2), "file": m.group(3)}
+
 
     if ref_type == "getter_setter":
         m = re.search(
@@ -838,29 +872,72 @@ def build_refactoring_check(
         old_m = targets.get("old_method")
         new_m = targets.get("new_method")
         file_hint = targets.get("file")
+
         if not old_m or not new_m:
             _record("rename", False, {"reason": "targets_not_parsed", "targets": targets})
         else:
-            # Stronger: scan whole project (comments stripped)
+            # 1) Resolve file hint to an actual relative path in the repo
+            resolved_file = None
+            if file_hint:
+                resolved_file = _resolve_file_hint(project_dir, file_hint, changed_rel_paths)
+
+            # 2) Scan project usage (calls)
             old_hits = _scan_project_for_regex(project_dir, r"\b" + re.escape(old_m) + r"\s*\(")
             new_hits = _scan_project_for_regex(project_dir, r"\b" + re.escape(new_m) + r"\s*\(")
 
-
-            # Also verify the declaration in the hinted file, if it exists.
+            # 3) Verify declaration in resolved file (stronger than "somewhere in repo")
             decl_old = None
             decl_new = None
-            if file_hint:
-                hinted_text = _strip_apex_comments(_read_project_file_text(project_dir, file_hint))
-                if hinted_text:
-                    # Very loose signature match: return type + method name + '('
-                    decl_old = re.search(r"\b\w[\w<>\[\]]*\s+" + re.escape(old_m) + r"\s*\(", hinted_text) is not None
-                    decl_new = re.search(r"\b\w[\w<>\[\]]*\s+" + re.escape(new_m) + r"\s*\(", hinted_text) is not None
+            decl_file_used = None
 
-            passed = (len(old_hits) == 0) and (len(new_hits) > 0)
-            if decl_old is True:
+            if resolved_file:
+                decl_file_used = resolved_file
+                hinted_text = _strip_apex_comments(_read_project_file_text(project_dir, resolved_file))
+                if hinted_text:
+                    # Allow common Apex modifiers
+                    sig_old = re.compile(
+                        r"\b(?:public|private|protected|global)\s+"
+                        r"(?:static\s+)?"
+                        r"[\w<>\[\]]+\s+"
+                        + re.escape(old_m) + r"\s*\(",
+                        flags=re.IGNORECASE
+                    )
+                    sig_new = re.compile(
+                        r"\b(?:public|private|protected|global)\s+"
+                        r"(?:static\s+)?"
+                        r"[\w<>\[\]]+\s+"
+                        + re.escape(new_m) + r"\s*\(",
+                        flags=re.IGNORECASE
+                    )
+                    decl_old = sig_old.search(hinted_text) is not None
+                    decl_new = sig_new.search(hinted_text) is not None
+
+            # 4) Decide pass/fail
+            reasons: list[str] = []
+            passed = True
+
+            # Basic expectations
+            if len(old_hits) != 0:
                 passed = False
-            if decl_new is False:
+                reasons.append("old_method_still_referenced")
+
+            # Strong requirement: declaration in the target file must be renamed
+            if resolved_file:
+                if decl_old is True:
+                    passed = False
+                    reasons.append("old_method_declaration_still_present_in_file")
+                if decl_new is not True:
+                    passed = False
+                    reasons.append("new_method_declaration_not_found_in_file")
+            else:
+                # If we cannot locate the file, don't guess -> fail
                 passed = False
+                reasons.append("file_hint_not_resolved")
+
+            # Optional sanity: new method appears at least once somewhere
+            if len(new_hits) == 0:
+                passed = False
+                reasons.append("new_method_never_referenced")
 
             _record(
                 "rename",
@@ -869,61 +946,76 @@ def build_refactoring_check(
                     "old_method": old_m,
                     "new_method": new_m,
                     "file_hint": file_hint,
+                    "resolved_file": decl_file_used,
+                    "decl_old_in_file": decl_old,
+                    "decl_new_in_file": decl_new,
                     "old_method_hits": old_hits[:25],
                     "new_method_hits": new_hits[:25],
+                    "reasons": reasons,
                 },
             )
+
 
     # ---- inline_variable ----
     if ref_type == "inline_variable":
         var_name = targets.get("var")
         method_name = targets.get("method")
-        file_path = targets.get("file")
-        if not var_name or not method_name or not file_path:
+        file_hint = targets.get("file")
+
+        if not var_name or not method_name or not file_hint:
             _record("inline_variable", False, {"reason": "targets_not_parsed", "targets": targets})
         else:
-            after_text = _read_project_file_text(project_dir, file_path)
-            before_text = _read_text_best_effort(backup_dir / Path(file_path))
+            resolved = _resolve_file_hint(project_dir, file_hint, changed_rel_paths)
+            if not resolved:
+                _record("inline_variable", False, {"reason": "file_not_found_in_project", "file_hint": file_hint})
+            else:
+                after_text = _read_project_file_text(project_dir, resolved)
+                before_text = _read_text_best_effort(backup_dir / Path(resolved))
 
-            after_nc = _strip_apex_comments(after_text)
-            before_nc = _strip_apex_comments(before_text)
+                after_nc = _strip_apex_comments(after_text)
+                before_nc = _strip_apex_comments(before_text)
 
-            # method exists
-            after_body = _extract_method_body_apex(after_nc, method_name)
-            before_body = _extract_method_body_apex(before_nc, method_name)
+                after_body = _extract_method_body_apex(after_nc, method_name)
+                before_body = _extract_method_body_apex(before_nc, method_name)
 
-            decl_rx = re.compile(r"\b\w+\s+" + re.escape(var_name) + r"\s*=")
-            return_rx = re.compile(r"\breturn\s+" + re.escape(var_name) + r"\s*;")
+                decl_rx = re.compile(r"\b\w+\s+" + re.escape(var_name) + r"\s*=")
+                return_rx = re.compile(r"\breturn\s+" + re.escape(var_name) + r"\s*;")
 
-            passed = True
-            reasons: list[str] = []
+                passed = True
+                reasons: list[str] = []
 
-            if before_body is None or after_body is None:
-                passed = False
-                reasons.append("method_not_found")
-
-            # After: declaration gone (or at least fewer)
-            if after_body is not None:
-                if decl_rx.search(after_body):
+                if before_body is None or after_body is None:
                     passed = False
-                    reasons.append("var_declaration_still_present")
-                if return_rx.search(after_body):
-                    passed = False
-                    reasons.append("return_var_still_present")
+                    reasons.append("method_not_found")
 
-            # Before should have had declaration (best-effort)
-            had_decl_before = bool(before_body and decl_rx.search(before_body))
-            _record(
-                "inline_variable",
-                passed,
-                {
-                    "file": file_path,
-                    "method": method_name,
-                    "var": var_name,
-                    "had_declaration_before": had_decl_before,
-                    "reasons": reasons,
-                },
-            )
+                if after_body is not None:
+                    if decl_rx.search(after_body):
+                        passed = False
+                        reasons.append("var_declaration_still_present")
+                    if return_rx.search(after_body):
+                        passed = False
+                        reasons.append("return_var_still_present")
+
+                had_decl_before = bool(before_body and decl_rx.search(before_body))
+                use_rx = re.compile(r"\b" + re.escape(var_name) + r"\b")
+                if after_body is not None and use_rx.search(after_body):
+                    passed = False
+                    reasons.append("var_usage_still_present")
+
+
+                _record(
+                    "inline_variable",
+                    passed,
+                    {
+                        "file": resolved,  # <-- wichtig
+                        "file_hint": file_hint,
+                        "method": method_name,
+                        "var": var_name,
+                        "had_declaration_before": had_decl_before,
+                        "reasons": reasons,
+                    },
+                )
+
 
     # ---- getter_setter ----
     if ref_type == "getter_setter":
