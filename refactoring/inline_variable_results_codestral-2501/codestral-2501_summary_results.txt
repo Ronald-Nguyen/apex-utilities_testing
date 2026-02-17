@@ -1,8 +1,11 @@
-iteration 1 failed test passed diff passed Tokens: prompt=12531, completion=621, total=13152 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(inline_variable)
-Fertig. Erfolgsrate: 0.0% (0/1)
 iteration 1 passed test passed diff passed Tokens: prompt=12531, completion=621, total=13152 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
-Fertig. Erfolgsrate: 100.0% (1/1)
-iteration 1 passed test passed diff passed Tokens: prompt=12535, completion=625, total=13160 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
-Fertig. Erfolgsrate: 100.0% (1/1)
-iteration 1 failed test failed diff passed Tokens: prompt=12531, completion=622, total=13153 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
-iteration 2 failed test failed diff passed Tokens: prompt=12531, completion=622, total=13153 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 2 passed test passed diff passed Tokens: prompt=12531, completion=621, total=13152 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 3 passed test passed diff passed Tokens: prompt=12531, completion=622, total=13153 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 4 passed test passed diff passed Tokens: prompt=12531, completion=621, total=13152 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 5 passed test passed diff passed Tokens: prompt=12531, completion=621, total=13152 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 6 failed test failed diff passed Tokens: prompt=12531, completion=621, total=13152 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 7 failed test failed diff passed Tokens: prompt=12531, completion=621, total=13152 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 8 failed test failed diff passed Tokens: prompt=12531, completion=566, total=13097 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(inline_variable)
+iteration 9 failed test failed diff passed Tokens: prompt=12531, completion=621, total=13152 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 10 failed test failed diff passed Tokens: prompt=12531, completion=566, total=13097 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(inline_variable)
+Fertig. Erfolgsrate: 50.0% (5/10)

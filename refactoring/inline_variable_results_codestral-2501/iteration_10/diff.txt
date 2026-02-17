@@ -1,0 +1,21 @@
+--- backup/utilities\logging\classes\Logger.cls
++++ refactored/utilities\logging\classes\Logger.cls
+@@ -59 +59,6 @@
+-runApexPofiling();
++Profilerprofiler=newApexProfiler();
++if(profiler.isBreachingWarning()){
++warn(profiler.generateProfilingReport());
++}else{
++info(profiler.generateProfilingReport());
++}
+@@ -62,7 +66,0 @@
+-privatevoidrunApexPofiling(){
+-Profilerprofiler=newApexProfiler();
+-StringprofilingReport=profiler.generateProfilingReport();
+-if(profiler.isBreachingWarning()){
+-warn(profilingReport);
+-}else{
+-info(profilingReport);
+@@ -70,2 +67,0 @@
+-}
+-}
