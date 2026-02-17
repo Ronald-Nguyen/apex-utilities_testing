@@ -1,0 +1,130 @@
+{
+  "iteration": 7,
+  "timestamp": "2026-02-17T18:45:42.011423",
+  "refactoring": "refactoring/guard_clauses",
+  "changed_files_scope": [
+    "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=13131, completion=952, total=14083",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-17T18:45:10.831163",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_07\\pmd_before\\subset_src",
+      "files": [
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_07\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_07\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 14,
+        "loc": 97,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 14,
+        "loc": 97,
+        "count": 1
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-17T18:45:12.473795",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_07\\pmd_after\\subset_src",
+      "files": [
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_07\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_07\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 12,
+        "loc": 101,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 12,
+        "loc": 101,
+        "count": 1
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": -2,
+      "loc": 4,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": -2,
+      "loc": 4,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "guard_clauses",
+    "targets": {},
+    "ok": true,
+    "checks": {
+      "guard_clauses": {
+        "passed": true,
+        "improved_files": [
+          "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls"
+        ],
+        "comparisons": [
+          {
+            "file": "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls",
+            "before_max_if_nesting": 2,
+            "after_max_if_nesting": 2,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 2,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 2
+          }
+        ],
+        "totals": {
+          "delta_guard_clauses": 2,
+          "delta_max_if_nesting": 0
+        },
+        "note": "heuristic_early_exit_and_nesting"
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+--- backup/utilities\logging\classes\EventBufferLogAdapter.cls
++++ refactored/utilities\logging\classes\EventBufferLogAdapter.cls
+@@ -32 +32,5 @@
+-if(LOGGING_LEVELS.contains(logLevelString)){
++//GuardClause:Skipifloglevelisnotvalid
++if(!LOGGING_LEVELS.contains(logLevelString)){
++return;
++}
++//HappyPath:Addlogeventandcheckbuffersize
+@@ -34 +37,0 @@
+-}
+
+--- backup/utilities\logging\classes\LogMessage.cls
++++ refactored/utilities\logging\classes\LogMessage.cls
+@@ -18,0 +19,5 @@
++//GuardClause:Skipifstackisempty
++if(stack.isEmpty()){
++return'';
++}
++//HappyPath:Removeloggingframeworkclassesandjoinstacktrace
+@@ -20,0 +26,4 @@
++//GuardClause:Breakifstackbecomesempty
++if(stack.isEmpty()){
++break;
++}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,4 @@
+-if(triggersAreActive()){
++//GuardClause:Skipiftriggersarenotactive
++if(!triggersAreActive()){
++return;
++}
+@@ -40 +42,0 @@
+-TRIGGER_STACK.pop();
+@@ -46 +47,0 @@
+-TRIGGER_STACK.pop();
+@@ -48,0 +50,5 @@
++//GuardClause:Onlypopifstackisnotempty
++if(!TRIGGER_STACK.isEmpty()){
++TRIGGER_STACK.pop();
++}
++//GuardClause:Onlycloselogifstackisempty
+@@ -51 +56,0 @@
+-}

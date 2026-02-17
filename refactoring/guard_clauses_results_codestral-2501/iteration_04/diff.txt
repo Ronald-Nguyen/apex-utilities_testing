@@ -1,0 +1,61 @@
+--- backup/utilities\logging\classes\EventBufferLogAdapter.cls
++++ refactored/utilities\logging\classes\EventBufferLogAdapter.cls
+@@ -32 +32,3 @@
+-if(LOGGING_LEVELS.contains(logLevelString)){
++if(!LOGGING_LEVELS.contains(logLevelString)){
++return;
++}
+@@ -34 +35,0 @@
+-}
+@@ -63 +64,3 @@
+-if(!logsToPublish.isEmpty()){
++if(logsToPublish.isEmpty()){
++return;
++}
+@@ -68 +70,0 @@
+-}
+
+--- backup/utilities\logging\profiler\classes\Profiler.cls
++++ refactored/utilities\logging\profiler\classes\Profiler.cls
+@@ -29 +29,3 @@
+-if(!IGNORE_LIMITS.contains(limitName)){
++if(IGNORE_LIMITS.contains(limitName)){
++return;
++}
+@@ -33 +34,0 @@
+-}
+
+--- backup/utilities\schema\classes\SecureSObjectWrapper.cls
++++ refactored/utilities\schema\classes\SecureSObjectWrapper.cls
+@@ -7 +7,3 @@
+-if(field.isAccessible()){
++if(!field.isAccessible()){
++returnnull;
++}
+@@ -9,2 +10,0 @@
+-}
+-returnnull;
+@@ -14 +14,3 @@
+-if(field.isCreateable()&&field.isUpdateable()){
++if(!field.isCreateable()||!field.isUpdateable()){
++return;
++}
+@@ -18 +19,0 @@
+-}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}
+@@ -71 +72,3 @@
+-if(!unknownExceptionLogged){
++if(unknownExceptionLogged){
++return;
++}
+@@ -82 +84,0 @@
+-}

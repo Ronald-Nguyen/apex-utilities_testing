@@ -1,0 +1,37 @@
+--- backup/utilities\logging\classes\EventBufferLogAdapter.cls
++++ refactored/utilities\logging\classes\EventBufferLogAdapter.cls
+@@ -32 +32,4 @@
+-if(LOGGING_LEVELS.contains(logLevelString)){
++//GuardClause:Skipifloglevelisnotvalid
++if(!LOGGING_LEVELS.contains(logLevelString)){
++return;
++}
+@@ -34 +37 @@
+-}
++//GuardClause:Publishlogsifbufferisfull
+
+--- backup/utilities\logging\classes\LogMessage.cls
++++ refactored/utilities\logging\classes\LogMessage.cls
+@@ -18,0 +19 @@
++//GuardClause:Removeloggingframeworkclassesfromstacktrace
+@@ -20,0 +22,4 @@
++//GuardClause:Exitifstackisemptyafterremoval
++if(stack.isEmpty()){
++return'';
++}
+
+--- backup/utilities\logging\profiler\classes\Profiler.cls
++++ refactored/utilities\logging\profiler\classes\Profiler.cls
+@@ -29 +29,4 @@
+-if(!IGNORE_LIMITS.contains(limitName)){
++//GuardClause:Skipiflimitshouldbeignored
++if(IGNORE_LIMITS.contains(limitName)){
++return;
++}
+@@ -33 +35,0 @@
+-}
+@@ -66,0 +69,4 @@
++//GuardClause:ReturnfalseiflimitTotalis0
++if(limitTotal==0){
++returnfalse;
++}

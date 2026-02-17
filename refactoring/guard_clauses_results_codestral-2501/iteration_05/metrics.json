@@ -1,0 +1,224 @@
+{
+  "iteration": 5,
+  "timestamp": "2026-02-17T18:44:24.752371",
+  "refactoring": "refactoring/guard_clauses",
+  "changed_files_scope": [
+    "utilities\\configuration-management\\classes\\DeletionValidator.cls",
+    "utilities\\logging\\classes\\EventBufferLogAdapter.cls",
+    "utilities\\logging\\classes\\LogMessage.cls",
+    "utilities\\logging\\classes\\LoggerAdapter.cls",
+    "utilities\\logging\\profiler\\classes\\Profiler.cls",
+    "utilities\\schema\\classes\\SObjectWrapper.cls",
+    "utilities\\string-utilities\\classes\\CsvBuilder.cls",
+    "utilities\\string-utilities\\classes\\QueryBuilder.cls",
+    "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "failed",
+    "has_diff": false
+  },
+  "tokens": "Tokens: prompt=13131, completion=4653, total=17784",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-17T18:43:44.378742",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_05\\pmd_before\\subset_src",
+      "files": [
+        "utilities/configuration-management/classes/DeletionValidator.cls",
+        "utilities/logging/classes/EventBufferLogAdapter.cls",
+        "utilities/logging/classes/LogMessage.cls",
+        "utilities/logging/classes/LoggerAdapter.cls",
+        "utilities/logging/profiler/classes/Profiler.cls",
+        "utilities/schema/classes/SObjectWrapper.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/string-utilities/classes/QueryBuilder.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_05\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_05\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 69,
+        "loc": 627,
+        "count": 9
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 69,
+        "loc": 627,
+        "count": 9
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-17T18:43:46.185708",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_05\\pmd_after\\subset_src",
+      "files": [
+        "utilities/configuration-management/classes/DeletionValidator.cls",
+        "utilities/logging/classes/EventBufferLogAdapter.cls",
+        "utilities/logging/classes/LogMessage.cls",
+        "utilities/logging/classes/LoggerAdapter.cls",
+        "utilities/logging/profiler/classes/Profiler.cls",
+        "utilities/schema/classes/SObjectWrapper.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/string-utilities/classes/QueryBuilder.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_05\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_05\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 69,
+        "loc": 610,
+        "count": 9
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 69,
+        "loc": 610,
+        "count": 9
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 0,
+      "loc": -17,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": 0,
+      "loc": -17,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "guard_clauses",
+    "targets": {},
+    "ok": false,
+    "checks": {
+      "guard_clauses": {
+        "passed": false,
+        "improved_files": [],
+        "comparisons": [
+          {
+            "file": "utilities\\configuration-management\\classes\\DeletionValidator.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\EventBufferLogAdapter.cls",
+            "before_max_if_nesting": 2,
+            "after_max_if_nesting": 2,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\LogMessage.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\LoggerAdapter.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\profiler\\classes\\Profiler.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\schema\\classes\\SObjectWrapper.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\string-utilities\\classes\\CsvBuilder.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 2,
+            "after_guard_clauses": 2,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\string-utilities\\classes\\QueryBuilder.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls",
+            "before_max_if_nesting": 2,
+            "after_max_if_nesting": 2,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          }
+        ],
+        "totals": {
+          "delta_guard_clauses": 0,
+          "delta_max_if_nesting": 0
+        },
+        "note": "heuristic_early_exit_and_nesting"
+      }
+    }
+  }
+}

@@ -1,0 +1,442 @@
+{
+  "iteration": 4,
+  "timestamp": "2026-02-17T18:43:24.904637",
+  "refactoring": "refactoring/guard_clauses",
+  "changed_files_scope": [
+    "utilities\\classes\\Stack.cls",
+    "utilities\\configuration-management\\classes\\ConfigurationManager.cls",
+    "utilities\\configuration-management\\classes\\DeletionValidator.cls",
+    "utilities\\logging\\classes\\EventBufferLogAdapter.cls",
+    "utilities\\logging\\classes\\LogMessage.cls",
+    "utilities\\logging\\classes\\LogWriter.cls",
+    "utilities\\logging\\classes\\LoggedQueueable.cls",
+    "utilities\\logging\\classes\\LoggedSchedulable.cls",
+    "utilities\\logging\\classes\\Logger.cls",
+    "utilities\\logging\\classes\\LoggerAdapter.cls",
+    "utilities\\logging\\classes\\LoggerFactory.cls",
+    "utilities\\logging\\classes\\QueueableScheduler.cls",
+    "utilities\\logging\\profiler\\classes\\ApexProfiler.cls",
+    "utilities\\logging\\profiler\\classes\\OrgLimitsProfiler.cls",
+    "utilities\\logging\\profiler\\classes\\OrgLimitsProfilingReportRunner.cls",
+    "utilities\\logging\\profiler\\classes\\Profiler.cls",
+    "utilities\\parsers\\classes\\DisplayTypeParser.cls",
+    "utilities\\parsers\\classes\\Parsable.cls",
+    "utilities\\schema\\classes\\InvalidFieldException.cls",
+    "utilities\\schema\\classes\\PicklistValueSet.cls",
+    "utilities\\schema\\classes\\Relationship.cls",
+    "utilities\\schema\\classes\\SObjectRecordTypes.cls",
+    "utilities\\schema\\classes\\SObjectWrapper.cls",
+    "utilities\\schema\\classes\\SchemaFacade.cls",
+    "utilities\\schema\\classes\\SecureSObjectWrapper.cls",
+    "utilities\\schema\\classes\\StateCountryCodeMapper.cls",
+    "utilities\\string-utilities\\classes\\CsvBuilder.cls",
+    "utilities\\string-utilities\\classes\\QueryBuilder.cls",
+    "utilities\\string-utilities\\classes\\StringBuilder.cls",
+    "utilities\\trigger-framework\\classes\\SObjectTriggerWrapper.cls",
+    "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls",
+    "utilities\\trigger-framework\\classes\\TriggerHandler.cls",
+    "utilities\\trigger-framework\\classes\\Triggerable.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=13131, completion=11122, total=24253",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-17T18:42:36.806868",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_04\\pmd_before\\subset_src",
+      "files": [
+        "utilities/classes/Stack.cls",
+        "utilities/configuration-management/classes/ConfigurationManager.cls",
+        "utilities/configuration-management/classes/DeletionValidator.cls",
+        "utilities/logging/classes/EventBufferLogAdapter.cls",
+        "utilities/logging/classes/LogMessage.cls",
+        "utilities/logging/classes/LogWriter.cls",
+        "utilities/logging/classes/LoggedQueueable.cls",
+        "utilities/logging/classes/LoggedSchedulable.cls",
+        "utilities/logging/classes/Logger.cls",
+        "utilities/logging/classes/LoggerAdapter.cls",
+        "utilities/logging/classes/LoggerFactory.cls",
+        "utilities/logging/classes/QueueableScheduler.cls",
+        "utilities/logging/profiler/classes/ApexProfiler.cls",
+        "utilities/logging/profiler/classes/OrgLimitsProfiler.cls",
+        "utilities/logging/profiler/classes/OrgLimitsProfilingReportRunner.cls",
+        "utilities/logging/profiler/classes/Profiler.cls",
+        "utilities/parsers/classes/DisplayTypeParser.cls",
+        "utilities/parsers/classes/Parsable.cls",
+        "utilities/schema/classes/InvalidFieldException.cls",
+        "utilities/schema/classes/PicklistValueSet.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectRecordTypes.cls",
+        "utilities/schema/classes/SObjectWrapper.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/schema/classes/SecureSObjectWrapper.cls",
+        "utilities/schema/classes/StateCountryCodeMapper.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/string-utilities/classes/QueryBuilder.cls",
+        "utilities/string-utilities/classes/StringBuilder.cls",
+        "utilities/trigger-framework/classes/SObjectTriggerWrapper.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls",
+        "utilities/trigger-framework/classes/TriggerHandler.cls",
+        "utilities/trigger-framework/classes/Triggerable.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_04\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_04\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 142,
+        "loc": 1492,
+        "count": 33
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 142,
+        "loc": 1492,
+        "count": 33
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-17T18:42:39.140384",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_04\\pmd_after\\subset_src",
+      "files": [
+        "utilities/classes/Stack.cls",
+        "utilities/configuration-management/classes/ConfigurationManager.cls",
+        "utilities/configuration-management/classes/DeletionValidator.cls",
+        "utilities/logging/classes/EventBufferLogAdapter.cls",
+        "utilities/logging/classes/LogMessage.cls",
+        "utilities/logging/classes/LogWriter.cls",
+        "utilities/logging/classes/LoggedQueueable.cls",
+        "utilities/logging/classes/LoggedSchedulable.cls",
+        "utilities/logging/classes/Logger.cls",
+        "utilities/logging/classes/LoggerAdapter.cls",
+        "utilities/logging/classes/LoggerFactory.cls",
+        "utilities/logging/classes/QueueableScheduler.cls",
+        "utilities/logging/profiler/classes/ApexProfiler.cls",
+        "utilities/logging/profiler/classes/OrgLimitsProfiler.cls",
+        "utilities/logging/profiler/classes/OrgLimitsProfilingReportRunner.cls",
+        "utilities/logging/profiler/classes/Profiler.cls",
+        "utilities/parsers/classes/DisplayTypeParser.cls",
+        "utilities/parsers/classes/Parsable.cls",
+        "utilities/schema/classes/InvalidFieldException.cls",
+        "utilities/schema/classes/PicklistValueSet.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectRecordTypes.cls",
+        "utilities/schema/classes/SObjectWrapper.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/schema/classes/SecureSObjectWrapper.cls",
+        "utilities/schema/classes/StateCountryCodeMapper.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/string-utilities/classes/QueryBuilder.cls",
+        "utilities/string-utilities/classes/StringBuilder.cls",
+        "utilities/trigger-framework/classes/SObjectTriggerWrapper.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls",
+        "utilities/trigger-framework/classes/TriggerHandler.cls",
+        "utilities/trigger-framework/classes/Triggerable.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_04\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_04\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 137,
+        "loc": 1425,
+        "count": 33
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 137,
+        "loc": 1425,
+        "count": 33
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": -5,
+      "loc": -67,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": -5,
+      "loc": -67,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "guard_clauses",
+    "targets": {},
+    "ok": true,
+    "checks": {
+      "guard_clauses": {
+        "passed": true,
+        "improved_files": [
+          "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls"
+        ],
+        "comparisons": [
+          {
+            "file": "utilities\\classes\\Stack.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\configuration-management\\classes\\ConfigurationManager.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\configuration-management\\classes\\DeletionValidator.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\EventBufferLogAdapter.cls",
+            "before_max_if_nesting": 2,
+            "after_max_if_nesting": 2,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\LogMessage.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\LogWriter.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\LoggedQueueable.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\LoggedSchedulable.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\Logger.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\LoggerAdapter.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\LoggerFactory.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\QueueableScheduler.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\profiler\\classes\\ApexProfiler.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\profiler\\classes\\OrgLimitsProfiler.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\profiler\\classes\\OrgLimitsProfilingReportRunner.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\profiler\\classes\\Profiler.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\parsers\\classes\\DisplayTypeParser.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\parsers\\classes\\Parsable.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\schema\\classes\\InvalidFieldException.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\schema\\classes\\PicklistValueSet.cls",
+            "before_max_if_nesting": 0,
+            "after_max_if_nesting": 0,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\schema\\classes\\Relationship.cls",
+            "before_max_if_nesting": 2,
+            "after_max_if_nesting": 2,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\schema\\classes\\SObjectRecordTypes.cls",
+            "before_max_if_nesting": 2,
+            "after_max_if_nesting": 2,
+            "before_guard_clauses": 1,
+            "after_guard_clauses": 1,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\schema\\classes\\SObjectWrapper.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\schema\\classes\\SchemaFacade.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\schema\\classes\\SecureSObjectWrapper.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          }
+        ],
+        "totals": {
+          "delta_guard_clauses": 2,
+          "delta_max_if_nesting": 0
+        },
+        "note": "heuristic_early_exit_and_nesting"
+      }
+    }
+  }
+}

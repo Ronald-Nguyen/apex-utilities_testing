@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd" version="7.21.0" timestamp="2026-02-17T18:44:30.490">
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\guard_clauses_results_codestral-2501\iteration_06\pmd_before\subset_src\utilities\logging\classes\EventBufferLogAdapter.cls">
+<violation beginline="21" endline="25" begincolumn="5" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method '&lt;clinit&gt;()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="35" endline="37" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'log(Object, String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="38" endline="46" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'log(Object, String, Id)' has a cognitive complexity of 2, current threshold is 1
+</violation>
+<violation beginline="70" endline="76" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'close()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\guard_clauses_results_codestral-2501\iteration_06\pmd_before\subset_src\utilities\trigger-framework\classes\TriggerDispatcher.cls">
+<violation beginline="15" endline="26" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The constructor 'TriggerDispatcher(List&lt;Triggerable&gt;, List&lt;SObject&gt;, Map&lt;Id, SObject&gt;, TriggerOperation)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="29" endline="31" begincolumn="19" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'run(List&lt;Triggerable&gt;)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="45" endline="64" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'run()' has a cognitive complexity of 7, current threshold is 1
+</violation>
+<violation beginline="66" endline="77" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'executeTriggerables()' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="79" endline="82" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'triggersAreActive()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="84" endline="96" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'logUnknownException(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+</pmd>

@@ -1,0 +1,18 @@
+--- backup/utilities\logging\classes\EventBufferLogAdapter.cls
++++ refactored/utilities\logging\classes\EventBufferLogAdapter.cls
+@@ -32 +32,4 @@
+-if(LOGGING_LEVELS.contains(logLevelString)){
++//GuardClause:Skipifloglevelisnotvalid
++if(!LOGGING_LEVELS.contains(logLevelString)){
++return;
++}
+@@ -34 +37 @@
+-}
++//GuardClause:Publishlogsifbufferisfull
+
+--- backup/utilities\logging\classes\LogMessage.cls
++++ refactored/utilities\logging\classes\LogMessage.cls
+@@ -19 +19,2 @@
+-while(isLoggingFrameworkClass(stack[0])){
++//GuardClause:Removeloggingframeworkclassesfromstacktrace
++while(!stack.isEmpty()&&isLoggingFrameworkClass(stack[0])){

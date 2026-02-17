@@ -1,0 +1,36 @@
+--- backup/utilities\logging\classes\LogMessage.cls
++++ refactored/utilities\logging\classes\LogMessage.cls
+@@ -25,3 +25,13 @@
+-returnstackLine.startsWith('Class.Logger.')||
+-stackLine.startsWith('Class.LoggerAdapter.')||
+-stackLine.startsWith('Class.LogMessage.');
++if(stackLine==null){
++returnfalse;
++}
++if(stackLine.startsWith('Class.Logger.')){
++returntrue;
++}
++if(stackLine.startsWith('Class.LoggerAdapter.')){
++returntrue;
++}
++if(stackLine.startsWith('Class.LogMessage.')){
++returntrue;
++}
++returnfalse;
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}
+@@ -71 +72,3 @@
+-if(!unknownExceptionLogged){
++if(unknownExceptionLogged){
++return;
++}
+@@ -82 +84,0 @@
+-}

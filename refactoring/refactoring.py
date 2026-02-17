@@ -30,7 +30,7 @@ REFACTORING_BASE_DIR = "refactoring"
 DEFAULT_REFACTORING = "guard_clauses"
 
 PATH = 'force-app/main'
-ITERATIONS = 1
+ITERATIONS = 10
 GEMMA = 'gemma-3-27b-it'
 GEMINI3 = 'gemini-3-pro-preview'
 GEMINI2 = 'gemini-2.5-flash'

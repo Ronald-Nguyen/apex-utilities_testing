@@ -1,0 +1,140 @@
+{
+  "iteration": 10,
+  "timestamp": "2026-02-17T18:47:46.251383",
+  "refactoring": "refactoring/guard_clauses",
+  "changed_files_scope": [
+    "utilities\\logging\\classes\\EventBufferLogAdapter.cls",
+    "utilities\\logging\\classes\\LogMessage.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=13131, completion=1081, total=14212",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-17T18:47:16.101834",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_10\\pmd_before\\subset_src",
+      "files": [
+        "utilities/logging/classes/EventBufferLogAdapter.cls",
+        "utilities/logging/classes/LogMessage.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_10\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_10\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 8,
+        "loc": 119,
+        "count": 2
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 8,
+        "loc": 119,
+        "count": 2
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-17T18:47:17.752835",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_10\\pmd_after\\subset_src",
+      "files": [
+        "utilities/logging/classes/EventBufferLogAdapter.cls",
+        "utilities/logging/classes/LogMessage.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_10\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_codestral-2501\\iteration_10\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 9,
+        "loc": 126,
+        "count": 2
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 9,
+        "loc": 126,
+        "count": 2
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 1,
+      "loc": 7,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": 1,
+      "loc": 7,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "guard_clauses",
+    "targets": {},
+    "ok": false,
+    "checks": {
+      "guard_clauses": {
+        "passed": false,
+        "improved_files": [],
+        "comparisons": [
+          {
+            "file": "utilities\\logging\\classes\\EventBufferLogAdapter.cls",
+            "before_max_if_nesting": 2,
+            "after_max_if_nesting": 2,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          },
+          {
+            "file": "utilities\\logging\\classes\\LogMessage.cls",
+            "before_max_if_nesting": 1,
+            "after_max_if_nesting": 1,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          }
+        ],
+        "totals": {
+          "delta_guard_clauses": 0,
+          "delta_max_if_nesting": 0
+        },
+        "note": "heuristic_early_exit_and_nesting"
+      }
+    }
+  }
+}
