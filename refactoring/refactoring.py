@@ -725,6 +725,40 @@ def _max_if_nesting_apex(code: str) -> int:
             max_score = max(max_score, len(if_stack))
     return max_score
 
+
+def _count_guard_clauses_apex(code: str) -> int:
+    """
+    Heuristic count of 'guard clauses' in Apex: conditionals that lead to an early exit
+    (return/continue/break/throw) very shortly after the condition.
+
+    Counts patterns like:
+      - if (cond) return ...;
+      - if (cond) { return ...; }
+      - if (cond) continue;
+      - if (cond) throw ...;
+
+    Best-effort only (comments removed before scanning).
+    """
+    code_nc = _strip_apex_comments(code)
+    if not code_nc:
+        return 0
+
+    # Normalize whitespace to make the regex more stable.
+    s = re.sub(r"\s+", " ", code_nc)
+
+    # 1) Single-line guard: if (...) return|continue|break|throw
+    rx_inline = re.compile(r"\bif\s*\([^\)]*\)\s*(?:\{|)\s*(return|continue|break|throw)\b")
+    count = len(rx_inline.findall(s))
+
+    # 2) Braced blocks where early-exit occurs shortly after the if-condition.
+    #    We allow a small window of non-brace tokens before the exit keyword.
+    rx_block = re.compile(
+        r"\bif\s*\([^\)]*\)\s*\{[^\}]{0,200}?\b(return|continue|break|throw)\b"
+    )
+    count = max(count, 0) + len(rx_block.findall(s))
+
+    return count
+
 def _parse_prompt_targets(prompt_text: str, ref_type: str) -> dict:
     """
     Extracts task-specific targets from the prompt text using regex.
@@ -811,7 +845,23 @@ def build_refactoring_check(
             old_hits = _scan_project_for_regex(project_dir, r"\b" + re.escape(old_m) + r"\s*\(")
             new_hits = _scan_project_for_regex(project_dir, r"\b" + re.escape(new_m) + r"\s*\(")
 
+
+            # Also verify the declaration in the hinted file, if it exists.
+            decl_old = None
+            decl_new = None
+            if file_hint:
+                hinted_text = _strip_apex_comments(_read_project_file_text(project_dir, file_hint))
+                if hinted_text:
+                    # Very loose signature match: return type + method name + '('
+                    decl_old = re.search(r"\b\w[\w<>\[\]]*\s+" + re.escape(old_m) + r"\s*\(", hinted_text) is not None
+                    decl_new = re.search(r"\b\w[\w<>\[\]]*\s+" + re.escape(new_m) + r"\s*\(", hinted_text) is not None
+
             passed = (len(old_hits) == 0) and (len(new_hits) > 0)
+            if decl_old is True:
+                passed = False
+            if decl_new is False:
+                passed = False
+
             _record(
                 "rename",
                 passed,
@@ -916,34 +966,75 @@ def build_refactoring_check(
                 },
             )
 
+
     # ---- guard_clauses ----
     if ref_type == "guard_clauses":
-        # Evaluate nesting reduction on changed files, best-effort.
+        # Guard clauses are about EARLY EXITS (return/continue/break/throw) to reduce nesting.
+        # Nesting reduction is helpful but not required in all valid refactors (e.g., single-level `if` -> `if(!cond) return;`).
         improved_files: list[str] = []
         compared: list[dict] = []
+
+        total_guard_delta = 0
+        total_nesting_delta = 0
+
         for rel in changed_rel_paths:
             if not rel.lower().endswith(".cls"):
                 continue
-            before = _strip_apex_comments(_read_text_best_effort(backup_dir / Path(rel)))
-            after = _strip_apex_comments(_read_project_file_text(project_dir, rel))
-            b = _max_if_nesting_apex(before)
-            a = _max_if_nesting_apex(after)
-            compared.append({"file": rel, "before_max_if_nesting": b, "after_max_if_nesting": a})
-            if a < b:
+
+            before_src = _strip_apex_comments(_read_text_best_effort(backup_dir / Path(rel)))
+            after_src = _strip_apex_comments(_read_project_file_text(project_dir, rel))
+
+            b_nest = _max_if_nesting_apex(before_src)
+            a_nest = _max_if_nesting_apex(after_src)
+
+            b_guard = _count_guard_clauses_apex(before_src)
+            a_guard = _count_guard_clauses_apex(after_src)
+
+            nest_delta = a_nest - b_nest
+            guard_delta = a_guard - b_guard
+
+            total_guard_delta += guard_delta
+            total_nesting_delta += nest_delta
+
+            compared.append(
+                {
+                    "file": rel,
+                    "before_max_if_nesting": b_nest,
+                    "after_max_if_nesting": a_nest,
+                    "before_guard_clauses": b_guard,
+                    "after_guard_clauses": a_guard,
+                    "delta_max_if_nesting": nest_delta,
+                    "delta_guard_clauses": guard_delta,
+                }
+            )
+
+            # Consider a file "improved" if:
+            # - nesting decreases, OR
+            # - guard clauses (early exits) increase without increasing nesting a lot.
+            if (a_nest < b_nest) or (guard_delta > 0 and a_nest <= b_nest + 1):
                 improved_files.append(rel)
 
+        # Pass condition:
+        # - at least one changed file shows improvement per above heuristic.
+        # This avoids false negatives when guard clauses increase but nesting stays equal.
         passed = len(improved_files) > 0
+
         _record(
             "guard_clauses",
             passed,
             {
                 "improved_files": improved_files[:25],
                 "comparisons": compared[:25],
-                "note": "heuristic_if_nesting_reduction",
+                "totals": {
+                    "delta_guard_clauses": total_guard_delta,
+                    "delta_max_if_nesting": total_nesting_delta,
+                },
+                "note": "heuristic_early_exit_and_nesting",
             },
         )
 
     # ---- strategy_pattern ----
+
     if ref_type == "strategy_pattern":
         method_name = targets.get("method")
         file_path = targets.get("file")
