@@ -27,10 +27,10 @@ REFACTORINGS = [
     "strategy_pattern",
 ]
 REFACTORING_BASE_DIR = "refactoring"
-DEFAULT_REFACTORING = "strategy_pattern"
+DEFAULT_REFACTORING = "getter_setter"
 
 PATH = 'force-app/main'
-ITERATIONS = 10
+ITERATIONS = 1
 GEMMA = 'gemma-3-27b-it'
 GEMINI3 = 'gemini-3-pro-preview'
 GEMINI2 = 'gemini-2.5-flash'
@@ -821,7 +821,7 @@ def _parse_prompt_targets(prompt_text: str, ref_type: str) -> dict:
 
     if ref_type == "getter_setter":
         m = re.search(
-            r"Encapsulate the attribute\s+`([^`]+)`\s+within the class\s+`([^`]+)`\s+in the file\s+`([^`]+)`",
+            r"Encapsulate only the attribute\s+`([^`]+)`\s+within the class\s+`([^`]+)`\s+in the file\s+`([^`]+)`",
             t,
             flags=re.IGNORECASE
         )
@@ -1021,42 +1021,102 @@ def build_refactoring_check(
     if ref_type == "getter_setter":
         attr = targets.get("attr")
         cls = targets.get("class")
-        file_path = targets.get("file")
-        if not attr or not cls or not file_path:
+        file_hint = targets.get("file")
+
+        if not attr or not cls or not file_hint:
             _record("getter_setter", False, {"reason": "targets_not_parsed", "targets": targets})
         else:
-            after_text = _strip_apex_comments(_read_project_file_text(project_dir, file_path))
+            resolved = _resolve_file_hint(project_dir, file_hint, changed_rel_paths)
+            if not resolved:
+                _record("getter_setter", False, {"reason": "file_not_found_in_project", "file_hint": file_hint})
+            else:
+                after_text = _strip_apex_comments(_read_project_file_text(project_dir, resolved))
 
-            # Expect getters/setters like getProjectName/setProjectName based on attr
-            cap = attr[:1].upper() + attr[1:]
-            get_name = f"get{cap}"
-            set_name = f"set{cap}"
+                cap = attr[:1].upper() + attr[1:]
+                get_name = f"get{cap}"
+                set_name = f"set{cap}"
 
-            has_get = re.search(r"\b" + re.escape(get_name) + r"\s*\(", after_text) is not None
-            has_set = re.search(r"\b" + re.escape(set_name) + r"\s*\(", after_text) is not None
+                # getter signature examples:
+                # public String getName() { ... }
+                # global static Integer getFoo() { ... }
+                getter_rx = re.compile(
+                    r"\b(?:public|private|protected|global)\s+"
+                    r"(?:static\s+)?"
+                    r"[\w<>\[\]]+\s+"
+                    + re.escape(get_name) +
+                    r"\s*\(\s*\)",
+                    flags=re.IGNORECASE
+                )
+                # setter signature examples:
+                # public void setName(String v) { ... }
+                setter_rx = re.compile(
+                    r"\b(?:public|private|protected|global)\s+"
+                    r"(?:static\s+)?"
+                    r"void\s+"
+                    + re.escape(set_name) +
+                    r"\s*\(\s*[\w<>\[\]]+\s+\w+\s*\)",
+                    flags=re.IGNORECASE
+                )
 
-            # No public field 'public <type> projectName;'
-            public_field = re.search(r"\bpublic\s+\w+\s+" + re.escape(attr) + r"\s*;", after_text) is not None
+                has_get = getter_rx.search(after_text) is not None
+                has_set = setter_rx.search(after_text) is not None
 
-            # Heuristic: no remaining direct dot-access `.projectName` anywhere in project
-            direct_access_hits = _scan_project_for_regex(project_dir, r"\." + re.escape(attr) + r"\b")
+                # Public field patterns to avoid:
+                # public String name;
+                # public static final Integer name = 1;
+                public_field_rx = re.compile(
+                    r"\bpublic\s+(?:static\s+)?(?:final\s+)?[\w<>\[\]]+\s+"
+                    + re.escape(attr) +
+                    r"\b",
+                    flags=re.IGNORECASE
+                )
+                public_field = public_field_rx.search(after_text) is not None
 
-            passed = has_get and has_set and (not public_field) and (len(direct_access_hits) == 0)
-            _record(
-                "getter_setter",
-                passed,
-                {
-                    "file": file_path,
-                    "class": cls,
-                    "attr": attr,
-                    "expected_getter": get_name,
-                    "expected_setter": set_name,
-                    "has_getter": has_get,
-                    "has_setter": has_set,
-                    "public_field_still_present": public_field,
-                    "direct_access_hits": direct_access_hits[:25],
-                },
-            )
+                # Optional: encourage private field presence (common encapsulation)
+                private_field_rx = re.compile(
+                    r"\bprivate\s+(?:static\s+)?(?:final\s+)?[\w<>\[\]]+\s+"
+                    + re.escape(attr) +
+                    r"\b",
+                    flags=re.IGNORECASE
+                )
+                private_field_present = private_field_rx.search(after_text) is not None
+
+                # Soft-signal only (do NOT hard fail):
+                # `.name` can appear legitimately; we just record hits for analysis.
+                direct_access_hits = _scan_project_for_regex(project_dir, r"\." + re.escape(attr) + r"\b")
+
+                # Pass criteria: getter+setter exist AND no public field remains.
+                passed = has_get and has_set and (not public_field)
+
+                reasons = []
+                if not has_get:
+                    reasons.append("getter_not_found")
+                if not has_set:
+                    reasons.append("setter_not_found")
+                if public_field:
+                    reasons.append("public_field_still_present")
+
+                _record(
+                    "getter_setter",
+                    passed,
+                    {
+                        "file": resolved,
+                        "file_hint": file_hint,
+                        "class": cls,
+                        "attr": attr,
+                        "expected_getter": get_name,
+                        "expected_setter": set_name,
+                        "has_getter": has_get,
+                        "has_setter": has_set,
+                        "public_field_still_present": public_field,
+                        "private_field_present": private_field_present,
+                        "direct_access_hits_count": len(direct_access_hits),
+                        "direct_access_hits_sample": direct_access_hits[:25],
+                        "reasons": reasons,
+                        "note": "getter_setter_requires_methods_and_no_public_field; dot-access_is_soft_signal",
+                    },
+                )
+
 
 
     # ---- guard_clauses ----

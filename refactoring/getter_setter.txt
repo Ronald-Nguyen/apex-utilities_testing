@@ -28,10 +28,6 @@ public class Person {
         this.name = name;
     }
 }
-
-Person person = new Person('Alice');
-System.debug(person.name);
-person.name = 'Bob';
 ```
 
 Task:
@@ -43,18 +39,18 @@ Task:
 File `Person.cls`:
 ```apex
 public class Person {
-    private String _name;
+    private String name;
 
     public Person(String name) {
-        this._name = name;
+        this.name = name;
     }
 
     public String getName() {
-        return _name;
+        return name;
     }
 
     public void setName(String value) {
-        _name = value;
+        name = value;
     }
 }
 
@@ -79,8 +75,6 @@ public class BankAccount {
     }
 }
 
-BankAccount account = new BankAccount(1000);
-account.balance = 500;
 ```
 
 Task:
@@ -92,31 +86,29 @@ Task:
 File `BankAccount.cls`:
 ```apex
 public class BankAccount {
-    private Decimal _balance;
+    private Decimal balance;
 
     public BankAccount(Decimal balance) {
-        this._balance = balance;
+        this.balance = balance;
     }
 
     public Decimal getBalance() {
-        return _balance;
+        return balance;
     }
 
     public void setBalance(Decimal value) {
-        _balance = value;
+        balance = value;
     }
 
     public void withdraw(Decimal amount) {
-        this._balance -= amount;
+        setBalance(getBalance() - amount);
     }
 }
 
-BankAccount account = new BankAccount(1000);
-account.setBalance(500);
 ```
 
 Your Task:
-1. Encapsulate the attributes `uniqueValue` within the class `AbstractSObjectTestFactory` in the file `AbstractSObjectTestFactory.cls`.
+1. Encapsulate only the attribute `idFieldName` within the class `Relationship` in the file `Relationship.cls`.
 2. Replace all direct attribute accesses with getter and setter methods.
 3. Update all references both inside the class and from external calls.
 4. For EACH modified file, respond exactly in the following format:
