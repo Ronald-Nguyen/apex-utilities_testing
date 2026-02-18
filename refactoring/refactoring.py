@@ -30,7 +30,7 @@ REFACTORING_BASE_DIR = "refactoring"
 DEFAULT_REFACTORING = "rename"
 
 PATH = 'force-app/main'
-ITERATIONS = 10
+ITERATIONS = 1
 GEMMA = 'gemma-3-27b-it'
 GEMINI3 = 'gemini-3-pro-preview'
 GEMINI2 = 'gemini-2.5-flash'
@@ -1126,42 +1126,99 @@ def build_refactoring_check(
         )
 
     # ---- strategy_pattern ----
-
     if ref_type == "strategy_pattern":
         method_name = targets.get("method")
-        file_path = targets.get("file")
-        if not method_name or not file_path:
+        file_hint = targets.get("file")
+
+        if not method_name or not file_hint:
             _record("strategy_pattern", False, {"reason": "targets_not_parsed", "targets": targets})
         else:
-            before_text = _strip_apex_comments(_read_text_best_effort(backup_dir / Path(file_path)))
-            after_text = _strip_apex_comments(_read_project_file_text(project_dir, file_path))
+            resolved = _resolve_file_hint(project_dir, file_hint, changed_rel_paths)
+            if not resolved:
+                _record("strategy_pattern", False, {"reason": "file_not_found_in_project", "file_hint": file_hint})
+            else:
+                before_text = _strip_apex_comments(_read_text_best_effort(backup_dir / Path(resolved)))
+                after_text = _strip_apex_comments(_read_project_file_text(project_dir, resolved))
 
-            before_body = _extract_method_body_apex(before_text, method_name) or ""
-            after_body = _extract_method_body_apex(after_text, method_name) or ""
+                before_body = _extract_method_body_apex(before_text, method_name) or ""
+                after_body = _extract_method_body_apex(after_text, method_name) or ""
 
-            # Heuristics: fewer else-if in method body + presence of Map/containsKey and interface/class strategy declaration in file
-            before_else_if = len(re.findall(r"\belse\s+if\b", before_body))
-            after_else_if = len(re.findall(r"\belse\s+if\b", after_body))
+                before_else_if = len(re.findall(r"\belse\s+if\b", before_body))
+                after_else_if = len(re.findall(r"\belse\s+if\b", after_body))
 
-            has_map = re.search(r"\bMap<", after_text) is not None
-            has_contains = re.search(r"\bcontainsKey\s*\(", after_text) is not None
-            has_strategy_interface = re.search(r"\binterface\b", after_text) is not None or re.search(r"\bStrategy\b", after_text) is not None
+                # --- Strategy signals in FILE (interface + implementations) ---
+                # Prefer explicit interface name if present (IdFieldStrategy etc.)
+                iface_names = set(re.findall(r"\binterface\s+([A-Za-z_]\w*)\b", after_text))
+                # Fall back: any interface containing 'Strategy' in the name
+                iface_names |= {n for n in iface_names if "strategy" in n.lower()}
 
-            passed = (after_else_if < before_else_if) and has_map and has_contains and has_strategy_interface
-            _record(
-                "strategy_pattern",
-                passed,
-                {
-                    "file": file_path,
-                    "method": method_name,
-                    "else_if_before": before_else_if,
-                    "else_if_after": after_else_if,
-                    "has_map": has_map,
-                    "has_containsKey": has_contains,
-                    "has_interface_or_strategy": has_strategy_interface,
-                    "note": "heuristic_dispatch_rewrite",
-                },
-            )
+                has_any_interface = len(iface_names) > 0
+                has_strategy_named_interface = any("strategy" in n.lower() for n in iface_names)
+
+                implements_hits = []
+                for iface in iface_names:
+                    if re.search(r"\bclass\s+[A-Za-z_]\w*\s+implements\s+" + re.escape(iface) + r"\b", after_text):
+                        implements_hits.append(iface)
+                has_implementation = len(implements_hits) > 0
+
+                # --- Strategy usage in METHOD (delegation) ---
+                # Look for var.methodName(...) call
+                # (we don't know the strategy var name, so generic: "<ident>.<ident>(")
+                has_delegation_call = re.search(r"\b[A-Za-z_]\w*\s*\.\s*[A-Za-z_]\w*\s*\(", after_body) is not None
+
+                # --- Selection mechanism (either conditional new, or map dispatch) ---
+                has_map = re.search(r"\bMap\s*<", after_text) is not None
+                has_contains = re.search(r"\bcontainsKey\s*\(", after_text) is not None
+                uses_map_dispatch = has_map and has_contains
+
+                # conditional selection: assigns "new Something()" into some variable inside the method
+                # (common in valid strategy refactors)
+                has_new_assignment = re.search(r"=\s*new\s+[A-Za-z_]\w*\s*\(", after_body) is not None
+
+                # Strategy variant label (helps later analysis)
+                if uses_map_dispatch:
+                    variant = "map_dispatch"
+                elif has_new_assignment:
+                    variant = "conditional_selection"
+                else:
+                    variant = "unknown_selection"
+
+                # --- Pass criteria ---
+                # Minimum: interface + implementation + delegation
+                passed = has_any_interface and has_implementation and has_delegation_call
+
+                reasons = []
+                if not has_any_interface:
+                    reasons.append("no_interface_found")
+                if not has_implementation:
+                    reasons.append("no_implements_found")
+                if not has_delegation_call:
+                    reasons.append("no_delegation_call_in_method")
+                if variant == "unknown_selection":
+                    # don't hard-fail for this; just record it (some strategies are injected)
+                    reasons.append("no_obvious_selection_mechanism")
+
+                _record(
+                    "strategy_pattern",
+                    passed,
+                    {
+                        "file": resolved,
+                        "file_hint": file_hint,
+                        "method": method_name,
+                        "else_if_before": before_else_if,
+                        "else_if_after": after_else_if,
+                        "has_map": has_map,
+                        "has_containsKey": has_contains,
+                        "variant": variant,
+                        "interfaces_found": sorted(list(iface_names))[:10],
+                        "implements_interfaces": implements_hits[:10],
+                        "has_delegation_call": has_delegation_call,
+                        "has_new_assignment_in_method": has_new_assignment,
+                        "reasons": reasons,
+                        "note": "heuristic_strategy_interface_impl_delegation",
+                    },
+                )
+
 
     # ---- coc_reduktion ----
     if ref_type == "coc_reduktion":
