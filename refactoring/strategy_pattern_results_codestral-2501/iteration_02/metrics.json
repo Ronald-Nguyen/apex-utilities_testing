@@ -1,0 +1,132 @@
+{
+  "iteration": 2,
+  "timestamp": "2026-02-18T13:07:31.000420",
+  "refactoring": "refactoring/strategy_pattern",
+  "changed_files_scope": [
+    "utilities\\schema\\classes\\Relationship.cls"
+  ],
+  "test": {
+    "status": "failed",
+    "success": false,
+    "level": 0
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=13065, completion=452, total=13517",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-18T13:07:25.845942",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\strategy_pattern_results_codestral-2501\\iteration_02\\pmd_before\\subset_src",
+      "files": [
+        "utilities/schema/classes/Relationship.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\strategy_pattern_results_codestral-2501\\iteration_02\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\strategy_pattern_results_codestral-2501\\iteration_02\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 5,
+        "loc": 36,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 5,
+        "loc": 36,
+        "count": 1
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-18T13:07:27.401327",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\strategy_pattern_results_codestral-2501\\iteration_02\\pmd_after\\subset_src",
+      "files": [
+        "utilities/schema/classes/Relationship.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\strategy_pattern_results_codestral-2501\\iteration_02\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\strategy_pattern_results_codestral-2501\\iteration_02\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 6,
+        "loc": 50,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 6,
+        "loc": 50,
+        "count": 1
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 1,
+      "loc": 14,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": 1,
+      "loc": 14,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "strategy_pattern",
+    "targets": {
+      "method": "fromIdField",
+      "file": "Relationship.cls"
+    },
+    "ok": true,
+    "checks": {
+      "strategy_pattern": {
+        "passed": true,
+        "file": "utilities/schema/classes/Relationship.cls",
+        "file_hint": "Relationship.cls",
+        "method": "fromIdField",
+        "else_if_before": 1,
+        "else_if_after": 0,
+        "has_map": true,
+        "has_containsKey": true,
+        "variant": "map_dispatch",
+        "interfaces_found": [
+          "RelationshipStrategy"
+        ],
+        "implements_interfaces": [
+          "RelationshipStrategy"
+        ],
+        "has_delegation_call": true,
+        "has_new_assignment_in_method": false,
+        "reasons": [],
+        "note": "heuristic_strategy_interface_impl_delegation"
+      }
+    }
+  }
+}

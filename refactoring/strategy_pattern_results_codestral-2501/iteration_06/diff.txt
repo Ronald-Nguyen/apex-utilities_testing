@@ -1,0 +1,28 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -19 +19 @@
+-StringreferenceFieldName;
++RelationshipStrategystrategy;
+@@ -21 +21 @@
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
++strategy=newCustomFieldStrategy();
+@@ -23 +23 @@
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
++strategy=newIdFieldStrategy();
+@@ -26,0 +27,8 @@
++returnstrategy.createRelationship(idFieldName);
++}
++privateinterfaceRelationshipStrategy{
++RelationshipcreateRelationship(StringidFieldName);
++}
++privateclassCustomFieldStrategyimplementsRelationshipStrategy{
++publicRelationshipcreateRelationship(StringidFieldName){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+@@ -29,0 +38,7 @@
++privateclassIdFieldStrategyimplementsRelationshipStrategy{
++publicRelationshipcreateRelationship(StringidFieldName){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)id','');
++returnnewRelationship(referenceFieldName,idFieldName);
++}
++}
++}

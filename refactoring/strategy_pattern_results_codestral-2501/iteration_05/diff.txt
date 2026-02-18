@@ -1,0 +1,20 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -18 +18,5 @@
+-publicstaticRelationshipfromIdField(StringidFieldName){
++privateinterfaceRelationshipStrategy{
++Relationshipexecute(StringfieldName);
++}
++privatestaticclassIdFieldStrategyimplementsRelationshipStrategy{
++publicRelationshipexecute(StringidFieldName){
+@@ -29,0 +34,10 @@
++privatestaticMap<String,RelationshipStrategy>STRATEGIES=newMap<String,RelationshipStrategy>{
++'idField'=>newIdFieldStrategy()
++};
++publicstaticRelationshipfromIdField(StringidFieldName){
++if(STRATEGIES.containsKey('idField')){
++returnSTRATEGIES.get('idField').execute(idFieldName);
++}
++thrownewInvalidFieldException(INVALID_RELATIONSHIP_FIELD+idFieldName);
++}
++}

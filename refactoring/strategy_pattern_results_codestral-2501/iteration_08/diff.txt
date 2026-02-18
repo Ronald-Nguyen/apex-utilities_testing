@@ -1,0 +1,42 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -18,8 +18,2 @@
+-publicstaticRelationshipfromIdField(StringidFieldName){
+-StringreferenceFieldName;
+-if(idFieldName.toLowerCase().endsWith('__c')){
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
+-thrownewInvalidFieldException(INVALID_RELATIONSHIP_FIELD+idFieldName);
++privateinterfaceIdFieldStrategy{
++Relationshipexecute(StringidFieldName);
+@@ -26,0 +21,3 @@
++privatestaticclassCustomFieldStrategyimplementsIdFieldStrategy{
++publicRelationshipexecute(StringidFieldName){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+@@ -29,0 +27,24 @@
++privatestaticclassStandardFieldStrategyimplementsIdFieldStrategy{
++publicRelationshipexecute(StringidFieldName){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)id','');
++returnnewRelationship(referenceFieldName,idFieldName);
++}
++}
++privatestaticclassInvalidFieldStrategyimplementsIdFieldStrategy{
++publicRelationshipexecute(StringidFieldName){
++thrownewInvalidFieldException(INVALID_RELATIONSHIP_FIELD+idFieldName);
++}
++}
++privatestaticfinalMap<String,IdFieldStrategy>STRATEGIES=newMap<String,IdFieldStrategy>{
++'__c'=>newCustomFieldStrategy(),
++'id'=>newStandardFieldStrategy()
++};
++publicstaticRelationshipfromIdField(StringidFieldName){
++StringstrategyKey=idFieldName.toLowerCase().endsWith('__c')?'__c':
++idFieldName.toLowerCase().endsWith('id')?'id':null;
++if(STRATEGIES.containsKey(strategyKey)){
++returnSTRATEGIES.get(strategyKey).execute(idFieldName);
++}
++returnnewInvalidFieldStrategy().execute(idFieldName);
++}
++}
