@@ -1,0 +1,9 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -4 +4 @@
+-publicfinalStringidFieldName;
++privatefinalStringidFieldName;
+@@ -7,0 +8,3 @@
++}
++publicStringgetIdFieldName(){
++returnidFieldName;

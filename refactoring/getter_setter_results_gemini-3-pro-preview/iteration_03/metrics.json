@@ -1,0 +1,134 @@
+{
+  "iteration": 3,
+  "timestamp": "2026-02-18T16:04:26.426386",
+  "refactoring": "refactoring/getter_setter",
+  "changed_files_scope": [
+    "utilities\\schema\\classes\\Relationship.cls",
+    "utilities\\schema\\classes\\SObjectWrapper.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=14094, completion=1243, total=22148",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-18T16:02:28.811672",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_gemini-3-pro-preview\\iteration_03\\pmd_before\\subset_src",
+      "files": [
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectWrapper.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_gemini-3-pro-preview\\iteration_03\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_gemini-3-pro-preview\\iteration_03\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 17,
+        "loc": 133,
+        "count": 2
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 17,
+        "loc": 133,
+        "count": 2
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-18T16:02:30.351226",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_gemini-3-pro-preview\\iteration_03\\pmd_after\\subset_src",
+      "files": [
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectWrapper.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_gemini-3-pro-preview\\iteration_03\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\getter_setter_results_gemini-3-pro-preview\\iteration_03\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 17,
+        "loc": 139,
+        "count": 2
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 17,
+        "loc": 139,
+        "count": 2
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 0,
+      "loc": 6,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": 0,
+      "loc": 6,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "getter_setter",
+    "targets": {
+      "attr": "idFieldName",
+      "class": "Relationship",
+      "file": "Relationship.cls"
+    },
+    "ok": true,
+    "checks": {
+      "getter_setter": {
+        "passed": true,
+        "file": "utilities/schema/classes/Relationship.cls",
+        "file_hint": "Relationship.cls",
+        "class": "Relationship",
+        "attr": "idFieldName",
+        "expected_getter": "getIdFieldName",
+        "expected_setter": "setIdFieldName",
+        "has_getter": true,
+        "has_setter": true,
+        "public_field_still_present": false,
+        "private_field_present": true,
+        "direct_access_hits_count": 1,
+        "direct_access_hits_sample": [
+          "utilities/schema/classes/Relationship.cls"
+        ],
+        "reasons": [],
+        "note": "getter_setter_requires_methods_and_no_public_field; dot-access_is_soft_signal"
+      }
+    }
+  }
+}

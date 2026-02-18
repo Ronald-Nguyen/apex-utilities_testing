@@ -1,0 +1,18 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -4 +4 @@
+-publicfinalStringidFieldName;
++privateStringidFieldName;
+@@ -7,0 +8,6 @@
++}
++publicStringgetIdFieldName(){
++returnidFieldName;
++}
++publicvoidsetIdFieldName(Stringvalue){
++idFieldName=value;
+
+--- backup/utilities\schema\classes\SObjectWrapper.cls
++++ refactored/utilities\schema\classes\SObjectWrapper.cls
+@@ -53 +53 @@
+-.idFieldName;
++.getIdFieldName();

@@ -1,0 +1,43 @@
+Iteration 10
+Timestamp: 2026-02-18T15:15:01.970899
+Success: False
+
+============================================================
+STDOUT:
+───── Deploying Metadata ─────
+Stages:
+1. Preparing
+2. Waiting for the org to respond
+3. Deploying Metadata
+4. Running Tests
+5. Updating Source Tracking
+6. Done
+
+▶ Preparing…
+   Deploying v48.0 metadata to test-oz61ydxlaciz@example.com using the v65.0 SOAP API.
+   Deploy ID: 0AfAw00000Mf3bgKAB
+   Target Org: test-oz61ydxlaciz@example.com
+✔ Preparing (209ms)
+◯ Waiting for the org to respond - Skipped
+▶ Deploying Metadata…
+   Components: 0/2 (0%)
+✘ Deploying Metadata (1.18s)
+   Components: 1/2 (50%)
+
+Deploying v48.0 metadata to test-oz61ydxlaciz@example.com using the v65.0 SOAP API.
+Status: Failed
+Deploy ID: 0AfAw00000Mf3bgKAB
+Target Org: test-oz61ydxlaciz@example.com
+
+Elapsed time: 1.39s
+
+[1m[31mComponent Failures [1][39m[22m
+ Type       Name            Problem                                                    Line:Column 
+---------------------------------------------------------------------------------------------------
+ ApexClass  SObjectWrapper  Variable is not visible: Relationship.idFieldName (64:14)  64:14       
+
+
+
+============================================================
+STDERR:
+DEPLOY FAILED (Level 0):

@@ -1,0 +1,11 @@
+iteration 1 failed test failed diff passed Tokens: prompt=12672, completion=399, total=13071 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 2 failed test failed diff passed Tokens: prompt=12672, completion=377, total=13049 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(getter_setter)
+iteration 3 failed test failed diff passed Tokens: prompt=12672, completion=404, total=13076 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 4 failed test failed diff passed Tokens: prompt=12672, completion=383, total=13055 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(getter_setter)
+iteration 5 failed test failed diff passed Tokens: prompt=12672, completion=399, total=13071 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 6 failed test failed diff passed Tokens: prompt=12672, completion=379, total=13051 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(getter_setter)
+iteration 7 failed test failed diff passed Tokens: prompt=12672, completion=399, total=13071 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 8 failed test failed diff passed Tokens: prompt=12672, completion=363, total=13035 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(getter_setter)
+iteration 9 failed test failed diff passed Tokens: prompt=12672, completion=403, total=13075 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:ok
+iteration 10 failed test failed diff passed Tokens: prompt=12672, completion=379, total=13051 PMD:ok CoCΔ(total=0, prod=0, test=0) REF:fail(getter_setter)
+Fertig. Erfolgsrate: 0.0% (0/10)
