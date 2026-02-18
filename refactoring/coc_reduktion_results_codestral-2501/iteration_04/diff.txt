@@ -1,0 +1,36 @@
+--- backup/utilities\logging\classes\EventBufferLogAdapter.cls
++++ refactored/utilities\logging\classes\EventBufferLogAdapter.cls
+@@ -32 +32,3 @@
+-if(LOGGING_LEVELS.contains(logLevelString)){
++if(!LOGGING_LEVELS.contains(logLevelString)){
++return;
++}
+@@ -34 +35,0 @@
+-}
+@@ -63 +64,3 @@
+-if(!logsToPublish.isEmpty()){
++if(logsToPublish.isEmpty()){
++return;
++}
+@@ -68 +70,0 @@
+-}
+
+--- backup/utilities\logging\profiler\classes\Profiler.cls
++++ refactored/utilities\logging\profiler\classes\Profiler.cls
+@@ -29 +29,3 @@
+-if(!IGNORE_LIMITS.contains(limitName)){
++if(IGNORE_LIMITS.contains(limitName)){
++return;
++}
+@@ -33 +34,0 @@
+-}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

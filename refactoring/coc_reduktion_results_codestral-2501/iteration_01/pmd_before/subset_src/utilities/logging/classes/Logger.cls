@@ -1,0 +1,91 @@
+
+
+
+@SuppressWarnings('PMD.ExcessivePublicCount')
+public without sharing class Logger {
+    private static final String MESSAGE_FORMAT = 'An error has occured in the class {0} with the message: {1}';
+
+    private final LoggerAdapter loggerAdapter;
+
+    public Logger(Type apexClass, LoggerAdapter loggerAdapter) {
+        this.loggerAdapter = loggerAdapter;
+        this.loggerAdapter.setType(apexClass.getName());
+    }
+
+    public void setType(String type) {
+        this.loggerAdapter.setType(type);
+    }
+
+    
+    public void debug(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.debugLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void debug(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.debugLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void info(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.infoLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void info(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.infoLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void warn(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.warningLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void warn(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.warningLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void error(String messageToLog) {
+        loggerAdapter.log(loggerAdapter.errorLevel(), (new LogMessage(messageToLog)).toString());
+    }
+
+    public void error(String messageToLog, Id recordId) {
+        loggerAdapter.log(
+            loggerAdapter.errorLevel(),
+            (new LogMessage(messageToLog)).toString(),
+            recordId
+        );
+    }
+
+    public void error(Exception exceptionToLog) {
+        error((new LogMessage(exceptionToLog)).toString());
+    }
+
+    public void error(Exception exceptionToLog, Id recordId) {
+        error((new LogMessage(exceptionToLog)).toString(), recordId);
+    }
+
+    
+    public void close() {
+        runApexPofiling();
+        loggerAdapter.close();
+    }
+
+    private void runApexPofiling() {
+        Profiler profiler = new ApexProfiler();
+        String profilingReport = profiler.generateProfilingReport();
+        if (profiler.isBreachingWarning()) {
+            warn(profilingReport);
+        } else {
+            info(profilingReport);
+        }
+    }
+}

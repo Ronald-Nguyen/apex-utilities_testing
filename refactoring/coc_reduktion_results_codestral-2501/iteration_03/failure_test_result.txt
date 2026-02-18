@@ -1,0 +1,43 @@
+Iteration 3
+Timestamp: 2026-02-18T17:02:37.432421
+Success: False
+
+============================================================
+STDOUT:
+───── Deploying Metadata ─────
+Stages:
+1. Preparing
+2. Waiting for the org to respond
+3. Deploying Metadata
+4. Running Tests
+5. Updating Source Tracking
+6. Done
+
+▶ Preparing…
+   Deploying v48.0 metadata to test-k3x8ifllg0h0@example.com using the v65.0 SOAP API.
+   Deploy ID: 0AfAw00000MfHZhKAN
+   Target Org: test-k3x8ifllg0h0@example.com
+✔ Preparing (301ms)
+◯ Waiting for the org to respond - Skipped
+▶ Deploying Metadata…
+   Components: 0/23 (0%)
+✘ Deploying Metadata (4.34s)
+   Components: 22/23 (96%)
+
+Deploying v48.0 metadata to test-k3x8ifllg0h0@example.com using the v65.0 SOAP API.
+Status: Failed
+Deploy ID: 0AfAw00000MfHZhKAN
+Target Org: test-k3x8ifllg0h0@example.com
+
+Elapsed time: 4.64s
+
+[1m[31mComponent Failures [1][39m[22m
+ Type       Name        Problem                                       Line:Column 
+----------------------------------------------------------------------------------
+ ApexClass  CsvBuilder  Variable does not exist: Collections (51:38)  51:38       
+
+
+
+============================================================
+STDERR:
+DEPLOY FAILED (Level 0):

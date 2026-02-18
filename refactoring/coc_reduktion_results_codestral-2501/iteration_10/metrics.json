@@ -1,0 +1,197 @@
+{
+  "iteration": 10,
+  "timestamp": "2026-02-18T17:15:48.475383",
+  "refactoring": "refactoring/coc_reduktion",
+  "changed_files_scope": [
+    "utilities\\classes\\Stack.cls",
+    "utilities\\configuration-management\\classes\\ConfigurationManager.cls",
+    "utilities\\logging\\classes\\EventBufferLogAdapter.cls",
+    "utilities\\logging\\classes\\LogMessage.cls",
+    "utilities\\logging\\classes\\LogWriter.cls",
+    "utilities\\logging\\classes\\LoggedQueueable.cls",
+    "utilities\\logging\\classes\\LoggedSchedulable.cls",
+    "utilities\\logging\\classes\\Logger.cls",
+    "utilities\\logging\\classes\\LoggerAdapter.cls",
+    "utilities\\logging\\classes\\LoggerFactory.cls",
+    "utilities\\logging\\classes\\QueueableScheduler.cls",
+    "utilities\\logging\\profiler\\classes\\ApexProfiler.cls",
+    "utilities\\logging\\profiler\\classes\\OrgLimitsProfiler.cls",
+    "utilities\\logging\\profiler\\classes\\OrgLimitsProfilingReportRunner.cls",
+    "utilities\\logging\\profiler\\classes\\Profiler.cls",
+    "utilities\\parsers\\classes\\DisplayTypeParser.cls",
+    "utilities\\schema\\classes\\Relationship.cls",
+    "utilities\\schema\\classes\\SObjectRecordTypes.cls",
+    "utilities\\schema\\classes\\SObjectWrapper.cls",
+    "utilities\\schema\\classes\\SchemaFacade.cls",
+    "utilities\\schema\\classes\\SecureSObjectWrapper.cls",
+    "utilities\\schema\\classes\\StateCountryCodeMapper.cls",
+    "utilities\\string-utilities\\classes\\CsvBuilder.cls",
+    "utilities\\string-utilities\\classes\\QueryBuilder.cls",
+    "utilities\\string-utilities\\classes\\StringBuilder.cls",
+    "utilities\\trigger-framework\\classes\\SObjectTriggerWrapper.cls",
+    "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls",
+    "utilities\\trigger-framework\\classes\\TriggerHandler.cls",
+    "utilities\\trigger-framework\\classes\\Triggerable.cls"
+  ],
+  "test": {
+    "status": "failed",
+    "success": false,
+    "level": 0
+  },
+  "diff": {
+    "status": "failed",
+    "has_diff": false
+  },
+  "tokens": "Tokens: prompt=12844, completion=10655, total=23499",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-18T17:15:31.694282",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_codestral-2501\\iteration_10\\pmd_before\\subset_src",
+      "files": [
+        "utilities/classes/Stack.cls",
+        "utilities/configuration-management/classes/ConfigurationManager.cls",
+        "utilities/logging/classes/EventBufferLogAdapter.cls",
+        "utilities/logging/classes/LogMessage.cls",
+        "utilities/logging/classes/LogWriter.cls",
+        "utilities/logging/classes/LoggedQueueable.cls",
+        "utilities/logging/classes/LoggedSchedulable.cls",
+        "utilities/logging/classes/Logger.cls",
+        "utilities/logging/classes/LoggerAdapter.cls",
+        "utilities/logging/classes/LoggerFactory.cls",
+        "utilities/logging/classes/QueueableScheduler.cls",
+        "utilities/logging/profiler/classes/ApexProfiler.cls",
+        "utilities/logging/profiler/classes/OrgLimitsProfiler.cls",
+        "utilities/logging/profiler/classes/OrgLimitsProfilingReportRunner.cls",
+        "utilities/logging/profiler/classes/Profiler.cls",
+        "utilities/parsers/classes/DisplayTypeParser.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectRecordTypes.cls",
+        "utilities/schema/classes/SObjectWrapper.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/schema/classes/SecureSObjectWrapper.cls",
+        "utilities/schema/classes/StateCountryCodeMapper.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/string-utilities/classes/QueryBuilder.cls",
+        "utilities/string-utilities/classes/StringBuilder.cls",
+        "utilities/trigger-framework/classes/SObjectTriggerWrapper.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls",
+        "utilities/trigger-framework/classes/TriggerHandler.cls",
+        "utilities/trigger-framework/classes/Triggerable.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_codestral-2501\\iteration_10\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_codestral-2501\\iteration_10\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 140,
+        "loc": 1452,
+        "count": 29
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 140,
+        "loc": 1452,
+        "count": 29
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-18T17:15:33.686500",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_codestral-2501\\iteration_10\\pmd_after\\subset_src",
+      "files": [
+        "utilities/classes/Stack.cls",
+        "utilities/configuration-management/classes/ConfigurationManager.cls",
+        "utilities/logging/classes/EventBufferLogAdapter.cls",
+        "utilities/logging/classes/LogMessage.cls",
+        "utilities/logging/classes/LogWriter.cls",
+        "utilities/logging/classes/LoggedQueueable.cls",
+        "utilities/logging/classes/LoggedSchedulable.cls",
+        "utilities/logging/classes/Logger.cls",
+        "utilities/logging/classes/LoggerAdapter.cls",
+        "utilities/logging/classes/LoggerFactory.cls",
+        "utilities/logging/classes/QueueableScheduler.cls",
+        "utilities/logging/profiler/classes/ApexProfiler.cls",
+        "utilities/logging/profiler/classes/OrgLimitsProfiler.cls",
+        "utilities/logging/profiler/classes/OrgLimitsProfilingReportRunner.cls",
+        "utilities/logging/profiler/classes/Profiler.cls",
+        "utilities/parsers/classes/DisplayTypeParser.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectRecordTypes.cls",
+        "utilities/schema/classes/SObjectWrapper.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/schema/classes/SecureSObjectWrapper.cls",
+        "utilities/schema/classes/StateCountryCodeMapper.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/string-utilities/classes/QueryBuilder.cls",
+        "utilities/string-utilities/classes/StringBuilder.cls",
+        "utilities/trigger-framework/classes/SObjectTriggerWrapper.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls",
+        "utilities/trigger-framework/classes/TriggerHandler.cls",
+        "utilities/trigger-framework/classes/Triggerable.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_codestral-2501\\iteration_10\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_codestral-2501\\iteration_10\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 140,
+        "loc": 1393,
+        "count": 29
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 140,
+        "loc": 1393,
+        "count": 29
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 0,
+      "loc": -59,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": 0,
+      "loc": -59,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "coc_reduktion",
+    "targets": {},
+    "ok": true,
+    "checks": {
+      "coc_reduktion": {
+        "passed": true,
+        "pmd_delta_total_complexity": 0,
+        "rule": "delta<=0"
+      }
+    }
+  }
+}

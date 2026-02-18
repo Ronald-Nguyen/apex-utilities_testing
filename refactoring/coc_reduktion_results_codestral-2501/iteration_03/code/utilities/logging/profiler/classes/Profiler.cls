@@ -1,0 +1,105 @@
+public abstract without sharing class Profiler {
+    @testVisible
+    private static final Decimal DEFAULT_WARNING_PERCENTAGE = 0.75;
+    @testVisible
+    private final Map<String, ProfileInfo> profilingInfos = new Map<String, ProfileInfo>();
+    private Boolean isBreachingWarning = false;
+    private static final Map<String, Decimal> WARNING_PERCENTAGES = new Map<String, Decimal>();
+    private static final Set<String> IGNORE_LIMITS = new Set<String>();
+
+    static {
+        for (Apex_Profiling_Warning_Limit__mdt warningLimit : [
+            SELECT DeveloperName, Ignore_Limit__c, Warning_Level__c
+            FROM Apex_Profiling_Warning_Limit__mdt
+        ]) {
+            if (warningLimit == null) {
+                continue;
+            }
+
+            if (warningLimit.Ignore_Limit__c) {
+                if (warningLimit.DeveloperName != null) {
+                    IGNORE_LIMITS.add(warningLimit.DeveloperName);
+                }
+            } else {
+                if (warningLimit.DeveloperName != null && warningLimit.Warning_Level__c != null) {
+                    WARNING_PERCENTAGES.put(warningLimit.DeveloperName, warningLimit.Warning_Level__c);
+                }
+            }
+        }
+    }
+
+    public Profiler() {
+        refreshProfiling();
+    }
+
+    public Boolean isBreachingWarning() {
+        return isBreachingWarning;
+    }
+
+    public abstract void refreshProfiling();
+
+    protected void addProfilingInfo(String limitName, Integer recorded, Integer limitTotal) {
+        if (String.isBlank(limitName) || recorded == null || limitTotal == null) {
+            return;
+        }
+
+        if (!IGNORE_LIMITS.contains(limitName)) {
+            ProfileInfo profilingInfo = new ProfileInfo(limitName, recorded, limitTotal);
+            isBreachingWarning = isBreachingWarning || profilingInfo.isBreachingWarning();
+            profilingInfos.put(profilingInfo.limitName, profilingInfo);
+        }
+    }
+
+    public String generateProfilingReport() {
+        if (profilingInfos == null || profilingInfos.isEmpty()) {
+            return '';
+        }
+
+        StringBuilder report = new StringBuilder();
+        report.setSeparator('\n');
+
+        for (ProfileInfo profile : profilingInfos.values()) {
+            if (profile != null) {
+                report.append(profile.getReportLine());
+            }
+        }
+
+        return report.toString();
+    }
+
+    private class ProfileInfo {
+        private final String limitName;
+        @testVisible
+        private final Integer recorded;
+        @testVisible
+        private final Integer limitTotal;
+
+        private ProfileInfo(String limitName, Integer recorded, Integer limitTotal) {
+            if (String.isBlank(limitName) || recorded == null || limitTotal == null) {
+                throw new IllegalArgumentException('ProfileInfo parameters cannot be null or blank');
+            }
+
+            this.limitName = limitName;
+            this.recorded = recorded;
+            this.limitTotal = limitTotal;
+        }
+
+        private Decimal getPercentage() {
+            return limitTotal == 0
+                ? 0
+                : 1 - Decimal.valueOf(limitTotal - recorded) / Decimal.valueOf(limitTotal);
+        }
+
+        private String getReportLine() {
+            String prefix = isBreachingWarning() ? 'Warning hit for ' : 'Number of ';
+            return prefix + limitName + ': ' + recorded + ' of ' + limitTotal;
+        }
+
+        private Boolean isBreachingWarning() {
+            Decimal warningPercentage = WARNING_PERCENTAGES.containsKey(limitName)
+                ? (WARNING_PERCENTAGES.get(limitName) / 100)
+                : DEFAULT_WARNING_PERCENTAGE;
+            return getPercentage() > warningPercentage;
+        }
+    }
+}

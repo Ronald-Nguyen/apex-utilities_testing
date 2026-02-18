@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd" version="7.21.0" timestamp="2026-02-18T16:59:47.326">
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\classes\DatabaseUtils.cls">
+<violation beginline="7" endline="14" begincolumn="19" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getErrorString(List&lt;Database.Error&gt;)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\classes\DateUtils.cls">
+<violation beginline="7" endline="9" begincolumn="19" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getNow()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="12" endline="14" begincolumn="19" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getToday()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\classes\Stack.cls">
+<violation beginline="9" endline="14" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'pop()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="16" endline="18" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'size()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="20" endline="22" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'isEmpty()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\configuration-management\classes\DeletionValidator.cls">
+<violation beginline="6" endline="10" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'register(SObjectTriggerWrapper)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\logging\classes\EventBufferLogAdapter.cls">
+<violation beginline="21" endline="25" begincolumn="5" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method '&lt;clinit&gt;()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="35" endline="37" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'log(Object, String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="38" endline="46" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'log(Object, String, Id)' has a cognitive complexity of 2, current threshold is 1
+</violation>
+<violation beginline="70" endline="76" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'close()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\logging\classes\LogMessage.cls">
+<violation beginline="15" endline="20" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getStackTraceString()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="22" endline="28" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'generateStackTraceString()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="30" endline="34" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'isLoggingFrameworkClass(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\logging\classes\LoggedQueueable.cls">
+<violation beginline="7" endline="15" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'execute(QueueableContext)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\logging\classes\LoggedSchedulable.cls">
+<violation beginline="11" endline="19" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'execute(SchedulableContext)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="30" endline="32" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'schedule(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\logging\classes\Logger.cls">
+<violation beginline="15" endline="17" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'setType(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="68" endline="70" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'error(Exception)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="72" endline="74" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'error(Exception, Id)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="77" endline="80" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'close()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="82" endline="90" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'runApexPofiling()' has a cognitive complexity of 2, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\logging\classes\LoggerAdapter.cls">
+<violation beginline="10" endline="13" begincolumn="20" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'log(Object, String, Id)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\logging\profiler\classes\OrgLimitsProfiler.cls">
+<violation beginline="3" endline="9" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'refreshProfiling()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\logging\profiler\classes\OrgLimitsProfilingReportRunner.cls">
+<violation beginline="12" endline="20" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'execute()' has a cognitive complexity of 2, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\logging\profiler\classes\Profiler.cls">
+<violation beginline="11" endline="22" begincolumn="5" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method '&lt;clinit&gt;()' has a cognitive complexity of 4, current threshold is 1
+</violation>
+<violation beginline="35" endline="41" begincolumn="15" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'addProfilingInfo(String, Integer, Integer)' has a cognitive complexity of 2, current threshold is 1
+</violation>
+<violation beginline="44" endline="51" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'generateProfilingReport()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="66" endline="70" begincolumn="17" endcolumn="10" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getPercentage()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="72" endline="75" begincolumn="17" endcolumn="10" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getReportLine()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="77" endline="82" begincolumn="17" endcolumn="10" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'isBreachingWarning()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\parsers\classes\DisplayTypeParser.cls">
+<violation beginline="18" endline="20" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The constructor 'DisplayTypeParser(DisplayType)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="23" endline="25" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'parse(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="28" endline="34" begincolumn="16" endcolumn="10" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'parse(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\schema\classes\PicklistValueSet.cls">
+<violation beginline="7" endline="13" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The constructor 'PicklistValueSet(DescribeFieldResult)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\schema\classes\Relationship.cls">
+<violation beginline="13" endline="22" begincolumn="19" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'fromRefrenceField(String)' has a cognitive complexity of 2, current threshold is 1
+</violation>
+<violation beginline="24" endline="35" begincolumn="19" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'fromIdField(String)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\schema\classes\SObjectRecordTypes.cls">
+<violation beginline="16" endline="26" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getDefaultId()' has a cognitive complexity of 6, current threshold is 1
+</violation>
+<violation beginline="29" endline="35" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getRecordTypeId(String)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="38" endline="44" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getRecordTypeDeveloperName(Id)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\schema\classes\SObjectWrapper.cls">
+<violation beginline="16" endline="21" begincolumn="20" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'get(String)' has a cognitive complexity of 2, current threshold is 1
+</violation>
+<violation beginline="23" endline="25" begincolumn="20" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'put(String, Object)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="31" endline="44" begincolumn="20" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getParentField(SObject, String)' has a cognitive complexity of 4, current threshold is 1
+</violation>
+<violation beginline="46" endline="51" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'describe(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="53" endline="60" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'describeParentField(String)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="91" endline="95" begincolumn="17" endcolumn="10" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'validateParentField(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\schema\classes\SchemaFacade.cls">
+<violation beginline="27" endline="37" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getDescribe(String)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="39" endline="43" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'validateObjectApiName(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="45" endline="48" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'isValidField(String, String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="55" endline="63" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getFieldsMap(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="67" endline="88" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'getFieldDescribe(String, String)' has a cognitive complexity of 4, current threshold is 1
+</violation>
+<violation beginline="90" endline="99" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'validateFieldApiName(String, String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\schema\classes\SecureSObjectWrapper.cls">
+<violation beginline="8" endline="14" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'get(String)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="17" endline="22" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'put(String, Object)' has a cognitive complexity of 4, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\string-utilities\classes\CsvBuilder.cls">
+<violation beginline="20" endline="29" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'appendField(String, String)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="37" endline="39" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'totalRows()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="41" endline="63" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'toString()' has a cognitive complexity of 11, current threshold is 1
+</violation>
+<violation beginline="78" endline="90" begincolumn="16" endcolumn="10" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'append(RowBuilder)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\string-utilities\classes\QueryBuilder.cls">
+<violation beginline="20" endline="24" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'validateObjectName(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="31" endline="36" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'selectFields(List&lt;String&gt;)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="38" endline="47" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'selectFieldSet(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="49" endline="55" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'selectAllFields()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="70" endline="76" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'validateFields()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\string-utilities\classes\StringBuilder.cls">
+<violation beginline="19" endline="25" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'append(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="27" endline="30" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'append(Object)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="32" endline="39" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'append(StringBuilder)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="41" endline="45" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'setSeparator(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="53" endline="55" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'length()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\trigger-framework\classes\SObjectTriggerWrapper.cls">
+<violation beginline="11" endline="13" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'hasChanged(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="15" endline="17" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'hasChanged(Schema.SObjectField)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="19" endline="21" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'hasChangedTo(String, Object)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="23" endline="25" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'hasChangedTo(Schema.SObjectField, Object)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\trigger-framework\classes\TriggerDispatcher.cls">
+<violation beginline="15" endline="26" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The constructor 'TriggerDispatcher(List&lt;Triggerable&gt;, List&lt;SObject&gt;, Map&lt;Id, SObject&gt;, TriggerOperation)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="29" endline="31" begincolumn="19" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'run(List&lt;Triggerable&gt;)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="45" endline="64" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'run()' has a cognitive complexity of 7, current threshold is 1
+</violation>
+<violation beginline="66" endline="77" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'executeTriggerables()' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="79" endline="82" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'triggersAreActive()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="84" endline="96" begincolumn="13" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'logUnknownException(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+<file name="C:\Users\ronald\apex-utilities_testing\refactoring\coc_reduktion_results_codestral-2501\iteration_02\pmd_before\subset_src\utilities\trigger-framework\classes\TriggerHandler.cls">
+<violation beginline="9" endline="13" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'register(SObjectTriggerWrapper)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="15" endline="19" begincolumn="21" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'performAction()' has a cognitive complexity of 3, current threshold is 1
+</violation>
+</file>
+</pmd>

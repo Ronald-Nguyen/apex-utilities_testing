@@ -1,0 +1,550 @@
+--- backup/utilities\classes\DatabaseUtils.cls
++++ refactored/utilities\classes\DatabaseUtils.cls
+@@ -3,0 +4,3 @@
++if(errors==null||errors.isEmpty()){
++return'';
++}
+
+--- backup/utilities\classes\DateUtils.cls
++++ refactored/utilities\classes\DateUtils.cls
+@@ -18,0 +19,3 @@
++if(input==null){
++returnnull;
++}
+
+--- backup/utilities\classes\Stack.cls
++++ refactored/utilities\classes\Stack.cls
+@@ -3,0 +4,3 @@
++if(item==null){
++thrownewIllegalArgumentException('Cannotpushnullitemtostack');
++}
+@@ -18,0 +22,3 @@
++if(isEmpty()){
++return'';
++}
+
+--- backup/utilities\configuration-management\classes\DeletionValidator.cls
++++ refactored/utilities\configuration-management\classes\DeletionValidator.cls
+@@ -4,0 +5,3 @@
++if(wrappedSObject==null){
++return;
++}
+
+--- backup/utilities\logging\classes\EventBufferLogAdapter.cls
++++ refactored/utilities\logging\classes\EventBufferLogAdapter.cls
+@@ -30,0 +31,3 @@
++if(logLevel==null||message==null){
++return;
++}
+
+--- backup/utilities\logging\classes\LogMessage.cls
++++ refactored/utilities\logging\classes\LogMessage.cls
+@@ -4,0 +5,3 @@
++if(String.isBlank(message)){
++thrownewIllegalArgumentException('Messagecannotbeblank');
++}
+@@ -7,0 +11,3 @@
++if(exceptionToLog==null){
++thrownewIllegalArgumentException('Exceptioncannotbenull');
++}
+@@ -24,0 +31,3 @@
++if(String.isBlank(stackLine)){
++returnfalse;
++}
+
+--- backup/utilities\logging\classes\LogWriter.cls
++++ refactored/utilities\logging\classes\LogWriter.cls
+@@ -3,0 +4,3 @@
++if(wrappedSObject==null){
++return;
++}
+@@ -16,0 +20 @@
++if(!logs.isEmpty()){
+@@ -19,0 +24 @@
++}
+
+--- backup/utilities\logging\classes\LoggedQueueable.cls
++++ refactored/utilities\logging\classes\LoggedQueueable.cls
+@@ -4,0 +5,3 @@
++if(context==null){
++return;
++}
+@@ -9,0 +13,2 @@
++}finally{
++log.close();
+@@ -11 +15,0 @@
+-log.close();
+
+--- backup/utilities\logging\classes\LoggedSchedulable.cls
++++ refactored/utilities\logging\classes\LoggedSchedulable.cls
+@@ -7,0 +8,3 @@
++if(context==null){
++return;
++}
+@@ -12,0 +16,2 @@
++}finally{
++log.close();
+@@ -14 +18,0 @@
+-log.close();
+@@ -20,0 +25,3 @@
++if(String.isBlank(cronExpression)){
++thrownewIllegalArgumentException('Cronexpressioncannotbeblank');
++}
+@@ -23,0 +31,3 @@
++if(String.isBlank(jobName)){
++thrownewIllegalArgumentException('Jobnamecannotbeblank');
++}
+
+--- backup/utilities\logging\classes\Logger.cls
++++ refactored/utilities\logging\classes\Logger.cls
+@@ -5,0 +6,3 @@
++if(apexClass==null||loggerAdapter==null){
++thrownewIllegalArgumentException('Loggerparameterscannotbenull');
++}
+@@ -9,0 +13,3 @@
++if(String.isBlank(type)){
++thrownewIllegalArgumentException('Typecannotbeblank');
++}
+@@ -12,0 +19,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -15,0 +25,3 @@
++if(String.isBlank(messageToLog)||recordId==null){
++return;
++}
+@@ -22,0 +35,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -25,0 +41,3 @@
++if(String.isBlank(messageToLog)||recordId==null){
++return;
++}
+@@ -32,0 +51,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -35,0 +57,3 @@
++if(String.isBlank(messageToLog)||recordId==null){
++return;
++}
+@@ -42,0 +67,3 @@
++if(String.isBlank(messageToLog)){
++return;
++}
+@@ -45,0 +73,3 @@
++if(String.isBlank(messageToLog)||recordId==null){
++return;
++}
+@@ -52,0 +83,3 @@
++if(exceptionToLog==null){
++return;
++}
+@@ -55,0 +89,3 @@
++if(exceptionToLog==null||recordId==null){
++return;
++}
+
+--- backup/utilities\logging\classes\LoggerAdapter.cls
++++ refactored/utilities\logging\classes\LoggerAdapter.cls
+@@ -4,0 +5,3 @@
++if(String.isBlank(type)){
++thrownewIllegalArgumentException('Typecannotbeblank');
++}
+@@ -8,0 +12,3 @@
++if(logLevel==null||String.isBlank(message)||recordId==null){
++return;
++}
+@@ -21,0 +28,3 @@
++if(logLevel==null||String.isBlank(message)){
++return;
++}
+
+--- backup/utilities\logging\classes\LoggerFactory.cls
++++ refactored/utilities\logging\classes\LoggerFactory.cls
+@@ -2,0 +3,3 @@
++if(apexClass==null){
++thrownewIllegalArgumentException('Apexclasscannotbenull');
++}
+
+--- backup/utilities\logging\classes\QueueableScheduler.cls
++++ refactored/utilities\logging\classes\QueueableScheduler.cls
+@@ -4,0 +5,3 @@
++if(queueableToRun==null){
++thrownewIllegalArgumentException('Queueabletoruncannotbenull');
++}
+
+--- backup/utilities\logging\profiler\classes\OrgLimitsProfiler.cls
++++ refactored/utilities\logging\profiler\classes\OrgLimitsProfiler.cls
+@@ -3,0 +4,3 @@
++if(orgLimitsMap==null||orgLimitsMap.isEmpty()){
++return;
++}
+@@ -5,0 +9 @@
++if(orgLimit!=null){
+@@ -9,0 +14 @@
++}
+
+--- backup/utilities\logging\profiler\classes\Profiler.cls
++++ refactored/utilities\logging\profiler\classes\Profiler.cls
+@@ -28,0 +29,3 @@
++if(String.isBlank(limitName)||recorded==null||limitTotal==null){
++return;
++}
+@@ -35,0 +39,3 @@
++if(profilingInfos.isEmpty()){
++return'';
++}
+@@ -49,0 +56,3 @@
++if(String.isBlank(limitName)||recorded==null||limitTotal==null){
++thrownewIllegalArgumentException('ProfileInfoparameterscannotbenullorblank');
++}
+
+--- backup/utilities\parsers\classes\DisplayTypeParser.cls
++++ refactored/utilities\parsers\classes\DisplayTypeParser.cls
+@@ -18,0 +19,3 @@
++if(String.isBlank(value)){
++returnnull;
++}
+
+--- backup/utilities\schema\classes\PicklistValueSet.cls
++++ refactored/utilities\schema\classes\PicklistValueSet.cls
+@@ -5,0 +6,3 @@
++if(fieldDefinition==null){
++thrownewIllegalArgumentException('Fielddefinitioncannotbenull');
++}
+@@ -7,0 +11 @@
++if(value!=null&&String.isNotBlank(value.getValue())&&String.isNotBlank(value.getLabel())){
+@@ -11,0 +16 @@
++}
+@@ -12,0 +18,3 @@
++if(String.isBlank(label)){
++returnnull;
++}
+@@ -15,0 +24,3 @@
++if(String.isBlank(value)){
++returnnull;
++}
+
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -5,0 +6,3 @@
++if(String.isBlank(referenceFieldName)||String.isBlank(idFieldName)){
++thrownewIllegalArgumentException('Fieldnamescannotbeblank');
++}
+@@ -9,0 +13,3 @@
++if(String.isBlank(referenceFieldName)){
++thrownewIllegalArgumentException('Referencefieldnamecannotbeblank');
++}
+@@ -18,0 +25,3 @@
++if(String.isBlank(idFieldName)){
++thrownewIllegalArgumentException('IDfieldnamecannotbeblank');
++}
+
+--- backup/utilities\schema\classes\SObjectRecordTypes.cls
++++ refactored/utilities\schema\classes\SObjectRecordTypes.cls
+@@ -6,0 +7,3 @@
++if(String.isBlank(objectApiName)){
++thrownewIllegalArgumentException('ObjectAPInamecannotbeblank');
++}
+@@ -21 +24 @@
+-returndefaultRecordTypeInfo.getRecordTypeId();
++returndefaultRecordTypeInfo!=null?defaultRecordTypeInfo.getRecordTypeId():null;
+@@ -23,0 +27,3 @@
++if(String.isBlank(developerName)){
++returnnull;
++}
+@@ -30,0 +37,3 @@
++if(recordTypeId==null){
++returnnull;
++}
+
+--- backup/utilities\schema\classes\SObjectWrapper.cls
++++ refactored/utilities\schema\classes\SObjectWrapper.cls
+@@ -7,0 +8,3 @@
++if(sObjectToWrap==null){
++thrownewIllegalArgumentException('SObjecttowrapcannotbenull');
++}
+@@ -11,0 +15,3 @@
++if(String.isBlank(fieldApiName)){
++returnnull;
++}
+@@ -17,0 +24,3 @@
++if(String.isBlank(fieldApiName)){
++return;
++}
+@@ -20,0 +30,3 @@
++if(String.isBlank(fieldApiName)){
++returnfalse;
++}
+@@ -23,0 +36,3 @@
++if(childSObject==null||String.isBlank(fieldApiName)){
++returnnull;
++}
+@@ -36,0 +52,3 @@
++if(String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('FieldAPInamecannotbeblank');
++}
+@@ -42,0 +61,3 @@
++if(String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('FieldAPInamecannotbeblank');
++}
+@@ -51,0 +73,3 @@
++if(String.isBlank(relationshipApiName)){
++thrownewIllegalArgumentException('RelationshipAPInamecannotbeblank');
++}
+@@ -62,0 +87,3 @@
++if(String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('FieldAPInamecannotbeblank');
++}
+@@ -69,0 +97,3 @@
++if(String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('FieldAPInamecannotbeblank');
++}
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -13,0 +14,3 @@
++if(String.isBlank(objectApiName)){
++returnfalse;
++}
+@@ -19,0 +23,3 @@
++if(String.isBlank(objectApiName)){
++thrownewIllegalArgumentException('ObjectAPInamecannotbeblank');
++}
+@@ -35,0 +42,3 @@
++if(String.isBlank(objectApiName)||String.isBlank(fieldApiName)){
++returnfalse;
++}
+@@ -43,0 +53,3 @@
++if(String.isBlank(objectApiName)){
++thrownewIllegalArgumentException('ObjectAPInamecannotbeblank');
++}
+@@ -53,0 +66,3 @@
++if(String.isBlank(objectApiName)||String.isBlank(fieldApiName)){
++thrownewIllegalArgumentException('ObjectAPInameandfieldAPInamecannotbeblank');
++}
+
+--- backup/utilities\schema\classes\SecureSObjectWrapper.cls
++++ refactored/utilities\schema\classes\SecureSObjectWrapper.cls
+@@ -5,0 +6,3 @@
++if(String.isBlank(fieldApiName)){
++returnnull;
++}
+@@ -12,0 +16,3 @@
++if(String.isBlank(fieldApiName)){
++return;
++}
+
+--- backup/utilities\schema\classes\StateCountryCodeMapper.cls
++++ refactored/utilities\schema\classes\StateCountryCodeMapper.cls
+@@ -10,0 +11,3 @@
++if(wrappedSObject==null){
++return;
++}
+@@ -11,0 +15,3 @@
++if(accountRecord==null){
++return;
++}
+
+--- backup/utilities\string-utilities\classes\CsvBuilder.cls
++++ refactored/utilities\string-utilities\classes\CsvBuilder.cls
+@@ -8,0 +9,3 @@
++if(String.isBlank(lineEnding)){
++thrownewIllegalArgumentException('Lineendingcannotbeblank');
++}
+@@ -15,2 +18,6 @@
+-headerName=String.isBlank(headerName)?'null':headerName;
+-fieldValue=String.isBlank(fieldValue)?'null':fieldValue;
++if(String.isBlank(headerName)){
++headerName='null';
++}
++if(String.isBlank(fieldValue)){
++fieldValue='null';
++}
+@@ -29 +36,10 @@
+-returnheaderToValues.values()!=null?headerToValues.values().size():0;
++if(headerToValues.isEmpty()){
++return0;
++}
++IntegermaxRows=0;
++for(Map<Integer,String>values:headerToValues.values()){
++if(values!=null&&values.size()>maxRows){
++maxRows=values.size();
++}
++}
++returnmaxRows;
+@@ -31,0 +48,3 @@
++if(headerToValues.isEmpty()){
++return'';
++}
+@@ -34 +53,2 @@
+-RowBuilder[]rows=newList<RowBuilder>(totalRows());
++IntegertotalRows=totalRows();
++RowBuilder[]rows=newList<RowBuilder>(totalRows);
+@@ -38 +58 @@
+-for(IntegerrowIterator=0;rowIterator<=currentRow;rowIterator++){
++for(IntegerrowIterator=0;rowIterator<totalRows;rowIterator++){
+@@ -49,0 +70 @@
++if(row!=null){
+@@ -50,0 +72 @@
++}
+@@ -61,0 +84,3 @@
++if(String.isBlank(lineEnding)){
++thrownewIllegalArgumentException('Lineendingcannotbeblank');
++}
+@@ -64,0 +90,3 @@
++if(rowToAdd==null){
++returnthis;
++}
+
+--- backup/utilities\string-utilities\classes\QueryBuilder.cls
++++ refactored/utilities\string-utilities\classes\QueryBuilder.cls
+@@ -8,0 +9,3 @@
++if(String.isBlank(objectName)){
++thrownewIllegalArgumentException('Objectnamecannotbeblank');
++}
+@@ -13,0 +17,3 @@
++if(String.isBlank(objectName)){
++thrownewIllegalArgumentException('Objectnamecannotbeblank');
++}
+@@ -21,0 +28,3 @@
++if(String.isBlank(field)){
++returnthis;
++}
+@@ -25,0 +35,3 @@
++if(fields==null||fields.isEmpty()){
++returnthis;
++}
+@@ -32,5 +44,8 @@
+-for(
+-Schema.FieldSetMembermember:objectDescribe.FieldSets.getMap()
+-.get(fieldSetName)
+-.getFields()
+-){
++if(String.isBlank(fieldSetName)){
++returnthis;
++}
++Map<String,Schema.FieldSet>fieldSets=objectDescribe.FieldSets.getMap();
++if(fieldSets==null||!fieldSets.containsKey(fieldSetName)){
++returnthis;
++}
++for(Schema.FieldSetMembermember:fieldSets.get(fieldSetName).getFields()){
+@@ -42 +57,8 @@
+-for(Stringfield:objectDescribe.fields.getMap().keySet()){
++if(objectDescribe==null||objectDescribe.fields==null){
++returnthis;
++}
++Map<String,SObjectField>fieldsMap=objectDescribe.fields.getMap();
++if(fieldsMap==null||fieldsMap.isEmpty()){
++returnthis;
++}
++for(Stringfield:fieldsMap.keySet()){
+
+--- backup/utilities\string-utilities\classes\StringBuilder.cls
++++ refactored/utilities\string-utilities\classes\StringBuilder.cls
+@@ -29,0 +30 @@
++if(stringBuilder.buffer!=null&&!stringBuilder.buffer.isEmpty()){
+@@ -31,0 +33 @@
++}
+@@ -40 +42 @@
+-returnbuffer.size();
++returnbuffer!=null?buffer.size():0;
+@@ -42,0 +45,3 @@
++if(buffer==null||buffer.isEmpty()){
++return0;
++}
+@@ -45,0 +51,3 @@
++if(buffer==null||buffer.isEmpty()){
++return'';
++}
+
+--- backup/utilities\trigger-framework\classes\SObjectTriggerWrapper.cls
++++ refactored/utilities\trigger-framework\classes\SObjectTriggerWrapper.cls
+@@ -4,0 +5,3 @@
++if(newSObject==null){
++thrownewIllegalArgumentException('NewSObjectcannotbenull');
++}
+@@ -8,0 +12,3 @@
++if(String.isBlank(fieldName)){
++returnfalse;
++}
+@@ -11,0 +18,3 @@
++if(field==null){
++returnfalse;
++}
+@@ -14,0 +24,3 @@
++if(String.isBlank(fieldName)){
++returnfalse;
++}
+@@ -17,0 +30,3 @@
++if(field==null){
++returnfalse;
++}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -17,0 +18,9 @@
++if(actions==null||actions.isEmpty()){
++thrownewIllegalArgumentException('Actionslistcannotbenullorempty');
++}
++if(newSObjects==null&&oldMap==null){
++thrownewIllegalArgumentException('BothnewSObjectsandoldMapcannotbenull');
++}
++if(operation==null){
++thrownewIllegalArgumentException('Operationcannotbenull');
++}
+@@ -23,0 +33,9 @@
++if(actions==null||actions.isEmpty()){
++thrownewIllegalArgumentException('Actionslistcannotbenullorempty');
++}
++if(Trigger.new==null&&Trigger.oldMap==null){
++thrownewIllegalArgumentException('BothTrigger.newandTrigger.oldMapcannotbenull');
++}
++if(Trigger.operationType==null){
++thrownewIllegalArgumentException('Triggeroperationtypecannotbenull');
++}
+@@ -26,0 +45,3 @@
++if(objectType==null||operation==null){
++thrownewIllegalArgumentException('Objecttypeandoperationcannotbenull');
++}
+@@ -29,0 +51,3 @@
++if(objectType==null||operation==null){
++thrownewIllegalArgumentException('Objecttypeandoperationcannotbenull');
++}
+@@ -32,0 +57,3 @@
++if(objectType==null||operation==null){
++thrownewIllegalArgumentException('Objecttypeandoperationcannotbenull');
++}
+@@ -55,0 +83,3 @@
++if(newSObjects==null||newSObjects.isEmpty()){
++return;
++}
+@@ -56,0 +87,3 @@
++if(newSObject==null){
++continue;
++}
+@@ -70,0 +104,3 @@
++if(String.isBlank(exceptionMessage)){
++return;
++}
+
+--- backup/utilities\trigger-framework\classes\TriggerHandler.cls
++++ refactored/utilities\trigger-framework\classes\TriggerHandler.cls
+@@ -3,0 +4,3 @@
++if(triggerActions==null||triggerActions.isEmpty()){
++thrownewIllegalArgumentException('Triggeractionslistcannotbenullorempty');
++}
+@@ -6,0 +10,3 @@
++if(wrappedSObject==null){
++return;
++}
+@@ -7,0 +14 @@
++if(action!=null){
+@@ -8,0 +16 @@
++}
+@@ -12,0 +21 @@
++if(action!=null){
+@@ -16,0 +26 @@
++}

@@ -1,0 +1,47 @@
+Iteration 8
+Timestamp: 2026-02-18T17:11:58.363343
+Success: False
+
+============================================================
+STDOUT:
+───── Deploying Metadata ─────
+Stages:
+1. Preparing
+2. Waiting for the org to respond
+3. Deploying Metadata
+4. Running Tests
+5. Updating Source Tracking
+6. Done
+
+▶ Preparing…
+   Deploying v48.0 metadata to test-artad1wypvc5@example.com using the v65.0 SOAP API.
+   Deploy ID: 0AfAs00000U8k4PKAR
+   Target Org: test-artad1wypvc5@example.com
+✔ Preparing (187ms)
+◯ Waiting for the org to respond - Skipped
+▶ Deploying Metadata…
+   Components: 0/109 (0%)
+   Components: 34/109 (31%)
+✘ Deploying Metadata (11.42s)
+   Components: 108/112 (96%)
+
+Deploying v48.0 metadata to test-artad1wypvc5@example.com using the v65.0 SOAP API.
+Status: Failed
+Deploy ID: 0AfAs00000U8k4PKAR
+Target Org: test-artad1wypvc5@example.com
+
+Elapsed time: 11.61s
+
+[1m[31mComponent Failures [4][39m[22m
+ Type       Name                    Problem                                                    Line:Column 
+-----------------------------------------------------------------------------------------------------------
+ ApexClass  StateCountryCodeMapper  Variable does not exist: Account.BillingStateCode (4:9)    4:9         
+ ApexClass  StateCountryCodeMapper  Variable does not exist: Account.BillingCountryCode (8:9)  8:9         
+ ApexClass  StateCountryCodeMapper  Variable does not exist: BillingStateCode (13:75)          13:75       
+ ApexClass  StateCountryCodeMapper  Variable does not exist: BillingCountryCode (14:79)        14:79       
+
+
+
+============================================================
+STDERR:
+DEPLOY FAILED (Level 0):

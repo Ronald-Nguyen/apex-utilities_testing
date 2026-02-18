@@ -1,0 +1,49 @@
+Iteration 7
+Timestamp: 2026-02-18T17:10:50.789963
+Success: False
+
+============================================================
+STDOUT:
+───── Deploying Metadata ─────
+Stages:
+1. Preparing
+2. Waiting for the org to respond
+3. Deploying Metadata
+4. Running Tests
+5. Updating Source Tracking
+6. Done
+
+▶ Preparing…
+   Deploying v48.0 metadata to test-artad1wypvc5@example.com using the v65.0 SOAP API.
+   Deploy ID: 0AfAs00000U8iaVKAR
+   Target Org: test-artad1wypvc5@example.com
+✔ Preparing (160ms)
+◯ Waiting for the org to respond - Skipped
+▶ Deploying Metadata…
+   Components: 0/109 (0%)
+   Components: 34/109 (31%)
+✘ Deploying Metadata (10.15s)
+   Components: 108/114 (95%)
+
+Deploying v48.0 metadata to test-artad1wypvc5@example.com using the v65.0 SOAP API.
+Status: Failed
+Deploy ID: 0AfAs00000U8iaVKAR
+Target Org: test-artad1wypvc5@example.com
+
+Elapsed time: 10.31s
+
+[1m[31mComponent Failures [6][39m[22m
+ Type       Name                    Problem                                                    Line:Column 
+-----------------------------------------------------------------------------------------------------------
+ ApexClass  StateCountryCodeMapper  Variable does not exist: Account.BillingStateCode (4:9)    4:9         
+ ApexClass  StateCountryCodeMapper  Variable does not exist: Account.BillingCountryCode (8:9)  8:9         
+ ApexClass  StateCountryCodeMapper  Variable does not exist: BillingStateCode (17:27)          17:27       
+ ApexClass  StateCountryCodeMapper  Variable does not exist: BillingStateCode (18:79)          18:79       
+ ApexClass  StateCountryCodeMapper  Variable does not exist: BillingCountryCode (20:27)        20:27       
+ ApexClass  StateCountryCodeMapper  Variable does not exist: BillingCountryCode (21:83)        21:83       
+
+
+
+============================================================
+STDERR:
+DEPLOY FAILED (Level 0):
