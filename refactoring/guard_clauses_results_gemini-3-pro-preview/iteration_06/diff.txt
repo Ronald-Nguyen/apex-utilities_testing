@@ -1,0 +1,37 @@
+--- backup/utilities\schema\classes\SObjectRecordTypes.cls
++++ refactored/utilities\schema\classes\SObjectRecordTypes.cls
+@@ -13 +13,3 @@
+-if(defaultRecordTypeInfo==null){
++if(defaultRecordTypeInfo!=null){
++returndefaultRecordTypeInfo.getRecordTypeId();
++}
+@@ -20 +21,0 @@
+-}
+@@ -24,3 +25,2 @@
+-IdrecordTypeId;
+-if(recordTypesByDeveloperName.containsKey(developerName)){
+-recordTypeId=recordTypesByDeveloperName.get(developerName).getRecordTypeId();
++if(!recordTypesByDeveloperName.containsKey(developerName)){
++returnnull;
+@@ -28 +28 @@
+-returnrecordTypeId;
++returnrecordTypesByDeveloperName.get(developerName).getRecordTypeId();
+@@ -31,3 +31,2 @@
+-StringrecordTypeDeveloperName;
+-if(recordTypesById.containsKey(recordTypeId)){
+-recordTypeDeveloperName=recordTypesById.get(recordTypeId).getDeveloperName();
++if(!recordTypesById.containsKey(recordTypeId)){
++returnnull;
+@@ -35 +34 @@
+-returnrecordTypeDeveloperName;
++returnrecordTypesById.get(recordTypeId).getDeveloperName();
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

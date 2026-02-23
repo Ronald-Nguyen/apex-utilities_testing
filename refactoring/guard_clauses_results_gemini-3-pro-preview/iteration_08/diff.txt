@@ -1,0 +1,19 @@
+--- backup/utilities\schema\classes\SObjectRecordTypes.cls
++++ refactored/utilities\schema\classes\SObjectRecordTypes.cls
+@@ -13 +13,3 @@
+-if(defaultRecordTypeInfo==null){
++if(defaultRecordTypeInfo!=null){
++returndefaultRecordTypeInfo.getRecordTypeId();
++}
+@@ -18 +19,0 @@
+-}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

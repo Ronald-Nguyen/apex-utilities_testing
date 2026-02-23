@@ -1,0 +1,47 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -10 +9,0 @@
+-StringidFieldName;
+@@ -12,3 +11,2 @@
+-idFieldName=referenceFieldName.replaceAll('(?i)__r','__c');
+-}else{
+-idFieldName=referenceFieldName+'Id';
++StringidFieldName=referenceFieldName.replaceAll('(?i)__r','__c');
++returnnewRelationship(referenceFieldName,idFieldName);
+@@ -15,0 +14 @@
++StringidFieldName=referenceFieldName+'Id';
+@@ -19 +17,0 @@
+-StringreferenceFieldName;
+@@ -21,4 +19,7 @@
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
++StringreferenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
++returnnewRelationship(referenceFieldName,idFieldName);
++}
++if(idFieldName.toLowerCase().endsWith('id')){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)id','');
++returnnewRelationship(referenceFieldName,idFieldName);
++}
+@@ -27 +27,0 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
+@@ -29 +28,0 @@
+-}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}
+@@ -71 +72,3 @@
+-if(!unknownExceptionLogged){
++if(unknownExceptionLogged){
++return;
++}
+@@ -82 +84,0 @@
+-}

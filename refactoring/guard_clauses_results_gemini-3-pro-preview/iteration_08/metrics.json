@@ -1,0 +1,142 @@
+{
+  "iteration": 8,
+  "timestamp": "2026-02-23T19:31:51.044042",
+  "refactoring": "refactoring/guard_clauses",
+  "changed_files_scope": [
+    "utilities\\schema\\classes\\SObjectRecordTypes.cls",
+    "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=14585, completion=1249, total=25206",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-23T19:31:20.947881",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_gemini-3-pro-preview\\iteration_08\\pmd_before\\subset_src",
+      "files": [
+        "utilities/schema/classes/SObjectRecordTypes.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_gemini-3-pro-preview\\iteration_08\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_gemini-3-pro-preview\\iteration_08\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 24,
+        "loc": 142,
+        "count": 2
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 24,
+        "loc": 142,
+        "count": 2
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-23T19:31:22.623629",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_gemini-3-pro-preview\\iteration_08\\pmd_after\\subset_src",
+      "files": [
+        "utilities/schema/classes/SObjectRecordTypes.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_gemini-3-pro-preview\\iteration_08\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\guard_clauses_results_gemini-3-pro-preview\\iteration_08\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 19,
+        "loc": 143,
+        "count": 2
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 19,
+        "loc": 143,
+        "count": 2
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": -5,
+      "loc": 1,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": -5,
+      "loc": 1,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "guard_clauses",
+    "targets": {},
+    "ok": true,
+    "checks": {
+      "guard_clauses": {
+        "passed": true,
+        "improved_files": [
+          "utilities\\schema\\classes\\SObjectRecordTypes.cls"
+        ],
+        "comparisons": [
+          {
+            "file": "utilities\\schema\\classes\\SObjectRecordTypes.cls",
+            "before_max_if_nesting": 2,
+            "after_max_if_nesting": 2,
+            "before_guard_clauses": 1,
+            "after_guard_clauses": 2,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 1
+          },
+          {
+            "file": "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls",
+            "before_max_if_nesting": 2,
+            "after_max_if_nesting": 2,
+            "before_guard_clauses": 0,
+            "after_guard_clauses": 0,
+            "delta_max_if_nesting": 0,
+            "delta_guard_clauses": 0
+          }
+        ],
+        "totals": {
+          "delta_guard_clauses": 1,
+          "delta_max_if_nesting": 0
+        },
+        "note": "heuristic_early_exit_and_nesting"
+      }
+    }
+  }
+}

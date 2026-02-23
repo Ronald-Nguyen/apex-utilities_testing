@@ -27,11 +27,12 @@ REFACTORINGS = [
     "strategy_pattern",
 ]
 REFACTORING_BASE_DIR = "refactoring"
-DEFAULT_REFACTORING = "coc_reduktion" \
+DEFAULT_REFACTORING = "guard_clauses" \
 ""
 
+
 PATH = 'force-app/main'
-ITERATIONS = 10
+ITERATIONS = 1
 GEMMA = 'gemma-3-27b-it'
 GEMINI3 = 'gemini-3-pro-preview'
 GEMINI2 = 'gemini-2.5-flash'
@@ -1366,7 +1367,7 @@ def main():
         REFACTORING = f"{REFACTORING_BASE_DIR}/{ref_name}"
 
         PROMPT_TEMPLATE = Path(f"{REFACTORING}.txt").read_text(encoding="utf-8")
-        RESULTS_DIR = Path(REFACTORING + "_results_" + MODEL)
+        RESULTS_DIR = Path(REFACTORING + "_results2_" + MODEL)
         RESULTS_DIR.mkdir(exist_ok=True)
 
         YOUR_PROMPT = PROMPT_TEMPLATE

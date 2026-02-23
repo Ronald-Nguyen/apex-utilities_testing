@@ -1,0 +1,22 @@
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -58,2 +58,2 @@
+-!fieldDescribeByNameAndObject.containsKey(objectApiName)||
+-!fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
++fieldDescribeByNameAndObject.containsKey(objectApiName)&&
++fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+@@ -60,0 +61,2 @@
++returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++}
+@@ -72 +73,0 @@
+-}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}
