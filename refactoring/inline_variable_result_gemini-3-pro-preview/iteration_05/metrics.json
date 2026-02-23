@@ -1,0 +1,121 @@
+{
+  "iteration": 5,
+  "timestamp": "2026-02-23T20:16:16.441554",
+  "refactoring": "refactoring/inline_variable",
+  "changed_files_scope": [
+    "utilities\\logging\\classes\\Logger.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=13923, completion=676, total=17399",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-23T20:15:58.450192",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\inline_variable_result_gemini-3-pro-preview\\iteration_05\\pmd_before\\subset_src",
+      "files": [
+        "utilities/logging/classes/Logger.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\inline_variable_result_gemini-3-pro-preview\\iteration_05\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\inline_variable_result_gemini-3-pro-preview\\iteration_05\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 6,
+        "loc": 91,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 6,
+        "loc": 91,
+        "count": 1
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-23T20:16:00.060323",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\inline_variable_result_gemini-3-pro-preview\\iteration_05\\pmd_after\\subset_src",
+      "files": [
+        "utilities/logging/classes/Logger.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\inline_variable_result_gemini-3-pro-preview\\iteration_05\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\inline_variable_result_gemini-3-pro-preview\\iteration_05\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 6,
+        "loc": 87,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 6,
+        "loc": 87,
+        "count": 1
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 0,
+      "loc": -4,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": 0,
+      "loc": -4,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "inline_variable",
+    "targets": {
+      "var": "profilingReport",
+      "method": "runApexPofiling",
+      "file": "Logger.cls"
+    },
+    "ok": true,
+    "checks": {
+      "inline_variable": {
+        "passed": true,
+        "file": "utilities/logging/classes/Logger.cls",
+        "file_hint": "Logger.cls",
+        "method": "runApexPofiling",
+        "var": "profilingReport",
+        "had_declaration_before": true,
+        "reasons": []
+      }
+    }
+  }
+}

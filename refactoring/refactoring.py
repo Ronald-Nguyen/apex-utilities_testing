@@ -27,12 +27,12 @@ REFACTORINGS = [
     "strategy_pattern",
 ]
 REFACTORING_BASE_DIR = "refactoring"
-DEFAULT_REFACTORING = "strategy_pattern" \
+DEFAULT_REFACTORING = "inline_variable" \
 ""
 
-RESULT_PATH = "_result_"
+RESULT_PATH = "_result2_"
 PATH = 'force-app/main'
-ITERATIONS = 8
+ITERATIONS = 1
 GEMMA = 'gemma-3-27b-it'
 GEMINI3 = 'gemini-3-pro-preview'
 GEMINI2 = 'gemini-2.5-flash'
