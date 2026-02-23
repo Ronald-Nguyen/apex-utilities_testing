@@ -1,0 +1,205 @@
+Iteration 5
+Timestamp: 2026-02-23T20:03:19.550633
+Success: True
+
+============================================================
+STDOUT:
+=== Test Results
+TEST NAME                                                                 OUTCOME  MESSAGE  RUNTIME (MS)
+────────────────────────────────────────────────────────────────────────  ───────  ───────  ────────────
+DisplayTypeParserTest.parseTestBooleanValue                               Pass              20          
+DisplayTypeParserTest.parseTestDateValue                                  Pass              5           
+DisplayTypeParserTest.parseTestDatetimeValue                              Pass              4           
+DisplayTypeParserTest.parseTestIdValue                                    Pass              5           
+DisplayTypeParserTest.parseTestInvalidDisplayType                         Pass              4           
+DisplayTypeParserTest.parseTestNumberValue                                Pass              5           
+DisplayTypeParserTest.parseTestStringValue                                Pass              4           
+IdGeneratorMockTest.getNextAvailableIdForMultipleTimes                    Pass              36          
+IdGeneratorMockTest.getNextAvailableIdForSingleTime                       Pass              6           
+IdGeneratorMockTest.getPrefixOfIdOfCustomObject                           Pass              11          
+IdGeneratorMockTest.getPrefixOfIdOfStandardObject                         Pass              5           
+OrgLimitsProfilingReportRunnerTest.testExecute                            Pass              401         
+SObjectTriggerWrapperTest.hasChangedFieldNameTestFieldChanged             Pass              23          
+SObjectTriggerWrapperTest.hasChangedFieldNameTestFieldNotChanged          Pass              4           
+SObjectTriggerWrapperTest.hasChangedFieldTestFieldChanged                 Pass              4           
+SObjectTriggerWrapperTest.hasChangedFieldTestFieldNotChanged              Pass              5           
+SObjectTriggerWrapperTest.hasChangedToFieldNameTest                       Pass              4           
+SObjectTriggerWrapperTest.hasChangedToFieldTest                           Pass              4           
+SObjectRecordTypesTest.constructorInvalidSObjectTest                      Pass              94          
+SObjectRecordTypesTest.getDefaultIdTest                                   Pass              198         
+SObjectRecordTypesTest.getRecordTypeDeveloperNameTest                     Pass              20          
+SObjectRecordTypesTest.getRecordTypeIdInvalidDeveloperNameTest            Pass              21          
+SObjectRecordTypesTest.getRecordTypeIdTest                                Pass              21          
+SecureSObjectWrapperTest.getTestIsAccessible                              Pass              247         
+SecureSObjectWrapperTest.getTestIsNotAccessible                           Pass              533         
+SecureSObjectWrapperTest.putTestIsEditable                                Pass              51          
+SecureSObjectWrapperTest.putTestIsNotEditable                             Pass              362         
+QueryBuilderTest.buildQueryTest                                           Pass              200         
+ApexProfilerTest.generateProfilingReportTest                              Pass              89          
+ApexProfilerTest.isBreachingWarningTestBreach                             Pass              330         
+ApexProfilerTest.isBreachingWarningTestNoBreach                           Pass              18          
+ApexProfilerTest.refreshProfilingTest                                     Pass              22          
+AbstractSObjectTestFactoryTest.insertMultipleWithDependanciesTest         Pass              38          
+AbstractSObjectTestFactoryTest.insertWithDependanciesTest                 Pass              3           
+LoggedQueueableTest.runTestLogWritten                                     Pass              294         
+DmlInserterTest.allowDuplicatesOnSaveTest                                 Pass              31          
+DmlInserterTest.insertMultipleSObjectTest                                 Pass              255         
+DmlInserterTest.insertSObjectTest                                         Pass              63          
+QueueableSchedulerTest.executeTest                                        Pass              78          
+StringBuilderTest.appendTestNullString                                    Pass              25          
+StringBuilderTest.appendTestValidObject                                   Pass              2           
+StringBuilderTest.appendTestValidString                                   Pass              2           
+StringBuilderTest.setSeparatorTest                                        Pass              1           
+StringBuilderTest.setSeparatorTestNullString                              Pass              2           
+StringBuilderTest.toStringTest                                            Pass              2           
+TriggerDispatcherTest.disableEnableTest                                   Pass              104         
+TriggerDispatcherTest.exceptionTest                                       Pass              227         
+TriggerDispatcherTest.runTest                                             Pass              57          
+TriggerDispatcherTest.stackExceptionTest                                  Pass              35          
+LogWriterTest.testAction                                                  Pass              166         
+StackTest.bulkPushPopTest                                                 Pass              37          
+StackTest.popEmptyStackExcpetion                                          Pass              2           
+StackTest.pushPopTest                                                     Pass              1           
+StackTest.toStringTest                                                    Pass              1           
+CsvBuilderTest.appendFieldTest                                            Pass              11          
+CsvBuilderTest.newRowTest                                                 Pass              2           
+CsvBuilderTest.nullHeaderTest                                             Pass              2           
+CsvBuilderTest.nullValueTest                                              Pass              2           
+CsvBuilderTest.toStringTest                                               Pass              2           
+ConfigurationManagerTest.areTriggersOffTestNoSetting                      Pass              29          
+ConfigurationManagerTest.commitChangesTestWithExistingSettingProcesses    Pass              125         
+ConfigurationManagerTest.commitChangesTestWithExistingSettingValidations  Pass              101         
+ConfigurationManagerTest.commitChangesTestWithExistingSettingWorkflows    Pass              99          
+ConfigurationManagerTest.commitChangesTestWithoutExistingSetting          Pass              47          
+ConfigurationManagerTest.singletonTest                                    Pass              9           
+ConfigurationManagerTest.toggleTriggersTest                               Pass              10          
+ConfigurationManagerTest.turnAutomationsOffTest                           Pass              35          
+ConfigurationManagerTest.turnAutomationsOnTest                            Pass              34          
+TriggerHandlerTest.performActionTest                                      Pass              20          
+TriggerHandlerTest.registerTest                                           Pass              4           
+LogMessageTest.exceptionConstructorTest                                   Pass              23          
+LogMessageTest.getStackTraceTest                                          Pass              5           
+LogMessageTest.messageConstructorTest                                     Pass              5           
+DateUtilsTest.getNow                                                      Pass              25          
+DateUtilsTest.getNowPriorDateSet                                          Pass              5           
+DateUtilsTest.getToday                                                    Pass              5           
+DateUtilsTest.getTodayPriorDateSet                                        Pass              4           
+DateUtilsTest.toEndOfMonthTestEndOfMonth                                  Pass              4           
+DateUtilsTest.toEndOfMonthTestMidMonth                                    Pass              6           
+DateUtilsTest.toEndOfMonthTestStartOfMonth                                Pass              4           
+SObjectWrapperTest.describeRelatedObjectFieldRecursive                    Pass              1786        
+SObjectWrapperTest.describeTestObjectField                                Pass              49          
+SObjectWrapperTest.describeTestRelatedObjectField                         Pass              18          
+SObjectWrapperTest.getTestObjectField                                     Pass              19          
+SObjectWrapperTest.getTestRelatedObjectField                              Pass              18          
+SObjectWrapperTest.getTestRelatedObjectFieldRecursive                     Pass              17          
+SObjectWrapperTest.getTestRelatedObjectNullValues                         Pass              24          
+SObjectWrapperTest.testRelationshipFieldInvalidRelationshipField          Pass              2           
+DeletionValidatorTest.registerTestAllowedDelete                           Pass              17          
+DeletionValidatorTest.registerTestNotAllowedDelete                        Pass              3           
+EventBufferLogAdapterTest.closeTest                                       Pass              147         
+EventBufferLogAdapterTest.debugLevelTest                                  Pass              6           
+EventBufferLogAdapterTest.errorLevelTest                                  Pass              6           
+EventBufferLogAdapterTest.infoLevelTest                                   Pass              7           
+EventBufferLogAdapterTest.logTest                                         Pass              7           
+EventBufferLogAdapterTest.logTestWithRecordId                             Pass              41          
+EventBufferLogAdapterTest.warningLevelTest                                Pass              6           
+EventBufferLogAdapterTest.writeMultipleLogsTest                           Pass              76          
+LoggedSchedulableTest.executeTest                                         Pass              375         
+LoggedSchedulableTest.scheduleTest                                        Pass              135         
+DatabaseUtilsTest.getErrorStringTest                                      Pass              216         
+SchemaFacadeTest.getDescribe                                              Pass              1298        
+SchemaFacadeTest.getDescribeException                                     Pass              30          
+SchemaFacadeTest.getFieldDescribe                                         Pass              21          
+SchemaFacadeTest.getFieldDescribeException                                Pass              29          
+SchemaFacadeTest.isNotValidField                                          Pass              25          
+SchemaFacadeTest.isNotValidSObject                                        Pass              25          
+SchemaFacadeTest.isValidField                                             Pass              24          
+SchemaFacadeTest.isValidSObject                                           Pass              21          
+RelationshipTest.fromIdFieldCustomField                                   Pass              55          
+RelationshipTest.fromIdFieldInvalidCustomField                            Pass              12          
+RelationshipTest.fromIdFieldStandardField                                 Pass              8           
+RelationshipTest.fromRefrenceFieldCustomField                             Pass              9           
+RelationshipTest.fromRefrenceFieldStandardField                           Pass              8           
+MockDmlInserterTest.allowDuplicatesOnSaveTest                             Pass              38          
+MockDmlInserterTest.insertMultipleSObjectTest                             Pass              40          
+MockDmlInserterTest.insertSObjectTest                                     Pass              8           
+LoggerTest.debugTest                                                      Pass              21          
+LoggerTest.debugTestWithApexClass                                         Pass              3           
+LoggerTest.debugTestWithRecordId                                          Pass              37          
+LoggerTest.errorTest                                                      Pass              3           
+LoggerTest.errorTestWithException                                         Pass              43          
+LoggerTest.errorTestWithExceptionWithRecordId                             Pass              26          
+LoggerTest.errorTestWithRecordId                                          Pass              26          
+LoggerTest.infoTest                                                       Pass              3           
+LoggerTest.infoTestWithRecordId                                           Pass              26          
+LoggerTest.testDebugLogAdapter                                            Pass              3           
+LoggerTest.warnTest                                                       Pass              3           
+LoggerTest.warnTestWithRecordId                                           Pass              22          
+
+
+=== Apex Code Coverage by Class
+CLASSES                         PERCENT  UNCOVERED LINES   
+──────────────────────────────  ───────  ──────────────────
+SchemaFacade                    100%                       
+LogMessage                      100%                       
+OrgLimitsProfiler               100%                       
+SObjectTriggerWrapper           100%                       
+LoggerFactory                   100%                       
+LoggerAdapter                   93%      19                
+SObjectTestFactory              100%                       
+Relationship                    100%                       
+Profiler                        95%      18,78             
+DisplayTypeParser               100%                       
+DmlInserter                     100%                       
+StringBuilder                   73%      31,32,33,35,36,...
+InvalidFieldException           0%                         
+CsvBuilder                      96%      82,83             
+QueueableScheduler              100%                       
+DeletionValidator               100%                       
+OrgLimitsProfilingReportRunner  89%      14                
+IdGeneratorMock                 88%      24,25             
+MockDmlInserter                 100%                       
+SObjectWrapper                  100%                       
+ApexProfiler                    100%                       
+TriggerHandler                  100%                       
+Assert                          91%      56,80,81          
+DateUtils                       100%                       
+Stack                           100%                       
+Logger                          98%      83                
+LoggedQueueable                 80%      10,11             
+TriggerDispatcher               100%                       
+ConfigurationManager            100%                       
+Triggerable                     0%       7                 
+QueryBuilder                    48%      21,30,31,32,34,...
+DatabaseUtils                   100%                       
+LogWriter                       100%                       
+EventBufferLogAdapter           97%      43                
+SecureSObjectWrapper            100%                       
+AbstractSObjectTestFactory      85%      39,47,57,58,59,...
+LoggedSchedulable               88%      14,15             
+SObjectRecordTypes              100%                       
+LogEventAfterInsert             100%                       
+
+
+
+
+=== Test Summary
+NAME                 VALUE                        
+───────────────────  ─────────────────────────────
+Outcome              Passed                       
+Tests Ran            129                          
+Pass Rate            100%                         
+Fail Rate            0%                           
+Skip Rate            0%                           
+Test Run Id          707Sv00001iYlsU              
+Test Setup Time      0 ms                         
+Test Execution Time  9132 ms                      
+Test Total Time      9132 ms                      
+Org Id               00DSv00000A29MJMAZ           
+Username             test-znkhmjvblivn@example.com
+Org Wide Coverage    88%                          
+
+
+============================================================
+STDERR:

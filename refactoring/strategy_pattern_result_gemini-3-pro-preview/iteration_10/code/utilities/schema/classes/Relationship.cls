@@ -1,0 +1,62 @@
+public with sharing class Relationship {
+    public static final String INVALID_RELATIONSHIP_FIELD = 'The field passed in is not a relationship. Field Value: ';
+
+    public final String referenceFieldName;
+    public final String idFieldName;
+
+    private Relationship(String referenceFieldName, String idFieldName) {
+        this.referenceFieldName = referenceFieldName;
+        this.idFieldName = idFieldName;
+    }
+
+    private interface IdFieldStrategy {
+        Boolean accepts(String fieldName);
+        String getReferenceFieldName(String fieldName);
+    }
+
+    private class CustomIdStrategy implements IdFieldStrategy {
+        public Boolean accepts(String fieldName) {
+            return fieldName.toLowerCase().endsWith('__c');
+        }
+
+        public String getReferenceFieldName(String fieldName) {
+            return fieldName.replaceAll('(?i)__c', '__r');
+        }
+    }
+
+    private class StandardIdStrategy implements IdFieldStrategy {
+        public Boolean accepts(String fieldName) {
+            return fieldName.toLowerCase().endsWith('id');
+        }
+
+        public String getReferenceFieldName(String fieldName) {
+            // Standard relationship
+            return fieldName.replaceAll('(?i)id', '');
+        }
+    }
+
+    private static final List<IdFieldStrategy> STRATEGIES = new List<IdFieldStrategy>{
+        new CustomIdStrategy(),
+        new StandardIdStrategy()
+    };
+
+    public static Relationship fromRefrenceField(String referenceFieldName) {
+        String idFieldName;
+        if (referenceFieldName.toLowerCase().endsWith('__r')) {
+            idFieldName = referenceFieldName.replaceAll('(?i)__r', '__c');
+        } else {
+            
+            idFieldName = referenceFieldName + 'Id';
+        }
+        return new Relationship(referenceFieldName, idFieldName);
+    }
+
+    public static Relationship fromIdField(String idFieldName) {
+        for (IdFieldStrategy strategy : STRATEGIES) {
+            if (strategy.accepts(idFieldName)) {
+                return new Relationship(strategy.getReferenceFieldName(idFieldName), idFieldName);
+            }
+        }
+        throw new InvalidFieldException(INVALID_RELATIONSHIP_FIELD + idFieldName);
+    }
+}

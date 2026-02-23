@@ -1,0 +1,43 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -17,0 +18,24 @@
++privateinterfaceIdFieldStrategy{
++Booleanmatches(StringfieldName);
++StringgetReferenceFieldName(StringfieldName);
++}
++privateclassCustomIdFieldStrategyimplementsIdFieldStrategy{
++publicBooleanmatches(StringfieldName){
++returnfieldName.toLowerCase().endsWith('__c');
++}
++publicStringgetReferenceFieldName(StringfieldName){
++returnfieldName.replaceAll('(?i)__c','__r');
++}
++}
++privateclassStandardIdFieldStrategyimplementsIdFieldStrategy{
++publicBooleanmatches(StringfieldName){
++returnfieldName.toLowerCase().endsWith('id');
++}
++publicStringgetReferenceFieldName(StringfieldName){
++returnfieldName.replaceAll('(?i)id','');
++}
++}
++privatestaticfinalList<IdFieldStrategy>ID_FIELD_STRATEGIES=newList<IdFieldStrategy>{
++newCustomIdFieldStrategy(),
++newStandardIdFieldStrategy()
++};
+@@ -19,6 +43,5 @@
+-StringreferenceFieldName;
+-if(idFieldName.toLowerCase().endsWith('__c')){
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
++for(IdFieldStrategystrategy:ID_FIELD_STRATEGIES){
++if(strategy.matches(idFieldName)){
++returnnewRelationship(strategy.getReferenceFieldName(idFieldName),idFieldName);
++}
++}
+@@ -27 +49,0 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
+@@ -29 +50,0 @@
+-}
