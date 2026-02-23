@@ -1,0 +1,132 @@
+--- backup/utilities\logging\classes\Logger.cls
++++ refactored/utilities\logging\classes\Logger.cls
+@@ -67 +67,2 @@
+-}else{
++return;
++}
+@@ -71 +71,0 @@
+-}
+
+--- backup/utilities\parsers\classes\DisplayTypeParser.cls
++++ refactored/utilities\parsers\classes\DisplayTypeParser.cls
+@@ -18,0 +19,3 @@
++if(String.isBlank(value)){
++returnnull;
++}
+
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -10 +9,0 @@
+-StringidFieldName;
+@@ -12,3 +11 @@
+-idFieldName=referenceFieldName.replaceAll('(?i)__r','__c');
+-}else{
+-idFieldName=referenceFieldName+'Id';
++returnnewRelationship(referenceFieldName,referenceFieldName.replaceAll('(?i)__r','__c'));
+@@ -16 +13 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
++returnnewRelationship(referenceFieldName,referenceFieldName+'Id');
+@@ -19 +15,0 @@
+-StringreferenceFieldName;
+@@ -21,4 +17,5 @@
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
++returnnewRelationship(idFieldName.replaceAll('(?i)__c','__r'),idFieldName);
++}
++if(idFieldName.toLowerCase().endsWith('id')){
++returnnewRelationship(idFieldName.replaceAll('(?i)id',''),idFieldName);
++}
+@@ -27 +23,0 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
+@@ -29 +24,0 @@
+-}
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -57,15 +57,3 @@
+-if(
+-!fieldDescribeByNameAndObject.containsKey(objectApiName)||
+-!fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+-){
+-Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(
+-objectApiName
+-);
+-fieldDescribeMap=fieldDescribeMap==null
+-?newMap<String,DescribeFieldResult>()
+-:fieldDescribeMap;
+-fieldDescribeMap.put(
+-fieldApiName,
+-getFieldsMap(objectApiName).get(fieldApiName).getDescribe()
+-);
+-fieldDescribeByNameAndObject.put(objectApiName,fieldDescribeMap);
++Map<String,DescribeFieldResult>objectFieldMap=fieldDescribeByNameAndObject.get(objectApiName);
++if(objectFieldMap!=null&&objectFieldMap.containsKey(fieldApiName)){
++returnobjectFieldMap.get(fieldApiName);
+@@ -73 +61,7 @@
+-returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++if(objectFieldMap==null){
++objectFieldMap=newMap<String,DescribeFieldResult>();
++fieldDescribeByNameAndObject.put(objectApiName,objectFieldMap);
++}
++DescribeFieldResultdescribe=getFieldsMap(objectApiName).get(fieldApiName).getDescribe();
++objectFieldMap.put(fieldApiName,describe);
++returndescribe;
+
+--- backup/utilities\schema\classes\SecureSObjectWrapper.cls
++++ refactored/utilities\schema\classes\SecureSObjectWrapper.cls
+@@ -7 +7,3 @@
+-if(field.isAccessible()){
++if(!field.isAccessible()){
++returnnull;
++}
+@@ -9,2 +10,0 @@
+-}
+-returnnull;
+@@ -14 +14,3 @@
+-if(field.isCreateable()&&field.isUpdateable()){
++if(!field.isCreateable()||!field.isUpdateable()){
++return;
++}
+@@ -18 +19,0 @@
+-}
+
+--- backup/utilities\string-utilities\classes\CsvBuilder.cls
++++ refactored/utilities\string-utilities\classes\CsvBuilder.cls
+@@ -32,0 +33 @@
++Set<String>headers=headerToValues.keySet();
+@@ -34,2 +35 @@
+-RowBuilder[]rows=newList<RowBuilder>(totalRows());
+-for(StringheaderName:headerToValues.keySet()){
++for(StringheaderName:headers){
+@@ -37,10 +36,0 @@
+-Map<Integer,String>values=headerToValues.get(headerName);
+-for(IntegerrowIterator=0;rowIterator<=currentRow;rowIterator++){
+-Stringvalue=values.containsKey(rowIterator)?values.get(rowIterator):'';
+-RowBuilderrow=rows[rowIterator];
+-if(row==null){
+-row=newRowBuilder();
+-}
+-row.append(value);
+-rows[rowIterator]=row;
+-}
+@@ -49 +39,7 @@
+-for(RowBuilderrow:rows){
++for(IntegerrowIterator=0;rowIterator<=currentRow;rowIterator++){
++RowBuilderrow=newRowBuilder();
++for(StringheaderName:headers){
++Map<Integer,String>values=headerToValues.get(headerName);
++Stringvalue=values.containsKey(rowIterator)?values.get(rowIterator):'';
++row.append(value);
++}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

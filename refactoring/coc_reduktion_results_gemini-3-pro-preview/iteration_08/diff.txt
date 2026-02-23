@@ -1,0 +1,47 @@
+--- backup/utilities\parsers\classes\DisplayTypeParser.cls
++++ refactored/utilities\parsers\classes\DisplayTypeParser.cls
+@@ -23,3 +23,2 @@
+-ObjectparsedValue;
+-if(String.isNotBlank(value)){
+-parsedValue=parseSafe(value);
++if(String.isBlank(value)){
++returnnull;
+@@ -27 +26 @@
+-returnparsedValue;
++returnparseSafe(value);
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -57,11 +57,6 @@
+-if(
+-!fieldDescribeByNameAndObject.containsKey(objectApiName)||
+-!fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+-){
+-Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(
+-objectApiName
+-);
+-fieldDescribeMap=fieldDescribeMap==null
+-?newMap<String,DescribeFieldResult>()
+-:fieldDescribeMap;
+-fieldDescribeMap.put(
++if(!fieldDescribeByNameAndObject.containsKey(objectApiName)){
++fieldDescribeByNameAndObject.put(objectApiName,newMap<String,DescribeFieldResult>());
++}
++Map<String,DescribeFieldResult>objectFields=fieldDescribeByNameAndObject.get(objectApiName);
++if(!objectFields.containsKey(fieldApiName)){
++objectFields.put(
+@@ -71 +65,0 @@
+-fieldDescribeByNameAndObject.put(objectApiName,fieldDescribeMap);
+@@ -73 +67 @@
+-returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++returnobjectFields.get(fieldApiName);
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

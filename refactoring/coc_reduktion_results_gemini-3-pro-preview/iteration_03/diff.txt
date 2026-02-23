@@ -1,0 +1,107 @@
+--- backup/utilities\parsers\classes\DisplayTypeParser.cls
++++ refactored/utilities\parsers\classes\DisplayTypeParser.cls
+@@ -23,3 +23,2 @@
+-ObjectparsedValue;
+-if(String.isNotBlank(value)){
+-parsedValue=parseSafe(value);
++if(String.isBlank(value)){
++returnnull;
+@@ -27 +26 @@
+-returnparsedValue;
++returnparseSafe(value);
+
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -19 +18,0 @@
+-StringreferenceFieldName;
+@@ -21,4 +20,7 @@
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
++StringreferenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
++returnnewRelationship(referenceFieldName,idFieldName);
++}
++if(idFieldName.toLowerCase().endsWith('id')){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)id','');
++returnnewRelationship(referenceFieldName,idFieldName);
++}
+@@ -27 +28,0 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
+@@ -29 +29,0 @@
+-}
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -57,15 +57,2 @@
+-if(
+-!fieldDescribeByNameAndObject.containsKey(objectApiName)||
+-!fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+-){
+-Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(
+-objectApiName
+-);
+-fieldDescribeMap=fieldDescribeMap==null
+-?newMap<String,DescribeFieldResult>()
+-:fieldDescribeMap;
+-fieldDescribeMap.put(
+-fieldApiName,
+-getFieldsMap(objectApiName).get(fieldApiName).getDescribe()
+-);
+-fieldDescribeByNameAndObject.put(objectApiName,fieldDescribeMap);
++if(!fieldDescribeByNameAndObject.containsKey(objectApiName)){
++fieldDescribeByNameAndObject.put(objectApiName,newMap<String,DescribeFieldResult>());
+@@ -73 +60,5 @@
+-returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++Map<String,DescribeFieldResult>objectFieldMap=fieldDescribeByNameAndObject.get(objectApiName);
++if(!objectFieldMap.containsKey(fieldApiName)){
++objectFieldMap.put(fieldApiName,getFieldsMap(objectApiName).get(fieldApiName).getDescribe());
++}
++returnobjectFieldMap.get(fieldApiName);
+
+--- backup/utilities\schema\classes\SecureSObjectWrapper.cls
++++ refactored/utilities\schema\classes\SecureSObjectWrapper.cls
+@@ -7 +7,3 @@
+-if(field.isAccessible()){
++if(!field.isAccessible()){
++returnnull;
++}
+@@ -9,2 +10,0 @@
+-}
+-returnnull;
+@@ -14 +14,3 @@
+-if(field.isCreateable()&&field.isUpdateable()){
++if(!field.isCreateable()||!field.isUpdateable()){
++return;
++}
+@@ -18 +19,0 @@
+-}
+
+--- backup/utilities\string-utilities\classes\CsvBuilder.cls
++++ refactored/utilities\string-utilities\classes\CsvBuilder.cls
+@@ -17,5 +17,4 @@
+-Map<Integer,String>column=headerToValues.containsKey(headerName)
+-?headerToValues.get(headerName)
+-:newMap<Integer,String>();
+-column.put(currentRow,fieldValue);
+-headerToValues.put(headerName,column);
++if(!headerToValues.containsKey(headerName)){
++headerToValues.put(headerName,newMap<Integer,String>());
++}
++headerToValues.get(headerName).put(currentRow,fieldValue);
+@@ -65,4 +64 @@
+-BooleanisAddedRowValid=
+-numberOfColumns==null||
+-rowToAdd.capacity()==numberOfColumns;
+-if(!isAddedRowValid){
++if(numberOfColumns!=null&&rowToAdd.capacity()!=numberOfColumns){
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

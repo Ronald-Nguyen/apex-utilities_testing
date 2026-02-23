@@ -1,0 +1,449 @@
+File `utilities\schema\classes\Relationship.cls`:
+```apex
+public with sharing class Relationship {
+    public static final String INVALID_RELATIONSHIP_FIELD = 'The field passed in is not a relationship. Field Value: ';
+
+    public final String referenceFieldName;
+    public final String idFieldName;
+
+    private Relationship(String referenceFieldName, String idFieldName) {
+        this.referenceFieldName = referenceFieldName;
+        this.idFieldName = idFieldName;
+    }
+
+    public static Relationship fromRefrenceField(String referenceFieldName) {
+        String idFieldName = resolveIdFieldName(referenceFieldName);
+        return new Relationship(referenceFieldName, idFieldName);
+    }
+
+    private static String resolveIdFieldName(String referenceFieldName) {
+        if (referenceFieldName.toLowerCase().endsWith('__r')) {
+            return referenceFieldName.replaceAll('(?i)__r', '__c');
+        }
+        return referenceFieldName + 'Id';
+    }
+
+    public static Relationship fromIdField(String idFieldName) {
+        String referenceFieldName = resolveReferenceFieldName(idFieldName);
+        return new Relationship(referenceFieldName, idFieldName);
+    }
+
+    private static String resolveReferenceFieldName(String idFieldName) {
+        String lowerIdField = idFieldName.toLowerCase();
+        if (lowerIdField.endsWith('__c')) {
+            return idFieldName.replaceAll('(?i)__c', '__r');
+        }
+        if (lowerIdField.endsWith('id')) {
+            return idFieldName.replaceAll('(?i)id', '');
+        }
+        throw new InvalidFieldException(INVALID_RELATIONSHIP_FIELD + idFieldName);
+    }
+}
+```
+
+File `utilities\schema\classes\SchemaFacade.cls`:
+```apex
+public without sharing class SchemaFacade {
+    private Map<String, SObjectType> sObjectTypeByObjectNames = Schema.getGlobalDescribe();
+    private Map<String, DescribeSObjectResult> sObjectDescribeByObjectNames = new Map<String, DescribeSObjectResult>();
+    private Map<String, Map<String, SObjectField>> fieldTypesByNameAndObject = new Map<String, Map<String, SObjectField>>();
+    private Map<String, Map<String, DescribeFieldResult>> fieldDescribeByNameAndObject = new Map<String, Map<String, DescribeFieldResult>>();
+
+    private static final SchemaFacade INSTANCE = new SchemaFacade();
+
+    public static SchemaFacade getInstance() {
+        return INSTANCE;
+    }
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    private SchemaFacade() {
+    }
+
+    public Boolean isValidSObject(String objectApiName) {
+        return sObjectTypeByObjectNames.containsKey(objectApiName);
+    }
+
+    public Boolean isNotValidSObject(String objectApiName) {
+        return !isValidSObject(objectApiName);
+    }
+
+    public DescribeSObjectResult getDescribe(String objectApiName) {
+        objectApiName = objectApiName.toLowerCase();
+        validateObjectApiName(objectApiName);
+        if (!sObjectDescribeByObjectNames.containsKey(objectApiName)) {
+            cacheSObjectDescribe(objectApiName);
+        }
+        return sObjectDescribeByObjectNames.get(objectApiName);
+    }
+
+    private void cacheSObjectDescribe(String objectApiName) {
+        DescribeSObjectResult sObjectDescribe = sObjectTypeByObjectNames.get(objectApiName)
+            .getDescribe(SObjectDescribeOptions.FULL);
+        sObjectDescribe.fields.getMap();
+        sObjectDescribeByObjectNames.put(objectApiName, sObjectDescribe);
+    }
+
+    private void validateObjectApiName(String objectApiName) {
+        if (isNotValidSObject(objectApiName)) {
+            throw new InvalidDescribeException('The field ' + objectApiName + ' does not exist');
+        }
+    }
+
+    public Boolean isValidField(String objectApiName, String fieldApiName) {
+        return isValidSObject(objectApiName) &&
+            getFieldsMap(objectApiName).containsKey(fieldApiName);
+    }
+
+    public Boolean isNotValidField(String objectApiName, String fieldApiName) {
+        return !isValidField(objectApiName, fieldApiName);
+    }
+
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    private Map<String, SObjectField> getFieldsMap(String objectApiName) {
+        objectApiName = objectApiName.toLowerCase();
+        validateObjectApiName(objectApiName);
+        if (!fieldTypesByNameAndObject.containsKey(objectApiName)) {
+            Map<String, SObjectField> fieldsMap = getDescribe(objectApiName).fields.getMap();
+            fieldTypesByNameAndObject.put(objectApiName, fieldsMap);
+        }
+        return fieldTypesByNameAndObject.get(objectApiName);
+    }
+
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    public DescribeFieldResult getFieldDescribe(String objectApiName, String fieldApiName) {
+        objectApiName = objectApiName.toLowerCase();
+        fieldApiName = fieldApiName.toLowerCase();
+        validateFieldApiName(objectApiName, fieldApiName);
+
+        if (isFieldDescribeCached(objectApiName, fieldApiName)) {
+            return fieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
+        }
+
+        return cacheAndReturnFieldDescribe(objectApiName, fieldApiName);
+    }
+
+    private Boolean isFieldDescribeCached(String objectApiName, String fieldApiName) {
+        return fieldDescribeByNameAndObject.containsKey(objectApiName) &&
+               fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName);
+    }
+
+    private DescribeFieldResult cacheAndReturnFieldDescribe(String objectApiName, String fieldApiName) {
+        if (!fieldDescribeByNameAndObject.containsKey(objectApiName)) {
+            fieldDescribeByNameAndObject.put(objectApiName, new Map<String, DescribeFieldResult>());
+        }
+
+        DescribeFieldResult describe = getFieldsMap(objectApiName).get(fieldApiName).getDescribe();
+        fieldDescribeByNameAndObject.get(objectApiName).put(fieldApiName, describe);
+
+        return describe;
+    }
+
+    private void validateFieldApiName(String objectApiName, String fieldApiName) {
+        if (isNotValidField(objectApiName, fieldApiName)) {
+            throw new InvalidDescribeException(
+                'The field ' +
+                fieldApiName +
+                ' does not exist on the object ' +
+                objectApiName
+            );
+        }
+    }
+
+    public class InvalidDescribeException extends Exception {
+    }
+}
+```
+
+File `utilities\string-utilities\classes\CsvBuilder.cls`:
+```apex
+public class CsvBuilder {
+    public static final String WINDOWS_LINE_ENDING = '\r\n';
+    public static final String UNIX_LINE_ENDING = '\n';
+
+    @testVisible
+    private final Map<String, Map<Integer, String>> headerToValues = new Map<String, Map<Integer, String>>();
+    private Integer currentRow = 0;
+    private final String lineEnding;
+
+    public CsvBuilder(String lineEnding) {
+        this.lineEnding = lineEnding;
+    }
+
+    public CsvBuilder() {
+        this(UNIX_LINE_ENDING);
+    }
+
+    public CsvBuilder appendField(String headerName, String fieldValue) {
+        headerName = String.isBlank(headerName) ? 'null' : headerName;
+        fieldValue = String.isBlank(fieldValue) ? 'null' : fieldValue;
+        Map<Integer, String> column = headerToValues.containsKey(headerName)
+            ? headerToValues.get(headerName)
+            : new Map<Integer, String>();
+        column.put(currentRow, fieldValue);
+        headerToValues.put(headerName, column);
+        return this;
+    }
+
+    public CsvBuilder newRow() {
+        currentRow++;
+        return this;
+    }
+
+    public Integer totalRows() {
+        return headerToValues.values() != null ? headerToValues.values().size() : 0;
+    }
+
+    public override String toString() {
+        ColumnBuilder csvDocument = new ColumnBuilder(lineEnding);
+
+        RowBuilder headerRow = buildHeaderRow();
+        csvDocument.append(headerRow);
+
+        List<RowBuilder> rows = buildDataRows();
+        for (RowBuilder row : rows) {
+            csvDocument.append(row);
+        }
+        return csvDocument.toString();
+    }
+
+    private RowBuilder buildHeaderRow() {
+        RowBuilder headerRow = new RowBuilder();
+        for (String headerName : headerToValues.keySet()) {
+            headerRow.append(headerName);
+        }
+        return headerRow;
+    }
+
+    private List<RowBuilder> buildDataRows() {
+        RowBuilder[] rows = new List<RowBuilder>(totalRows());
+        for (String headerName : headerToValues.keySet()) {
+            Map<Integer, String> values = headerToValues.get(headerName);
+            populateRowsForHeader(rows, values);
+        }
+        return rows;
+    }
+
+    private void populateRowsForHeader(List<RowBuilder> rows, Map<Integer, String> values) {
+        for (Integer rowIterator = 0; rowIterator <= currentRow; rowIterator++) {
+            String value = values.containsKey(rowIterator) ? values.get(rowIterator) : '';
+            ensureRowInitialized(rows, rowIterator);
+            rows[rowIterator].append(value);
+        }
+    }
+
+    private void ensureRowInitialized(List<RowBuilder> rows, Integer index) {
+        if (rows[index] == null) {
+            rows[index] = new RowBuilder();
+        }
+    }
+
+    private class RowBuilder extends StringBuilder {
+        public RowBuilder() {
+            setSeparator(',');
+        }
+    }
+
+    private class ColumnBuilder extends StringBuilder {
+        private Integer numberOfColumns;
+
+        public ColumnBuilder(String lineEnding) {
+            setSeparator(lineEnding);
+        }
+
+        public ColumnBuilder append(RowBuilder rowToAdd) {
+            Boolean isAddedRowValid =
+                numberOfColumns == null ||
+                rowToAdd.capacity() == numberOfColumns;
+            if (!isAddedRowValid) {
+                throw new InvalidRowException(
+                    'The number of columns provided does not match those already in the csv'
+                );
+            }
+            numberOfColumns = rowToAdd.capacity();
+            append(rowToAdd.toString());
+            return this;
+        }
+    }
+
+    public class InvalidRowException extends Exception {
+    }
+}
+```
+
+File `utilities\string-utilities\classes\QueryBuilder.cls`:
+```apex
+public virtual class QueryBuilder {
+    private static final String SOQL_QUERY_STRUCTURE = 'SELECT {0} FROM {1}';
+    protected final String objectName;
+    private final Set<String> fieldsToQuery = new Set<String>();
+    protected final SchemaFacade schema = SchemaFacade.getInstance();
+    protected final DescribeSObjectResult objectDescribe;
+
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    protected QueryBuilder(String objectName) {
+        validateObjectName(objectName);
+        this.objectName = objectName;
+        objectDescribe = schema.getDescribe(objectName);
+    }
+
+    public static QueryBuilder fromObject(String objectName) {
+        return new QueryBuilder(objectName);
+    }
+
+    private void validateObjectName(String objectName) {
+        if (schema.isNotValidSObject(objectName)) {
+            throw new QueryException('The object name \'' + objectName + '\' is not valid');
+        }
+    }
+
+    public QueryBuilder selectField(String field) {
+        fieldsToQuery.add(field.toLowerCase());
+        return this;
+    }
+
+    public QueryBuilder selectFields(List<String> fields) {
+        for (String field : fields) {
+            selectField(field);
+        }
+        return this;
+    }
+
+    public QueryBuilder selectFieldSet(String fieldSetName) {
+        Schema.FieldSet fieldSet = objectDescribe.FieldSets.getMap().get(fieldSetName);
+        for (Schema.FieldSetMember member : fieldSet.getFields()) {
+            selectField(member.getFieldPath());
+        }
+        return this;
+    }
+
+    public QueryBuilder selectAllFields() {
+        for (String field : objectDescribe.fields.getMap().keySet()) {
+            selectField(field);
+        }
+        return this;
+    }
+
+    public QueryBuilder selectAllAccessibleFields() {
+        selectField('FIELDS(ALL)');
+        return this;
+    }
+
+    public override String toString() {
+        validateFields();
+        return String.format(
+            SOQL_QUERY_STRUCTURE,
+            new List<String>{ String.join(new List<String>(fieldsToQuery), ','), objectName }
+        );
+    }
+
+    private void validateFields() {
+        if (fieldsToQuery.isEmpty()) {
+            throw new QueryException(
+                'No fields have been added into the query so it cannot be executed'
+            );
+        }
+    }
+
+    public class QueryException extends Exception {
+    }
+}
+```
+
+File `utilities\trigger-framework\classes\TriggerDispatcher.cls`:
+```apex
+public with sharing class TriggerDispatcher {
+    private static final Stack TRIGGER_STACK = new Stack();
+    private static Boolean unknownExceptionLogged = false;
+    private static final Set<String> DISABLED_TRIGGERS = new Set<String>();
+
+    private final Triggerable handler;
+    private final List<SObject> newSObjects;
+    private final Map<Id, SObject> oldMap;
+    private final String currentTriggerAction;
+    private final Logger log = LoggerFactory.createLogger(TriggerDispatcher.class);
+
+    @SuppressWarnings('PMD.ExcessiveParameterList')
+    @TestVisible
+    private TriggerDispatcher(
+        List<Triggerable> actions,
+        List<SObject> newSObjects,
+        Map<Id, SObject> oldMap,
+        TriggerOperation operation
+    ) {
+        this.handler = new TriggerHandler(actions);
+        
+        this.newSObjects = newSObjects == null ? oldMap.values() : newSObjects;
+        this.oldMap = oldMap;
+        this.currentTriggerAction = getTriggerAction(newSObjects.getSObjectType(), operation);
+    }
+
+    public static void run(List<Triggerable> actions) {
+        (new TriggerDispatcher(actions, Trigger.new, Trigger.oldMap, Trigger.operationType)).run();
+    }
+
+    public static void disable(SObjectType objectType, TriggerOperation operation) {
+        DISABLED_TRIGGERS.add(getTriggerAction(objectType, operation));
+    }
+
+    public static void enable(SObjectType objectType, TriggerOperation operation) {
+        DISABLED_TRIGGERS.remove(getTriggerAction(objectType, operation));
+    }
+
+    private static String getTriggerAction(SObjectType objectType, TriggerOperation operation) {
+        return (operation + '-' + objectType).toUpperCase();
+    }
+
+    public void run() {
+        if (!triggersAreActive()) {
+            return;
+        }
+
+        try {
+            TRIGGER_STACK.push(currentTriggerAction);
+            executeTriggerables();
+            TRIGGER_STACK.pop();
+        } catch (Stack.UnderflowException underflowException) {
+            logUnknownException('Stack underflow');
+            throw underflowException;
+        } catch (Exception exceptionToHandle) {
+            logUnknownException(exceptionToHandle.getMessage());
+            TRIGGER_STACK.pop();
+            throw exceptionToHandle;
+        } finally {
+            if (TRIGGER_STACK.isEmpty()) {
+                log.close();
+            }
+        }
+    }
+
+    private void executeTriggerables() {
+        for (SObject newSObject : newSObjects) {
+            SObject oldSObject = oldMap != null ? oldMap.get(newSObject.Id) : null;
+            SObjectTriggerWrapper wrappedSObject = new SObjectTriggerWrapper(
+                newSObject,
+                oldSObject
+            );
+            handler.register(wrappedSObject);
+        }
+        handler.performAction();
+    }
+
+    private Boolean triggersAreActive() {
+        return ConfigurationManager.getInstance().areTriggersOn() &&
+            !DISABLED_TRIGGERS.contains(currentTriggerAction);
+    }
+
+    private void logUnknownException(String exceptionMessage) {
+        if (!unknownExceptionLogged) {
+            log.error(
+                'Unhandled exception within trigger: ' +
+                exceptionMessage +
+                '\n' +
+                'Trigger Stack: ' +
+                TRIGGER_STACK.toString()
+            );
+            unknownExceptionLogged = true;
+        }
+    }
+}
+```

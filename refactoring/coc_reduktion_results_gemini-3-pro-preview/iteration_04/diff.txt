@@ -1,0 +1,113 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -10 +9,0 @@
+-StringidFieldName;
+@@ -12,4 +11 @@
+-idFieldName=referenceFieldName.replaceAll('(?i)__r','__c');
+-}else{
+-idFieldName=referenceFieldName+'Id';
+-}
++StringidFieldName=referenceFieldName.replaceAll('(?i)__r','__c');
+@@ -17,0 +14,2 @@
++returnnewRelationship(referenceFieldName,referenceFieldName+'Id');
++}
+@@ -19,6 +17,9 @@
+-StringreferenceFieldName;
+-if(idFieldName.toLowerCase().endsWith('__c')){
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
++StringlowerIdField=idFieldName.toLowerCase();
++if(lowerIdField.endsWith('__c')){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
++returnnewRelationship(referenceFieldName,idFieldName);
++}
++if(lowerIdField.endsWith('id')){
++StringreferenceFieldName=idFieldName.replaceAll('(?i)id','');
++returnnewRelationship(referenceFieldName,idFieldName);
++}
+@@ -27 +27,0 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
+@@ -29 +28,0 @@
+-}
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -22 +22,3 @@
+-if(!sObjectDescribeByObjectNames.containsKey(objectApiName)){
++if(sObjectDescribeByObjectNames.containsKey(objectApiName)){
++returnsObjectDescribeByObjectNames.get(objectApiName);
++}
+@@ -27,2 +29 @@
+-}
+-returnsObjectDescribeByObjectNames.get(objectApiName);
++returnsObjectDescribe;
+@@ -57,14 +58,13 @@
+-if(
+-!fieldDescribeByNameAndObject.containsKey(objectApiName)||
+-!fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+-){
+-Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(
+-objectApiName
+-);
+-fieldDescribeMap=fieldDescribeMap==null
+-?newMap<String,DescribeFieldResult>()
+-:fieldDescribeMap;
+-fieldDescribeMap.put(
+-fieldApiName,
+-getFieldsMap(objectApiName).get(fieldApiName).getDescribe()
+-);
++if(isFieldCached(objectApiName,fieldApiName)){
++returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++}
++returncacheAndReturnFieldDescribe(objectApiName,fieldApiName);
++}
++privateBooleanisFieldCached(StringobjectApiName,StringfieldApiName){
++returnfieldDescribeByNameAndObject.containsKey(objectApiName)&&
++fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName);
++}
++privateDescribeFieldResultcacheAndReturnFieldDescribe(StringobjectApiName,StringfieldApiName){
++Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(objectApiName);
++if(fieldDescribeMap==null){
++fieldDescribeMap=newMap<String,DescribeFieldResult>();
+@@ -73 +73,3 @@
+-returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++DescribeFieldResultfieldDescribe=getFieldsMap(objectApiName).get(fieldApiName).getDescribe();
++fieldDescribeMap.put(fieldApiName,fieldDescribe);
++returnfieldDescribe;
+
+--- backup/utilities\string-utilities\classes\CsvBuilder.cls
++++ refactored/utilities\string-utilities\classes\CsvBuilder.cls
+@@ -34 +33,0 @@
+-RowBuilder[]rows=newList<RowBuilder>(totalRows());
+@@ -37,10 +35,0 @@
+-Map<Integer,String>values=headerToValues.get(headerName);
+-for(IntegerrowIterator=0;rowIterator<=currentRow;rowIterator++){
+-Stringvalue=values.containsKey(rowIterator)?values.get(rowIterator):'';
+-RowBuilderrow=rows[rowIterator];
+-if(row==null){
+-row=newRowBuilder();
+-}
+-row.append(value);
+-rows[rowIterator]=row;
+-}
+@@ -49 +38,7 @@
+-for(RowBuilderrow:rows){
++for(IntegerrowIndex=0;rowIndex<=currentRow;rowIndex++){
++RowBuilderrow=newRowBuilder();
++for(StringheaderName:headerToValues.keySet()){
++Map<Integer,String>columnValues=headerToValues.get(headerName);
++Stringvalue=columnValues.containsKey(rowIndex)?columnValues.get(rowIndex):'';
++row.append(value);
++}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

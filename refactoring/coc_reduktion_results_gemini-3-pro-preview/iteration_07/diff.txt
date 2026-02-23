@@ -1,0 +1,155 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -10,6 +10 @@
+-StringidFieldName;
+-if(referenceFieldName.toLowerCase().endsWith('__r')){
+-idFieldName=referenceFieldName.replaceAll('(?i)__r','__c');
+-}else{
+-idFieldName=referenceFieldName+'Id';
+-}
++StringidFieldName=resolveIdFieldName(referenceFieldName);
+@@ -17,0 +13,6 @@
++privatestaticStringresolveIdFieldName(StringreferenceFieldName){
++if(referenceFieldName.toLowerCase().endsWith('__r')){
++returnreferenceFieldName.replaceAll('(?i)__r','__c');
++}
++returnreferenceFieldName+'Id';
++}
+@@ -19,6 +20,11 @@
+-StringreferenceFieldName;
+-if(idFieldName.toLowerCase().endsWith('__c')){
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
++StringreferenceFieldName=resolveReferenceFieldName(idFieldName);
++returnnewRelationship(referenceFieldName,idFieldName);
++}
++privatestaticStringresolveReferenceFieldName(StringidFieldName){
++StringlowerIdField=idFieldName.toLowerCase();
++if(lowerIdField.endsWith('__c')){
++returnidFieldName.replaceAll('(?i)__c','__r');
++}
++if(lowerIdField.endsWith('id')){
++returnidFieldName.replaceAll('(?i)id','');
++}
+@@ -27 +32,0 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
+@@ -29 +33,0 @@
+-}
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -22,0 +23,5 @@
++cacheSObjectDescribe(objectApiName);
++}
++returnsObjectDescribeByObjectNames.get(objectApiName);
++}
++privatevoidcacheSObjectDescribe(StringobjectApiName){
+@@ -27,2 +31,0 @@
+-}
+-returnsObjectDescribeByObjectNames.get(objectApiName);
+@@ -57,15 +60,2 @@
+-if(
+-!fieldDescribeByNameAndObject.containsKey(objectApiName)||
+-!fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+-){
+-Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(
+-objectApiName
+-);
+-fieldDescribeMap=fieldDescribeMap==null
+-?newMap<String,DescribeFieldResult>()
+-:fieldDescribeMap;
+-fieldDescribeMap.put(
+-fieldApiName,
+-getFieldsMap(objectApiName).get(fieldApiName).getDescribe()
+-);
+-fieldDescribeByNameAndObject.put(objectApiName,fieldDescribeMap);
++if(isFieldDescribeCached(objectApiName,fieldApiName)){
++returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
+@@ -73 +63,13 @@
+-returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++returncacheAndReturnFieldDescribe(objectApiName,fieldApiName);
++}
++privateBooleanisFieldDescribeCached(StringobjectApiName,StringfieldApiName){
++returnfieldDescribeByNameAndObject.containsKey(objectApiName)&&
++fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName);
++}
++privateDescribeFieldResultcacheAndReturnFieldDescribe(StringobjectApiName,StringfieldApiName){
++if(!fieldDescribeByNameAndObject.containsKey(objectApiName)){
++fieldDescribeByNameAndObject.put(objectApiName,newMap<String,DescribeFieldResult>());
++}
++DescribeFieldResultdescribe=getFieldsMap(objectApiName).get(fieldApiName).getDescribe();
++fieldDescribeByNameAndObject.get(objectApiName).put(fieldApiName,describe);
++returndescribe;
+
+--- backup/utilities\string-utilities\classes\CsvBuilder.cls
++++ refactored/utilities\string-utilities\classes\CsvBuilder.cls
+@@ -33,15 +33 @@
+-RowBuilderheaderRow=newRowBuilder();
+-RowBuilder[]rows=newList<RowBuilder>(totalRows());
+-for(StringheaderName:headerToValues.keySet()){
+-headerRow.append(headerName);
+-Map<Integer,String>values=headerToValues.get(headerName);
+-for(IntegerrowIterator=0;rowIterator<=currentRow;rowIterator++){
+-Stringvalue=values.containsKey(rowIterator)?values.get(rowIterator):'';
+-RowBuilderrow=rows[rowIterator];
+-if(row==null){
+-row=newRowBuilder();
+-}
+-row.append(value);
+-rows[rowIterator]=row;
+-}
+-}
++RowBuilderheaderRow=buildHeaderRow();
+@@ -48,0 +35 @@
++List<RowBuilder>rows=buildDataRows();
+@@ -52,0 +40,27 @@
++}
++privateRowBuilderbuildHeaderRow(){
++RowBuilderheaderRow=newRowBuilder();
++for(StringheaderName:headerToValues.keySet()){
++headerRow.append(headerName);
++}
++returnheaderRow;
++}
++privateList<RowBuilder>buildDataRows(){
++RowBuilder[]rows=newList<RowBuilder>(totalRows());
++for(StringheaderName:headerToValues.keySet()){
++Map<Integer,String>values=headerToValues.get(headerName);
++populateRowsForHeader(rows,values);
++}
++returnrows;
++}
++privatevoidpopulateRowsForHeader(List<RowBuilder>rows,Map<Integer,String>values){
++for(IntegerrowIterator=0;rowIterator<=currentRow;rowIterator++){
++Stringvalue=values.containsKey(rowIterator)?values.get(rowIterator):'';
++ensureRowInitialized(rows,rowIterator);
++rows[rowIterator].append(value);
++}
++}
++privatevoidensureRowInitialized(List<RowBuilder>rows,Integerindex){
++if(rows[index]==null){
++rows[index]=newRowBuilder();
++}
+
+--- backup/utilities\string-utilities\classes\QueryBuilder.cls
++++ refactored/utilities\string-utilities\classes\QueryBuilder.cls
+@@ -32,5 +32,2 @@
+-for(
+-Schema.FieldSetMembermember:objectDescribe.FieldSets.getMap()
+-.get(fieldSetName)
+-.getFields()
+-){
++Schema.FieldSetfieldSet=objectDescribe.FieldSets.getMap().get(fieldSetName);
++for(Schema.FieldSetMembermember:fieldSet.getFields()){
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

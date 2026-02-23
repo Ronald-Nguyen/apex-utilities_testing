@@ -1,0 +1,128 @@
+{
+  "iteration": 2,
+  "timestamp": "2026-02-23T18:42:48.970222",
+  "refactoring": "refactoring/coc_reduktion",
+  "changed_files_scope": [
+    "utilities\\parsers\\classes\\DisplayTypeParser.cls",
+    "utilities\\schema\\classes\\Relationship.cls",
+    "utilities\\schema\\classes\\SObjectRecordTypes.cls",
+    "utilities\\schema\\classes\\SchemaFacade.cls",
+    "utilities\\string-utilities\\classes\\CsvBuilder.cls",
+    "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=14305, completion=4051, total=27607",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-23T18:41:37.223681",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_02\\pmd_before\\subset_src",
+      "files": [
+        "utilities/parsers/classes/DisplayTypeParser.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectRecordTypes.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_02\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_02\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 61,
+        "loc": 443,
+        "count": 6
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 61,
+        "loc": 443,
+        "count": 6
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-23T18:41:39.059464",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_02\\pmd_after\\subset_src",
+      "files": [
+        "utilities/parsers/classes/DisplayTypeParser.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectRecordTypes.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_02\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_02\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 50,
+        "loc": 452,
+        "count": 6
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 50,
+        "loc": 452,
+        "count": 6
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": -11,
+      "loc": 9,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": -11,
+      "loc": 9,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "coc_reduktion",
+    "targets": {},
+    "ok": true,
+    "checks": {
+      "coc_reduktion": {
+        "passed": true,
+        "pmd_delta_total_complexity": -11,
+        "rule": "delta<=0"
+      }
+    }
+  }
+}

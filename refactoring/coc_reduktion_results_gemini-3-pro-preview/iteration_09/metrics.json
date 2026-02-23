@@ -1,0 +1,131 @@
+{
+  "iteration": 9,
+  "timestamp": "2026-02-23T19:02:58.323420",
+  "refactoring": "refactoring/coc_reduktion",
+  "changed_files_scope": [
+    "utilities\\logging\\classes\\Logger.cls",
+    "utilities\\parsers\\classes\\DisplayTypeParser.cls",
+    "utilities\\schema\\classes\\Relationship.cls",
+    "utilities\\schema\\classes\\SchemaFacade.cls",
+    "utilities\\schema\\classes\\SecureSObjectWrapper.cls",
+    "utilities\\string-utilities\\classes\\CsvBuilder.cls",
+    "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=14305, completion=4318, total=30196",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-23T19:02:20.974658",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_09\\pmd_before\\subset_src",
+      "files": [
+        "utilities/logging/classes/Logger.cls",
+        "utilities/parsers/classes/DisplayTypeParser.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/schema/classes/SecureSObjectWrapper.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_09\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_09\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 64,
+        "loc": 512,
+        "count": 7
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 64,
+        "loc": 512,
+        "count": 7
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-23T19:02:22.853367",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_09\\pmd_after\\subset_src",
+      "files": [
+        "utilities/logging/classes/Logger.cls",
+        "utilities/parsers/classes/DisplayTypeParser.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/schema/classes/SecureSObjectWrapper.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_09\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_09\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 53,
+        "loc": 496,
+        "count": 7
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 53,
+        "loc": 496,
+        "count": 7
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": -11,
+      "loc": -16,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": -11,
+      "loc": -16,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "coc_reduktion",
+    "targets": {},
+    "ok": true,
+    "checks": {
+      "coc_reduktion": {
+        "passed": true,
+        "pmd_delta_total_complexity": -11,
+        "rule": "delta<=0"
+      }
+    }
+  }
+}

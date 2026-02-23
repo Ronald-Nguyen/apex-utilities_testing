@@ -1,0 +1,128 @@
+{
+  "iteration": 10,
+  "timestamp": "2026-02-23T19:06:09.793085",
+  "refactoring": "refactoring/coc_reduktion",
+  "changed_files_scope": [
+    "utilities\\configuration-management\\classes\\ConfigurationManager.cls",
+    "utilities\\schema\\classes\\Relationship.cls",
+    "utilities\\schema\\classes\\SObjectWrapper.cls",
+    "utilities\\schema\\classes\\SchemaFacade.cls",
+    "utilities\\string-utilities\\classes\\CsvBuilder.cls",
+    "utilities\\trigger-framework\\classes\\TriggerDispatcher.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=14305, completion=4581, total=30269",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-02-23T19:05:30.475730",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_10\\pmd_before\\subset_src",
+      "files": [
+        "utilities/configuration-management/classes/ConfigurationManager.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectWrapper.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_10\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_10\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 60,
+        "loc": 518,
+        "count": 6
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 60,
+        "loc": 518,
+        "count": 6
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-02-23T19:05:32.318655",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronald\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_10\\pmd_after\\subset_src",
+      "files": [
+        "utilities/configuration-management/classes/ConfigurationManager.cls",
+        "utilities/schema/classes/Relationship.cls",
+        "utilities/schema/classes/SObjectWrapper.cls",
+        "utilities/schema/classes/SchemaFacade.cls",
+        "utilities/string-utilities/classes/CsvBuilder.cls",
+        "utilities/trigger-framework/classes/TriggerDispatcher.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_10\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronald\\apex-utilities_testing\\refactoring\\coc_reduktion_results_gemini-3-pro-preview\\iteration_10\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 51,
+        "loc": 522,
+        "count": 6
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 51,
+        "loc": 522,
+        "count": 6
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": -9,
+      "loc": 4,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": -9,
+      "loc": 4,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "coc_reduktion",
+    "targets": {},
+    "ok": true,
+    "checks": {
+      "coc_reduktion": {
+        "passed": true,
+        "pmd_delta_total_complexity": -9,
+        "rule": "delta<=0"
+      }
+    }
+  }
+}

@@ -1,0 +1,139 @@
+--- backup/utilities\logging\profiler\classes\Profiler.cls
++++ refactored/utilities\logging\profiler\classes\Profiler.cls
+@@ -29 +29,3 @@
+-if(!IGNORE_LIMITS.contains(limitName)){
++if(IGNORE_LIMITS.contains(limitName)){
++return;
++}
+@@ -33 +34,0 @@
+-}
+
+--- backup/utilities\parsers\classes\DisplayTypeParser.cls
++++ refactored/utilities\parsers\classes\DisplayTypeParser.cls
+@@ -23,3 +23,2 @@
+-ObjectparsedValue;
+-if(String.isNotBlank(value)){
+-parsedValue=parseSafe(value);
++if(String.isBlank(value)){
++returnnull;
+@@ -27 +26 @@
+-returnparsedValue;
++returnparseSafe(value);
+
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -10 +9,0 @@
+-StringidFieldName;
+@@ -12,3 +11,4 @@
+-idFieldName=referenceFieldName.replaceAll('(?i)__r','__c');
+-}else{
+-idFieldName=referenceFieldName+'Id';
++returnnewRelationship(
++referenceFieldName,
++referenceFieldName.replaceAll('(?i)__r','__c')
++);
+@@ -16 +16 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
++returnnewRelationship(referenceFieldName,referenceFieldName+'Id');
+@@ -19 +18,0 @@
+-StringreferenceFieldName;
+@@ -21,4 +20,11 @@
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
++returnnewRelationship(
++idFieldName.replaceAll('(?i)__c','__r'),
++idFieldName
++);
++}
++if(idFieldName.toLowerCase().endsWith('id')){
++returnnewRelationship(
++idFieldName.replaceAll('(?i)id',''),
++idFieldName
++);
++}
+@@ -27 +32,0 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
+@@ -29 +33,0 @@
+-}
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -22 +22,3 @@
+-if(!sObjectDescribeByObjectNames.containsKey(objectApiName)){
++if(sObjectDescribeByObjectNames.containsKey(objectApiName)){
++returnsObjectDescribeByObjectNames.get(objectApiName);
++}
+@@ -27,2 +29 @@
+-}
+-returnsObjectDescribeByObjectNames.get(objectApiName);
++returnsObjectDescribe;
+@@ -46 +47,3 @@
+-if(!fieldTypesByNameAndObject.containsKey(objectApiName)){
++if(fieldTypesByNameAndObject.containsKey(objectApiName)){
++returnfieldTypesByNameAndObject.get(objectApiName);
++}
+@@ -49,2 +52 @@
+-}
+-returnfieldTypesByNameAndObject.get(objectApiName);
++returnfieldsMap;
+@@ -57,14 +59,6 @@
+-if(
+-!fieldDescribeByNameAndObject.containsKey(objectApiName)||
+-!fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+-){
+-Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(
+-objectApiName
+-);
+-fieldDescribeMap=fieldDescribeMap==null
+-?newMap<String,DescribeFieldResult>()
+-:fieldDescribeMap;
+-fieldDescribeMap.put(
+-fieldApiName,
+-getFieldsMap(objectApiName).get(fieldApiName).getDescribe()
+-);
++Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(objectApiName);
++if(fieldDescribeMap!=null&&fieldDescribeMap.containsKey(fieldApiName)){
++returnfieldDescribeMap.get(fieldApiName);
++}
++if(fieldDescribeMap==null){
++fieldDescribeMap=newMap<String,DescribeFieldResult>();
+@@ -73 +67,3 @@
+-returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++DescribeFieldResultdescribeResult=getFieldsMap(objectApiName).get(fieldApiName).getDescribe();
++fieldDescribeMap.put(fieldApiName,describeResult);
++returndescribeResult;
+
+--- backup/utilities\string-utilities\classes\CsvBuilder.cls
++++ refactored/utilities\string-utilities\classes\CsvBuilder.cls
+@@ -17,5 +17,4 @@
+-Map<Integer,String>column=headerToValues.containsKey(headerName)
+-?headerToValues.get(headerName)
+-:newMap<Integer,String>();
+-column.put(currentRow,fieldValue);
+-headerToValues.put(headerName,column);
++if(!headerToValues.containsKey(headerName)){
++headerToValues.put(headerName,newMap<Integer,String>());
++}
++headerToValues.get(headerName).put(currentRow,fieldValue);
+
+--- backup/utilities\string-utilities\classes\StringBuilder.cls
++++ refactored/utilities\string-utilities\classes\StringBuilder.cls
+@@ -16 +16,3 @@
+-if(value!=null){
++if(value==null){
++returnthis;
++}
+@@ -19 +20,0 @@
+-}
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

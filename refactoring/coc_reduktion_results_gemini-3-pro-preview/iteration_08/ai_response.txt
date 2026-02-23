@@ -1,0 +1,273 @@
+File `utilities\parsers\classes\DisplayTypeParser.cls`:
+```apex
+public class DisplayTypeParser implements Parsable {
+    private static final Map<DisplayType, Parser> PARSERS = new Map<DisplayType, Parser>{
+        DisplayType.BOOLEAN => new BooleanParser(),
+        DisplayType.DOUBLE => new DecimalParser(),
+        DisplayType.CURRENCY => new DecimalParser(),
+        DisplayType.PERCENT => new DecimalParser(),
+        DisplayType.INTEGER => new DecimalParser(),
+        DisplayType.DATE => new DateParser(),
+        DisplayType.DATETIME => new DatetimeParser(),
+        DisplayType.ID => new IdParser(),
+        DisplayType.REFERENCE => new IdParser(),
+        null => new StringParser()
+    };
+
+    private final Parser parser;
+
+    public DisplayTypeParser(DisplayType type) {
+        parser = PARSERS.containsKey(type) ? PARSERS.get(type) : PARSERS.get(null);
+    }
+
+    
+    public Object parse(String value) {
+        return parser.parse(value);
+    }
+
+    private abstract class Parser {
+        public Object parse(String value) {
+            if (String.isBlank(value)) {
+                return null;
+            }
+            return parseSafe(value);
+        }
+        protected abstract Object parseSafe(String value);
+    }
+    private class BooleanParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Boolean.valueOf(value);
+        }
+    }
+    private class DecimalParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Decimal.valueOf(value);
+        }
+    }
+    private class DateParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Date.valueOf(value);
+        }
+    }
+    private class DatetimeParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Datetime.valueOf(value);
+        }
+    }
+    private class IdParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return Id.valueOf(value);
+        }
+    }
+    private class StringParser extends Parser {
+        protected override Object parseSafe(String value) {
+            return String.valueOf(value);
+        }
+    }
+}
+```
+
+File `utilities\schema\classes\SchemaFacade.cls`:
+```apex
+public without sharing class SchemaFacade {
+    private Map<String, SObjectType> sObjectTypeByObjectNames = Schema.getGlobalDescribe();
+    private Map<String, DescribeSObjectResult> sObjectDescribeByObjectNames = new Map<String, DescribeSObjectResult>();
+    private Map<String, Map<String, SObjectField>> fieldTypesByNameAndObject = new Map<String, Map<String, SObjectField>>();
+    private Map<String, Map<String, DescribeFieldResult>> fieldDescribeByNameAndObject = new Map<String, Map<String, DescribeFieldResult>>();
+
+    private static final SchemaFacade INSTANCE = new SchemaFacade();
+
+    public static SchemaFacade getInstance() {
+        return INSTANCE;
+    }
+
+    @SuppressWarnings('PMD.EmptyStatementBlock')
+    private SchemaFacade() {
+    }
+
+    public Boolean isValidSObject(String objectApiName) {
+        return sObjectTypeByObjectNames.containsKey(objectApiName);
+    }
+
+    public Boolean isNotValidSObject(String objectApiName) {
+        return !isValidSObject(objectApiName);
+    }
+
+    
+    public DescribeSObjectResult getDescribe(String objectApiName) {
+        objectApiName = objectApiName.toLowerCase();
+        validateObjectApiName(objectApiName);
+        if (!sObjectDescribeByObjectNames.containsKey(objectApiName)) {
+            DescribeSObjectResult sObjectDescribe = sObjectTypeByObjectNames.get(objectApiName)
+                .getDescribe(SObjectDescribeOptions.FULL);
+            sObjectDescribe.fields.getMap();
+            sObjectDescribeByObjectNames.put(objectApiName, sObjectDescribe);
+        }
+        return sObjectDescribeByObjectNames.get(objectApiName);
+    }
+
+    private void validateObjectApiName(String objectApiName) {
+        if (isNotValidSObject(objectApiName)) {
+            throw new InvalidDescribeException('The field ' + objectApiName + ' does not exist');
+        }
+    }
+
+    public Boolean isValidField(String objectApiName, String fieldApiName) {
+        return isValidSObject(objectApiName) &&
+            getFieldsMap(objectApiName).containsKey(fieldApiName);
+    }
+
+    public Boolean isNotValidField(String objectApiName, String fieldApiName) {
+        return !isValidField(objectApiName, fieldApiName);
+    }
+
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    private Map<String, SObjectField> getFieldsMap(String objectApiName) {
+        objectApiName = objectApiName.toLowerCase();
+        validateObjectApiName(objectApiName);
+        if (!fieldTypesByNameAndObject.containsKey(objectApiName)) {
+            Map<String, SObjectField> fieldsMap = getDescribe(objectApiName).fields.getMap();
+            fieldTypesByNameAndObject.put(objectApiName, fieldsMap);
+        }
+        return fieldTypesByNameAndObject.get(objectApiName);
+    }
+
+    
+    @SuppressWarnings('PMD.EagerlyLoadedDescribeSObjectResult')
+    public DescribeFieldResult getFieldDescribe(String objectApiName, String fieldApiName) {
+        objectApiName = objectApiName.toLowerCase();
+        fieldApiName = fieldApiName.toLowerCase();
+        validateFieldApiName(objectApiName, fieldApiName);
+        
+        if (!fieldDescribeByNameAndObject.containsKey(objectApiName)) {
+            fieldDescribeByNameAndObject.put(objectApiName, new Map<String, DescribeFieldResult>());
+        }
+
+        Map<String, DescribeFieldResult> objectFields = fieldDescribeByNameAndObject.get(objectApiName);
+        if (!objectFields.containsKey(fieldApiName)) {
+            objectFields.put(
+                fieldApiName,
+                getFieldsMap(objectApiName).get(fieldApiName).getDescribe()
+            );
+        }
+        
+        return objectFields.get(fieldApiName);
+    }
+
+    private void validateFieldApiName(String objectApiName, String fieldApiName) {
+        if (isNotValidField(objectApiName, fieldApiName)) {
+            throw new InvalidDescribeException(
+                'The field ' +
+                fieldApiName +
+                ' does not exist on the object ' +
+                objectApiName
+            );
+        }
+    }
+
+    public class InvalidDescribeException extends Exception {
+    }
+}
+```
+
+File `utilities\trigger-framework\classes\TriggerDispatcher.cls`:
+```apex
+public with sharing class TriggerDispatcher {
+    private static final Stack TRIGGER_STACK = new Stack();
+    private static Boolean unknownExceptionLogged = false;
+    private static final Set<String> DISABLED_TRIGGERS = new Set<String>();
+
+    private final Triggerable handler;
+    private final List<SObject> newSObjects;
+    private final Map<Id, SObject> oldMap;
+    private final String currentTriggerAction;
+    private final Logger log = LoggerFactory.createLogger(TriggerDispatcher.class);
+
+    @SuppressWarnings('PMD.ExcessiveParameterList')
+    @TestVisible
+    private TriggerDispatcher(
+        List<Triggerable> actions,
+        List<SObject> newSObjects,
+        Map<Id, SObject> oldMap,
+        TriggerOperation operation
+    ) {
+        this.handler = new TriggerHandler(actions);
+        
+        this.newSObjects = newSObjects == null ? oldMap.values() : newSObjects;
+        this.oldMap = oldMap;
+        this.currentTriggerAction = getTriggerAction(newSObjects.getSObjectType(), operation);
+    }
+
+    
+    public static void run(List<Triggerable> actions) {
+        (new TriggerDispatcher(actions, Trigger.new, Trigger.oldMap, Trigger.operationType)).run();
+    }
+
+    public static void disable(SObjectType objectType, TriggerOperation operation) {
+        DISABLED_TRIGGERS.add(getTriggerAction(objectType, operation));
+    }
+
+    public static void enable(SObjectType objectType, TriggerOperation operation) {
+        DISABLED_TRIGGERS.remove(getTriggerAction(objectType, operation));
+    }
+
+    private static String getTriggerAction(SObjectType objectType, TriggerOperation operation) {
+        return (operation + '-' + objectType).toUpperCase();
+    }
+
+    public void run() {
+        if (!triggersAreActive()) {
+            return;
+        }
+
+        try {
+            TRIGGER_STACK.push(currentTriggerAction);
+            executeTriggerables();
+            TRIGGER_STACK.pop(); 
+        } catch (Stack.UnderflowException underflowException) {
+            logUnknownException('Stack underflow');
+            throw underflowException; 
+        } catch (Exception exceptionToHandle) {
+            logUnknownException(exceptionToHandle.getMessage());
+            TRIGGER_STACK.pop(); 
+            throw exceptionToHandle;
+        } finally {
+            if (TRIGGER_STACK.isEmpty()) {
+                log.close();
+            }
+        }
+    }
+
+    private void executeTriggerables() {
+        for (SObject newSObject : newSObjects) {
+            
+            SObject oldSObject = oldMap != null ? oldMap.get(newSObject.Id) : null;
+            SObjectTriggerWrapper wrappedSObject = new SObjectTriggerWrapper(
+                newSObject,
+                oldSObject
+            );
+            handler.register(wrappedSObject);
+        }
+        handler.performAction();
+    }
+
+    private Boolean triggersAreActive() {
+        return ConfigurationManager.getInstance().areTriggersOn() &&
+            !DISABLED_TRIGGERS.contains(currentTriggerAction);
+    }
+
+    private void logUnknownException(String exceptionMessage) {
+        
+        if (!unknownExceptionLogged) {
+            log.error(
+                'Unhandled exception within trigger: ' +
+                exceptionMessage +
+                '\n' +
+                'Trigger Stack: ' +
+                TRIGGER_STACK.toString()
+            );
+            unknownExceptionLogged = true;
+        }
+    }
+}
+```

@@ -1,0 +1,80 @@
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -10 +9,0 @@
+-StringidFieldName;
+@@ -12,3 +11,4 @@
+-idFieldName=referenceFieldName.replaceAll('(?i)__r','__c');
+-}else{
+-idFieldName=referenceFieldName+'Id';
++returnnewRelationship(
++referenceFieldName,
++referenceFieldName.replaceAll('(?i)__r','__c')
++);
+@@ -16 +16 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
++returnnewRelationship(referenceFieldName,referenceFieldName+'Id');
+@@ -19 +18,0 @@
+-StringreferenceFieldName;
+@@ -21,4 +20,11 @@
+-referenceFieldName=idFieldName.replaceAll('(?i)__c','__r');
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
+-referenceFieldName=idFieldName.replaceAll('(?i)id','');
+-}else{
++returnnewRelationship(
++idFieldName.replaceAll('(?i)__c','__r'),
++idFieldName
++);
++}
++if(idFieldName.toLowerCase().endsWith('id')){
++returnnewRelationship(
++idFieldName.replaceAll('(?i)id',''),
++idFieldName
++);
++}
+@@ -27 +32,0 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
+@@ -29 +33,0 @@
+-}
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -57,10 +57,12 @@
+-if(
+-!fieldDescribeByNameAndObject.containsKey(objectApiName)||
+-!fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+-){
+-Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(
+-objectApiName
+-);
+-fieldDescribeMap=fieldDescribeMap==null
+-?newMap<String,DescribeFieldResult>()
+-:fieldDescribeMap;
++ensureFieldDescribeCached(objectApiName,fieldApiName);
++returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++}
++privatevoidensureFieldDescribeCached(StringobjectApiName,StringfieldApiName){
++if(isFieldDescribeCached(objectApiName,fieldApiName)){
++return;
++}
++Map<String,DescribeFieldResult>fieldDescribeMap=fieldDescribeByNameAndObject.get(objectApiName);
++if(fieldDescribeMap==null){
++fieldDescribeMap=newMap<String,DescribeFieldResult>();
++fieldDescribeByNameAndObject.put(objectApiName,fieldDescribeMap);
++}
+@@ -71 +72,0 @@
+-fieldDescribeByNameAndObject.put(objectApiName,fieldDescribeMap);
+@@ -73 +74,3 @@
+-returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++privateBooleanisFieldDescribeCached(StringobjectApiName,StringfieldApiName){
++returnfieldDescribeByNameAndObject.containsKey(objectApiName)&&
++fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName);
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}

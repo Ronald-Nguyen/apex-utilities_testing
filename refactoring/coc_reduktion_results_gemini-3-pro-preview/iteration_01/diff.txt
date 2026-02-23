@@ -1,0 +1,94 @@
+--- backup/utilities\logging\profiler\classes\Profiler.cls
++++ refactored/utilities\logging\profiler\classes\Profiler.cls
+@@ -29 +29,3 @@
+-if(!IGNORE_LIMITS.contains(limitName)){
++if(IGNORE_LIMITS.contains(limitName)){
++return;
++}
+@@ -33 +34,0 @@
+-}
+
+--- backup/utilities\schema\classes\Relationship.cls
++++ refactored/utilities\schema\classes\Relationship.cls
+@@ -10 +9,0 @@
+-StringidFieldName;
+@@ -12,3 +11 @@
+-idFieldName=referenceFieldName.replaceAll('(?i)__r','__c');
+-}else{
+-idFieldName=referenceFieldName+'Id';
++returnnewRelationship(referenceFieldName,referenceFieldName.replaceAll('(?i)__r','__c'));
+@@ -16 +13 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
++returnnewRelationship(referenceFieldName,referenceFieldName+'Id');
+@@ -22 +19,3 @@
+-}elseif(idFieldName.toLowerCase().endsWith('id')){
++returnnewRelationship(referenceFieldName,idFieldName);
++}
++if(idFieldName.toLowerCase().endsWith('id')){
+@@ -24 +23,2 @@
+-}else{
++returnnewRelationship(referenceFieldName,idFieldName);
++}
+@@ -27 +26,0 @@
+-returnnewRelationship(referenceFieldName,idFieldName);
+@@ -29 +27,0 @@
+-}
+
+--- backup/utilities\schema\classes\SchemaFacade.cls
++++ refactored/utilities\schema\classes\SchemaFacade.cls
+@@ -22 +22,3 @@
+-if(!sObjectDescribeByObjectNames.containsKey(objectApiName)){
++if(sObjectDescribeByObjectNames.containsKey(objectApiName)){
++returnsObjectDescribeByObjectNames.get(objectApiName);
++}
+@@ -27 +28,0 @@
+-}
+@@ -57,4 +58,11 @@
+-if(
+-!fieldDescribeByNameAndObject.containsKey(objectApiName)||
+-!fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName)
+-){
++if(isFieldCached(objectApiName,fieldApiName)){
++returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++}
++cacheFieldDescribe(objectApiName,fieldApiName);
++returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
++}
++privateBooleanisFieldCached(StringobjectApiName,StringfieldApiName){
++returnfieldDescribeByNameAndObject.containsKey(objectApiName)&&
++fieldDescribeByNameAndObject.get(objectApiName).containsKey(fieldApiName);
++}
++privatevoidcacheFieldDescribe(StringobjectApiName,StringfieldApiName){
+@@ -72,2 +79,0 @@
+-}
+-returnfieldDescribeByNameAndObject.get(objectApiName).get(fieldApiName);
+
+--- backup/utilities\string-utilities\classes\CsvBuilder.cls
++++ refactored/utilities\string-utilities\classes\CsvBuilder.cls
+@@ -37,0 +38,9 @@
++populateRowsForColumn(rows,values);
++}
++csvDocument.append(headerRow);
++for(RowBuilderrow:rows){
++csvDocument.append(row);
++}
++returncsvDocument.toString();
++}
++privatevoidpopulateRowsForColumn(RowBuilder[]rows,Map<Integer,String>values){
+@@ -47,6 +55,0 @@
+-}
+-csvDocument.append(headerRow);
+-for(RowBuilderrow:rows){
+-csvDocument.append(row);
+-}
+-returncsvDocument.toString();
+
+--- backup/utilities\trigger-framework\classes\TriggerDispatcher.cls
++++ refactored/utilities\trigger-framework\classes\TriggerDispatcher.cls
+@@ -36 +36,3 @@
+-if(triggersAreActive()){
++if(!triggersAreActive()){
++return;
++}
+@@ -51 +52,0 @@
+-}
