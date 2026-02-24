@@ -52,4 +52,16 @@ private class LoggedSchedulableTest {
         );
         Assert.contains(logs[0].Messages__c, LOG_MESSAGE);
     }
+
+    @IsTest
+    private static void setJobNameTest() {
+        LoggedSchedulable schedulable = new TestLog();
+        String customJobName = 'Custom Job Name';
+        schedulable.setJobName(customJobName);
+        System.assertEquals(
+            customJobName,
+            schedulable.getJobName(),
+            'Job name should be set correctly'
+        );
+    }
 }

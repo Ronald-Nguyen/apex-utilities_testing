@@ -22,6 +22,31 @@ private class DeletionValidatorTest {
         Assert.pageMessage(DeletionValidator.NOT_ALLOWED_DELETE);
     }
 
+    @IsTest
+    private static void performActionWithAllowedDelete() {
+        ConfigurationManager.getInstance().turnDeletionOn();
+        DeletionValidator validator = new DeletionValidator();
+        validator.performAction();
+        Assert.doesNotHavePageMessages();
+    }
+
+    @IsTest
+    private static void performActionWithNotAllowedDelete() {
+        ConfigurationManager.getInstance().turnDeletionOff();
+        DeletionValidator validator = new DeletionValidator();
+        validator.performAction();
+        Assert.doesNotHavePageMessages();
+    }
+
+    @IsTest
+    private static void multipleRegistrations() {
+        ConfigurationManager.getInstance().turnDeletionOff();
+        DeletionValidator validator = new DeletionValidator();
+        validator.register(getSObjectWrapper());
+        validator.register(getSObjectWrapper());
+        Assert.pageMessage(DeletionValidator.NOT_ALLOWED_DELETE);
+    }
+
     private static SObjectTriggerWrapper getSObjectWrapper() {
         return new SObjectTriggerWrapper(new Account(), new Account());
     }
