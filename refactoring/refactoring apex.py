@@ -12,9 +12,9 @@ import time
 import json
 import xml.etree.ElementTree as ET
 '''
-python refactoring/refactoring.py
-python refactoring/refactoring.py --all-refactorings
-python refactoring/refactoring.py --refactoring rename
+python refactoring/refactoring apex.py
+python refactoring/refactoring apex.py --all-refactorings
+python refactoring/refactoring apex.py --refactoring rename
 '''
 
 
@@ -32,7 +32,7 @@ DEFAULT_REFACTORING = "inline_variable" \
 
 RESULT_PATH = "_result2_"
 PATH = 'force-app/main'
-ITERATIONS = 1
+ITERATIONS = 10
 GEMMA = 'gemma-3-27b-it'
 GEMINI3 = 'gemini-3-pro-preview'
 GEMINI2 = 'gemini-2.5-flash'
@@ -46,7 +46,7 @@ MODEL_MISTRAL = CODESTRAL
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 MISTRAL_API_KEY = os.environ.get('MISTRAL_API_KEY')
-LLM_API_KEY = MISTRAL_API_KEY    
+LLM_API_KEY = GEMINI_API_KEY    
 client = None
 MODEL = None
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd" version="7.22.0" timestamp="2026-03-12T20:31:12.681">
+<file name="C:\Users\ronal\apex-utilities_testing\refactoring\inline_variable_result2_codestral-2501\iteration_08\pmd_after\subset_src\utilities\string-utilities\classes\StringBuilder.cls">
+<violation beginline="18" endline="24" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'append(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="26" endline="28" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'append(Object)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="30" endline="37" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'append(StringBuilder)' has a cognitive complexity of 3, current threshold is 1
+</violation>
+<violation beginline="39" endline="43" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'setSeparator(String)' has a cognitive complexity of 1, current threshold is 1
+</violation>
+<violation beginline="49" endline="51" begincolumn="12" endcolumn="6" rule="CognitiveComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cognitivecomplexity" priority="3">
+The method 'length()' has a cognitive complexity of 1, current threshold is 1
+</violation>
+</file>
+</pmd>

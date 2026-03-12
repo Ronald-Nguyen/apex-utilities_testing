@@ -1,0 +1,113 @@
+{
+  "iteration": 5,
+  "timestamp": "2026-03-12T20:29:40.504887",
+  "refactoring": "refactoring/inline_variable",
+  "changed_files_scope": [
+    "utilities\\string-utilities\\classes\\StringBuilder.cls"
+  ],
+  "test": {
+    "status": "passed",
+    "success": true,
+    "level": 2
+  },
+  "diff": {
+    "status": "passed",
+    "has_diff": true
+  },
+  "tokens": "Tokens: prompt=12526, completion=297, total=12823",
+  "pmd_before": {
+    "ok": true,
+    "timestamp": "2026-03-12T20:29:20.208363",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronal\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronal\\apex-utilities_testing\\refactoring\\inline_variable_result2_codestral-2501\\iteration_05\\pmd_before\\subset_src",
+      "files": [
+        "utilities/string-utilities/classes/StringBuilder.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronal\\apex-utilities_testing\\refactoring\\inline_variable_result2_codestral-2501\\iteration_05\\pmd_before\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronal\\apex-utilities_testing\\refactoring\\inline_variable_result2_codestral-2501\\iteration_05\\pmd_before\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 7,
+        "loc": 69,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 7,
+        "loc": 69,
+        "count": 1
+      }
+    }
+  },
+  "pmd_after": {
+    "ok": true,
+    "timestamp": "2026-03-12T20:29:22.353568",
+    "scope": {
+      "mode": "subset_changed_files_only",
+      "source_root": "C:\\Users\\ronal\\apex-utilities_testing\\force-app\\main",
+      "subset_root": "C:\\Users\\ronal\\apex-utilities_testing\\refactoring\\inline_variable_result2_codestral-2501\\iteration_05\\pmd_after\\subset_src",
+      "files": [
+        "utilities/string-utilities/classes/StringBuilder.cls"
+      ]
+    },
+    "pmd": {
+      "ruleset_file": "C:\\Users\\ronal\\apex-utilities_testing\\refactoring\\inline_variable_result2_codestral-2501\\iteration_05\\pmd_after\\pmd-ruleset.xml",
+      "report_file": "C:\\Users\\ronal\\apex-utilities_testing\\refactoring\\inline_variable_result2_codestral-2501\\iteration_05\\pmd_after\\pmd-report.xml"
+    },
+    "summary": {
+      "prod": {
+        "complexity": 7,
+        "loc": 56,
+        "count": 1
+      },
+      "test": {
+        "complexity": 0,
+        "loc": 0,
+        "count": 0
+      },
+      "total": {
+        "complexity": 7,
+        "loc": 56,
+        "count": 1
+      }
+    }
+  },
+  "pmd_delta": {
+    "prod": {
+      "complexity": 0,
+      "loc": -13,
+      "count": 0
+    },
+    "test": {
+      "complexity": 0,
+      "loc": 0,
+      "count": 0
+    },
+    "total": {
+      "complexity": 0,
+      "loc": -13,
+      "count": 0
+    }
+  },
+  "refactoring_check": {
+    "type": "inline_variable",
+    "targets": {},
+    "ok": false,
+    "checks": {
+      "inline_variable": {
+        "passed": false,
+        "reason": "targets_not_parsed",
+        "targets": {}
+      }
+    }
+  }
+}
