@@ -1,0 +1,6 @@
+--- backup/utilities\string-utilities\classes\StringBuilder.cls
++++ refactored/utilities\string-utilities\classes\StringBuilder.cls
+@@ -23,2 +23 @@
+-StringstringValue=String.valueOf(value);
+-returnappend(stringValue);
++returnappend(String.valueOf(value));
